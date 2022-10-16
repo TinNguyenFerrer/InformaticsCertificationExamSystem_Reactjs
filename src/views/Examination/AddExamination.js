@@ -17,7 +17,7 @@ import DateTimeRange from "components/Datepiker/DateTimeRange";
 
 */
 import React from "react";
-
+import { useState } from "react";
 // reactstrap components
 import { Card, Container, Row } from "reactstrap";
 
@@ -34,98 +34,37 @@ import {
   Col
 } from "reactstrap";
 
-import "assets/css/Examination.css"
-const MapWrapper = () => {
-  const mapRef = React.useRef(null);
-  React.useEffect(() => {
-    let google = window.google;
-    let map = mapRef.current;
-    let lat = "40.748817";
-    let lng = "-73.985428";
-    const myLatlng = new google.maps.LatLng(lat, lng);
-    const mapOptions = {
-      zoom: 12,
-      center: myLatlng,
-      scrollwheel: false,
-      zoomControl: true,
-      styles: [
-        {
-          featureType: "administrative",
-          elementType: "labels.text.fill",
-          stylers: [{ color: "#444444" }]
-        },
-        {
-          featureType: "landscape",
-          elementType: "all",
-          stylers: [{ color: "#f2f2f2" }]
-        },
-        {
-          featureType: "poi",
-          elementType: "all",
-          stylers: [{ visibility: "off" }]
-        },
-        {
-          featureType: "road",
-          elementType: "all",
-          stylers: [{ saturation: -100 }, { lightness: 45 }]
-        },
-        {
-          featureType: "road.highway",
-          elementType: "all",
-          stylers: [{ visibility: "simplified" }]
-        },
-        {
-          featureType: "road.arterial",
-          elementType: "labels.icon",
-          stylers: [{ visibility: "off" }]
-        },
-        {
-          featureType: "transit",
-          elementType: "all",
-          stylers: [{ visibility: "off" }]
-        },
-        {
-          featureType: "water",
-          elementType: "all",
-          stylers: [{ color: "#5e72e4" }, { visibility: "on" }]
-        }
-      ]
-    };
+//import "assets/css/Examination.css";
+import "./AddExamination.css";
 
-    map = new google.maps.Map(map, mapOptions);
 
-    const marker = new google.maps.Marker({
-      position: myLatlng,
-      map: map,
-      animation: google.maps.Animation.DROP,
-      title: "Light Bootstrap Dashboard PRO React!"
-    });
-
-    const contentString =
-      '<div class="info-window-content"><h2>Light Bootstrap Dashboard PRO React</h2>' +
-      "<p>A premium Admin for React-Bootstrap, Bootstrap, React, and React Hooks.</p></div>";
-
-    const infowindow = new google.maps.InfoWindow({
-      content: contentString
-    });
-
-    google.maps.event.addListener(marker, "click", function () {
-      infowindow.open(map, marker);
-    });
-  }, []);
-  return (
-    <>
-      <div
-        style={{ height: `600px` }}
-        className="map-canvas"
-        id="map-canvas"
-        ref={mapRef}
-      ></div>
-    </>
-  );
-};
 
 const AddExamination = () => {
+  const teacherInformInit = {
+    Name: "",
+    IdentifierCode: "",
+    PhoneNumber: "",
+    Email: "",
+  }
+  const addressInit = {
+    province: "",
+    district: "",
+    ward: "",
+    Street: ""
+  }
+  const [teacherInfor, setTeacherInfor] = useState(teacherInformInit);
+  const [address, setAddress] = useState(addressInit)
+  // console.log(address)
+  // console.log(teacherInfor)
+  const handelSubmitTeacherInfo = () => {
+    const addressSubmit = `${address.province}, ${address.district}, ${address.ward}, ${address.Street}`
+    const teacherInformSubmit = {...teacherInfor, Address:addressSubmit}
+    console.log(teacherInformSubmit)
+    console.log(addressSubmit)
+    // let t= addressSubmit.split(",")
+    // console.log(addressSubmit.split(",",3))
+    // console.log(t.slice(3,t.length).join(","))
+  }
   return (
     <>
       <HeaderEmpty />
@@ -134,89 +73,247 @@ const AddExamination = () => {
         <Row>
           <div className="col">
             <Card className="shadow border-0">
-            <div>
+              <div>
                 <CardBody>
-                  <Row className="icon-examples">
-                    <Form>
-                      <h6 className="heading-small text-muted mb-4">
-                        User information
-                      </h6>
-                      <div className="pl-lg-4">
-                        <Row>
-                          <Col lg="6">
-                            <FormGroup>
-                              <label
-                                className="form-control-label"
-                                htmlFor="input-username"
-                              >
-                                Username
-                              </label>
-                              <Input
-                                className="form-control-alternative"
-                                defaultValue="lucky.jesse"
-                                id="input-username"
-                                placeholder="Username"
-                                type="text"
-                              />
-                            </FormGroup>
-                          </Col>
-                          <Col lg="6">
-                            <FormGroup>
-                              <label
-                                className="form-control-label"
-                                htmlFor="input-email"
-                              >
-                                Email address
-                              </label>
-                              <DateTimeRange />
-                            </FormGroup>
-                          </Col>
-                        </Row>
-                        <Row>
-                          <Col lg="6">
-                            <FormGroup>
-                              <label
-                                className="form-control-label"
-                                htmlFor="input-first-name"
-                              >
-                                First name
-                              </label>
-                              <Input
-                                className="form-control-alternative"
-                                defaultValue="Lucky"
-                                id="input-first-name"
-                                placeholder="First name"
-                                type="text"
-                              />
-                            </FormGroup>
-                          </Col>
-                          <Col lg="6">
-                            <FormGroup>
-                              <label
-                                className="form-control-label"
-                                htmlFor="input-last-name"
-                              >
-                                Last name dfsfd
-                              </label>
-                              <Input
-                                className="form-control-alternative"
-                                defaultValue="Jesse"
-                                id="input-last-name"
-                                placeholder="Last name"
-                                type="text"
-                              />
-                            </FormGroup>
-                          </Col>
-                        </Row>
-                      </div>
-                      <hr className="my-4" />
-                      {/* Address */}
-                    </Form>
-                  </Row>
+
+                  <Form>
+                    <h6 className="heading-small text-muted mb-4">
+                      Thông tin cá nhân cán bộ
+                    </h6>
+                    <div className="pl-lg-4">
+                      <Row>
+                        <Col lg="6">
+                          <FormGroup>
+                            <label
+                              className="form-control-label"
+                              htmlFor="input-username"
+                            >
+                              Họ và tên
+                            </label>
+                            <Input
+                              className="form-control-alternative addExamination_input_userinfor"
+                              defaultValue={teacherInfor.Name}
+                              id="input-username"
+                              placeholder="Trần Minh Tân"
+                              type="text"
+                              onChange={e => {
+                                setTeacherInfor(pre => {
+                                  let newTeacherInfo = { ...pre }
+                                  newTeacherInfo.Name = e.target.value
+                                  return newTeacherInfo
+                                })
+                              }}
+                            />
+                          </FormGroup>
+                        </Col>
+                        <Col lg="6">
+                          <FormGroup>
+                            <label
+                              className="form-control-label"
+                              htmlFor="input-email"
+                            >
+                              Mã số cán bộ
+                            </label>
+                            <Input
+                              className="form-control-alternative addExamination_input_userinfor"
+                              value={teacherInfor.IdentifierCode}
+                              id="input-username"
+                              placeholder="000122"
+                              type="number"
+                              max={999999}
+                              onChange={e => {
+                                setTeacherInfor(pre => {
+                                  let newTeacherInfo = { ...pre }
+                                  newTeacherInfo.IdentifierCode = e.target.value
+                                  return newTeacherInfo
+                                })
+                              }}
+                            />
+
+                          </FormGroup>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col lg="6">
+                          <FormGroup>
+                            <label
+                              className="form-control-label"
+                              htmlFor="input-first-name"
+                            >
+                              Số điện thoại
+                            </label>
+                            <Input
+                              className="form-control-alternative addExamination_input_userinfor"
+                              value={teacherInfor.PhoneNumber}
+                              id="input-first-name"
+                              placeholder="xxxx xxx xxx"
+                              type="text"
+                              onChange={e => {
+                                setTeacherInfor(pre => {
+                                  let newTeacherInfo = { ...pre }
+                                  newTeacherInfo.PhoneNumber = e.target.value
+                                  return newTeacherInfo
+                                })
+                              }}
+                            />
+                          </FormGroup>
+                        </Col>
+                        <Col lg="6">
+                          <FormGroup>
+                            <label
+                              className="form-control-label"
+                              htmlFor="input-last-name"
+                            >
+                              Email
+                            </label>
+                            <Input
+                              className="form-control-alternative addExamination_input_userinfor"
+                              id="input-email"
+                              placeholder="tantran@ctu.edu.vn"
+                              type="email"
+                              value={teacherInfor.Email}
+                              onChange={e => {
+                                setTeacherInfor(pre => {
+                                  let newTeacherInfo = { ...pre }
+                                  newTeacherInfo.Email = e.target.value
+                                  return newTeacherInfo
+                                })
+                              }}
+                            />
+                          </FormGroup>
+
+
+
+                        </Col>
+                      </Row>
+                    </div>
+                    <hr className="my-4" />
+                    {/* ================================================================ */}
+                    {/* Address */}
+                    <h5 className="heading-small text-muted">
+                      Địa chỉ cá nhân
+                    </h5>
+                    <div className="pl-lg-4">
+                      <br />
+                      <Row>
+                        <Col lg="4">
+                          <FormGroup>
+                            <label
+                              className="form-control-label"
+                              htmlFor="input-city"
+                            >
+                              Tỉnh, Thành phố
+                            </label>
+                            <Input
+                              className="form-control-alternative"
+                              value={address.province}
+                              id="input-city"
+                              placeholder="Tỉnh"
+                              type="text"
+                              onChange={e => {
+                                setAddress(pre => {
+                                  let newAddress = { ...pre }
+                                  newAddress.province = e.target.value
+                                  return newAddress
+                                })
+                              }}
+                            />
+                          </FormGroup>
+                        </Col>
+                        <Col lg="4">
+                          <FormGroup>
+                            <label
+                              className="form-control-label"
+                              htmlFor="input-country"
+                            >
+                              Quận, huyện
+                            </label>
+                            <Input
+                              className="form-control-alternative"
+                              value={address.district}
+                              id="input-country"
+                              placeholder="Huyện"
+                              type="text"
+                              onChange={e => {
+
+                                setAddress(pre => {
+                                  let newAddress = { ...pre }
+                                  newAddress.district = e.target.value
+                                  return newAddress
+                                })
+
+                              }}
+                            />
+                          </FormGroup>
+                        </Col>
+                        <Col lg="4">
+                          <FormGroup>
+                            <label
+                              className="form-control-label"
+                              htmlFor="input-country"
+                            >
+                              Phường, xã
+                            </label>
+                            <Input
+                              className="form-control-alternative"
+                              value={address.ward}
+                              id="input-postal-code"
+                              placeholder="Xã"
+                              type="text"
+                              onChange={e => {
+
+                                setAddress(pre => {
+                                  let newAddress = { ...pre }
+                                  newAddress.ward = e.target.value
+                                  return newAddress
+                                })
+                              }}
+                            />
+                          </FormGroup>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col md="8">
+                          <FormGroup>
+                            <label
+                              className="form-control-label"
+                              htmlFor="input-address"
+                            >
+                              Số nhà, Tên đường
+                            </label>
+                            <Input
+                              className="form-control-alternative"
+                              value={address.Street}
+                              id="input-address"
+                              placeholder=""
+                              type="text"
+                              onChange={e => {
+                                setAddress(pre => {
+                                  let newAddress = { ...pre }
+                                  newAddress.Street = e.target.value
+                                  return newAddress
+                                })
+                              }}
+                            />
+                          </FormGroup>
+                        </Col>
+                      </Row>
+                    </div>
+                    <div className="d-flex flex-row-reverse">
+                      <Button
+                        color="primary"
+                        onClick={handelSubmitTeacherInfo}
+                        size="lg"
+                        className="align-items-end"
+                      >Tạo mới</Button>
+                    </div>
+                  </Form>
+
+
 
                 </CardBody>
               </div>
-            
+
 
             </Card>
           </div>
