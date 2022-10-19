@@ -35,11 +35,11 @@ import {
 } from "reactstrap";
 
 //import "assets/css/Examination.css";
-import "./AddExamination.css";
+import "./AddRoom.css";
 
 
 
-const AddExamination = () => {
+const AddRoom = () => {
   const teacherInformInit = {
     Name: "",
     IdentifierCode: "",
@@ -79,7 +79,7 @@ const AddExamination = () => {
 
                   <Form>
                     <h6 className="heading-small text-muted mb-4">
-                      Thông tin kì thi
+                      Thông tin phòng thi
                     </h6>
                     <div className="pl-lg-4">
                       <Row>
@@ -89,13 +89,13 @@ const AddExamination = () => {
                               className="form-control-label"
                               htmlFor="input-username"
                             >
-                              Tên kì thi
+                              Tên phòng thi
                             </label>
                             <Input
                               className="form-control-alternative addExamination_input_userinfor"
                               defaultValue={teacherInfor.Name}
                               id="input-username"
-                              placeholder="Thi chứng chỉ UD công nghệ thông tin"
+                              placeholder="Phòng 202"
                               type="text"
                               // onChange={e => {
                               //   setTeacherInfor(pre => {
@@ -113,7 +113,7 @@ const AddExamination = () => {
                               className="form-control-label"
                               htmlFor="input-email"
                             >
-                              Địa điểm tổ chức thi
+                              Vị trí phòng thi
                             </label>
                             <Input
                               className="form-control-alternative addExamination_input_userinfor"
@@ -134,7 +134,7 @@ const AddExamination = () => {
                               className="form-control-label"
                               htmlFor="input-first-name"
                             >
-                              Điểm đậu lý thuyết
+                              Số lượng sinh viên tối đa
                             </label>
                             <Input
                               className="form-control-alternative addExamination_input_userinfor"
@@ -147,97 +147,10 @@ const AddExamination = () => {
                           </FormGroup>
                         </Col>
                         <Col lg="3"></Col>
-                        <Col lg="3">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-last-name"
-                            >
-                              Điểm đậu thực hành
-                            </label>
-                            <Input
-                              className="form-control-alternative addExamination_input_userinfor"
-                              id="input-mark"
-                              type="number"
-                              value="5"
-                            />
-                          </FormGroup>
-
-
-
-                        </Col>
-                      </Row>
-                    </div>
-                    <hr className="my-4" />
-                    {/* ================================================================ */}
-                    {/* Address */}
-                    <h5 className="heading-small text-muted">
-                      Mốc thời gian
-                    </h5>
-                    <div className="pl-lg-4">
-                      <br />
-                      <Row>
-                        <Col lg="4">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-city"
-                            >
-                              Ngày bắt đầu 
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              name="input-city"
-                              id="input-city"
-                              placeholder=""
-                              type="date"
-                              min={`${toDate.getFullYear()}-${toDate.getMonth()+1}-${toDate.getDate()}`}
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col lg="4">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-country"
-                            >
-                              Ngày kết thúc
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              value={address.district}
-                              id="input-country"
-                              placeholder="Huyện"
-                              type="date"
-                              min={`${toDate.getFullYear()}-${toDate.getMonth()+1}-${toDate.getDate()}`}
-                              
-                            />
-                          </FormGroup>
-                        </Col>
                         
                       </Row>
-                      <Row>
-                      <Col lg="4">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-country"
-                            >
-                              Thời hạn chấm bài
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              value={address.district}
-                              id="input-country"
-                              placeholder="Huyện"
-                              type="date"
-                              min={`${toDate.getFullYear()}-${toDate.getMonth()+1}-${toDate.getDate()}`}
-                              
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row>
                     </div>
+                    
                     <div className="d-flex flex-row-reverse">
                       <Button
                         color="primary"
@@ -247,8 +160,13 @@ const AddExamination = () => {
                       >Tạo mới</Button>
                     </div>
                   </Form>
+
+
+
                 </CardBody>
               </div>
+
+
             </Card>
           </div>
         </Row>
@@ -257,4 +175,4 @@ const AddExamination = () => {
   );
 };
 
-export default AddExamination;
+export default AddRoom;

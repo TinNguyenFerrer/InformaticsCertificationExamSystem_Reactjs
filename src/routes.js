@@ -23,6 +23,11 @@ import Login from "views/examples/Login.js";
 import Tables from "views/examples/Tables.js";
 import Icons from "views/examples/Icons.js";
 import Examination from "views/Examination/Examination.js";
+import Room from "views/Admin/Room/Room.js";
+import TestSchedule from "views/Admin/Schedule/TestSchedule";
+import Student from "views/Admin/Student/Student";
+import Teacher from "views/Admin/Teacher/Teacher";
+import TheoryTest from "views/Admin/TheoryTest/TheoryTest";
 var routes = [
   {
     path: "/index",
@@ -75,6 +80,57 @@ var routes = [
   }
 ];
 
+var routesTeacher1 = [
+  {
+    path: "/index",
+    name: "Dashboard",
+    icon: "ni ni-tv-2 text-primary",
+    component: Index,
+    layout: "/teacher"
+  },
+  {
+    path: "/icons",
+    name: "Icons",
+    icon: "ni ni-planet text-blue",
+    component: Icons,
+    layout: "/teacher"
+  },
+  {
+    path: "/maps",
+    name: "Maps",
+    icon: "ni ni-pin-3 text-orange",
+    component: Maps,
+    layout: "/teacher"
+  },
+  {
+    path: "/user-profile",
+    name: "User Profile",
+    icon: "ni ni-single-02 text-yellow",
+    component: Profile,
+    layout: "/teacher"
+  },
+  {
+    path: "/tables",
+    name: "Tables",
+    icon: "ni ni-bullet-list-67 text-red",
+    component: Tables,
+    layout: "/teacher"
+  },
+  {
+    path: "/login",
+    name: "Login",
+    icon: "ni ni-key-25 text-info",
+    component: Login,
+    layout: "/auth"
+  },
+  {
+    path: "/register",
+    name: "Register",
+    icon: "ni ni-circle-08 text-pink",
+    component: Register,
+    layout: "/auth"
+  }
+];
 var routesTeacher = [
   {
     path: "/index",
@@ -139,35 +195,35 @@ var routesAdmin = [
     path: "/room",
     name: "Phòng thi",
     icon: "ni ni-building text-blue",
-    component: Icons,
+    component: Room,
     layout: "/admin"
   },
   {
-    path: "/testSchedules",
+    path: "/testschedules",
     name: "Ca thi",
     icon: "ni ni-calendar-grid-58 text-orange",
-    component: Maps,
+    component: TestSchedule,
     layout: "/admin"
   },
   {
-    path: "/Student",
+    path: "/student",
     name: "Thí sinh",
     icon: "ni ni-hat-3 text-orange",
-    component: Maps,
+    component: Student,
     layout: "/admin"
   },
   {
     path: "/teacher",
     name: "Cán bộ",
     icon: "ni ni-single-02 text-yellow",
-    component: Profile,
+    component: Teacher,
     layout: "/admin"
   },
   {
     path: "/theoryTests",
     name: "Đề lý thuyết",
     icon: "ni ni-archive-2 text-red",
-    component: Tables,
+    component: TheoryTest,
     layout: "/admin"
   },
   // {
@@ -186,5 +242,6 @@ var routesAdmin = [
   // }
 ];
 export {routesTeacher};
+export {routesTeacher1};
 export {routesAdmin}
 export default routes;

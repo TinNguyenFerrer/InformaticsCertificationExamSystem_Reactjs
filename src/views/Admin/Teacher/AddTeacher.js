@@ -1,4 +1,4 @@
-import DateTimeRange from "components/Datepiker/DateTimeRange";
+
 /*!
 
 =========================================================
@@ -35,11 +35,11 @@ import {
 } from "reactstrap";
 
 //import "assets/css/Examination.css";
-import "./AddExamination.css";
+import "./AddTeacher.css";
 
 
 
-const AddExamination = () => {
+const AddTeacher = () => {
   const teacherInformInit = {
     Name: "",
     IdentifierCode: "",
@@ -52,7 +52,6 @@ const AddExamination = () => {
     ward: "",
     Street: ""
   }
-  const toDate = new Date()
   const [teacherInfor, setTeacherInfor] = useState(teacherInformInit);
   const [address, setAddress] = useState(addressInit)
   // console.log(address)
@@ -79,7 +78,7 @@ const AddExamination = () => {
 
                   <Form>
                     <h6 className="heading-small text-muted mb-4">
-                      Thông tin kì thi
+                      Thông tin cá nhân cán bộ
                     </h6>
                     <div className="pl-lg-4">
                       <Row>
@@ -89,21 +88,21 @@ const AddExamination = () => {
                               className="form-control-label"
                               htmlFor="input-username"
                             >
-                              Tên kì thi
+                              Họ và tên
                             </label>
                             <Input
                               className="form-control-alternative addExamination_input_userinfor"
                               defaultValue={teacherInfor.Name}
                               id="input-username"
-                              placeholder="Thi chứng chỉ UD công nghệ thông tin"
+                              placeholder="Trần Minh Tân"
                               type="text"
-                              // onChange={e => {
-                              //   setTeacherInfor(pre => {
-                              //     let newTeacherInfo = { ...pre }
-                              //     newTeacherInfo.Name = e.target.value
-                              //     return newTeacherInfo
-                              //   })
-                              // }}
+                              onChange={e => {
+                                setTeacherInfor(pre => {
+                                  let newTeacherInfo = { ...pre }
+                                  newTeacherInfo.Name = e.target.value
+                                  return newTeacherInfo
+                                })
+                              }}
                             />
                           </FormGroup>
                         </Col>
@@ -113,53 +112,73 @@ const AddExamination = () => {
                               className="form-control-label"
                               htmlFor="input-email"
                             >
-                              Địa điểm tổ chức thi
+                              Mã số cán bộ
                             </label>
                             <Input
                               className="form-control-alternative addExamination_input_userinfor"
-                              
-                              defaultValue = ""
+                              value={teacherInfor.IdentifierCode}
                               id="input-username"
-                              placeholder="Đại học cần thơ"
-                              type="text"
+                              placeholder="000122"
+                              type="number"
+                              max={999999}
+                              onChange={e => {
+                                setTeacherInfor(pre => {
+                                  let newTeacherInfo = { ...pre }
+                                  newTeacherInfo.IdentifierCode = e.target.value
+                                  return newTeacherInfo
+                                })
+                              }}
                             />
 
                           </FormGroup>
                         </Col>
                       </Row>
                       <Row>
-                        <Col lg="3">
+                        <Col lg="6">
                           <FormGroup>
                             <label
                               className="form-control-label"
                               htmlFor="input-first-name"
                             >
-                              Điểm đậu lý thuyết
+                              Số điện thoại
                             </label>
                             <Input
                               className="form-control-alternative addExamination_input_userinfor"
-                              defaultValue="5"
-                              id="input-mark"
-                              placeholder="5"
-                              type="number"
-                              
+                              value={teacherInfor.PhoneNumber}
+                              id="input-first-name"
+                              placeholder="xxxx xxx xxx"
+                              type="text"
+                              onChange={e => {
+                                setTeacherInfor(pre => {
+                                  let newTeacherInfo = { ...pre }
+                                  newTeacherInfo.PhoneNumber = e.target.value
+                                  return newTeacherInfo
+                                })
+                              }}
                             />
                           </FormGroup>
                         </Col>
-                        <Col lg="3"></Col>
-                        <Col lg="3">
+                        <Col lg="6">
                           <FormGroup>
                             <label
                               className="form-control-label"
                               htmlFor="input-last-name"
                             >
-                              Điểm đậu thực hành
+                              Email
                             </label>
                             <Input
                               className="form-control-alternative addExamination_input_userinfor"
-                              id="input-mark"
-                              type="number"
-                              value="5"
+                              id="input-email"
+                              placeholder="tantran@ctu.edu.vn"
+                              type="email"
+                              value={teacherInfor.Email}
+                              onChange={e => {
+                                setTeacherInfor(pre => {
+                                  let newTeacherInfo = { ...pre }
+                                  newTeacherInfo.Email = e.target.value
+                                  return newTeacherInfo
+                                })
+                              }}
                             />
                           </FormGroup>
 
@@ -172,7 +191,7 @@ const AddExamination = () => {
                     {/* ================================================================ */}
                     {/* Address */}
                     <h5 className="heading-small text-muted">
-                      Mốc thời gian
+                      Địa chỉ cá nhân
                     </h5>
                     <div className="pl-lg-4">
                       <br />
@@ -183,15 +202,21 @@ const AddExamination = () => {
                               className="form-control-label"
                               htmlFor="input-city"
                             >
-                              Ngày bắt đầu 
+                              Tỉnh, Thành phố
                             </label>
                             <Input
                               className="form-control-alternative"
-                              name="input-city"
+                              value={address.province}
                               id="input-city"
-                              placeholder=""
-                              type="date"
-                              min={`${toDate.getFullYear()}-${toDate.getMonth()+1}-${toDate.getDate()}`}
+                              placeholder="Tỉnh"
+                              type="text"
+                              onChange={e => {
+                                setAddress(pre => {
+                                  let newAddress = { ...pre }
+                                  newAddress.province = e.target.value
+                                  return newAddress
+                                })
+                              }}
                             />
                           </FormGroup>
                         </Col>
@@ -201,38 +226,74 @@ const AddExamination = () => {
                               className="form-control-label"
                               htmlFor="input-country"
                             >
-                              Ngày kết thúc
+                              Quận, huyện
                             </label>
                             <Input
                               className="form-control-alternative"
                               value={address.district}
                               id="input-country"
                               placeholder="Huyện"
-                              type="date"
-                              min={`${toDate.getFullYear()}-${toDate.getMonth()+1}-${toDate.getDate()}`}
-                              
+                              type="text"
+                              onChange={e => {
+
+                                setAddress(pre => {
+                                  let newAddress = { ...pre }
+                                  newAddress.district = e.target.value
+                                  return newAddress
+                                })
+
+                              }}
                             />
                           </FormGroup>
                         </Col>
-                        
-                      </Row>
-                      <Row>
-                      <Col lg="4">
+                        <Col lg="4">
                           <FormGroup>
                             <label
                               className="form-control-label"
                               htmlFor="input-country"
                             >
-                              Thời hạn chấm bài
+                              Phường, xã
                             </label>
                             <Input
                               className="form-control-alternative"
-                              value={address.district}
-                              id="input-country"
-                              placeholder="Huyện"
-                              type="date"
-                              min={`${toDate.getFullYear()}-${toDate.getMonth()+1}-${toDate.getDate()}`}
-                              
+                              value={address.ward}
+                              id="input-postal-code"
+                              placeholder="Xã"
+                              type="text"
+                              onChange={e => {
+
+                                setAddress(pre => {
+                                  let newAddress = { ...pre }
+                                  newAddress.ward = e.target.value
+                                  return newAddress
+                                })
+                              }}
+                            />
+                          </FormGroup>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col md="8">
+                          <FormGroup>
+                            <label
+                              className="form-control-label"
+                              htmlFor="input-address"
+                            >
+                              Số nhà, Tên đường
+                            </label>
+                            <Input
+                              className="form-control-alternative"
+                              value={address.Street}
+                              id="input-address"
+                              placeholder=""
+                              type="text"
+                              onChange={e => {
+                                setAddress(pre => {
+                                  let newAddress = { ...pre }
+                                  newAddress.Street = e.target.value
+                                  return newAddress
+                                })
+                              }}
                             />
                           </FormGroup>
                         </Col>
@@ -242,13 +303,18 @@ const AddExamination = () => {
                       <Button
                         color="primary"
                         onClick={handelSubmitTeacherInfo}
-                        size=""
+                        size="lg"
                         className="align-items-end"
                       >Tạo mới</Button>
                     </div>
                   </Form>
+
+
+
                 </CardBody>
               </div>
+
+
             </Card>
           </div>
         </Row>
@@ -257,4 +323,4 @@ const AddExamination = () => {
   );
 };
 
-export default AddExamination;
+export default AddTeacher;

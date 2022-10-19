@@ -1,4 +1,5 @@
 import AddExamination from "views/Examination/AddExamination.js";
+import AddRoom from "views/Admin/Room/AddRoom.js";
 import Icons from "views/examples/Icons.js";
 
 import "./Admin.css"
@@ -29,13 +30,44 @@ import AdminFooter from "components/Footers/AdminFooter.js";
 import SidebarAdmin from "components/Sidebar/SidebarAdmin";
 
 import { routesAdmin } from "routes.js";
+import AddStudent from "views/Admin/Student/AddStudent";
+import AddTeacher from "views/Admin/Teacher/AddTeacher";
+import AddSchedule from "views/Admin/Schedule/AddSchedule";
+import AddTheoryTest from "views/Admin/TheoryTest/AddTheoryTest";
 const RouteChil = () => {
   return (
-    <Route
-      exact
-      path={"/admin/examination/add"}
-      component={AddExamination}
-    />
+    <>
+      <Route
+        exact
+        path={"/admin/examination/add"}
+        component={AddExamination}
+      />
+      <Route
+        exact
+        path={"/admin/room/add"}
+        component={AddRoom}
+      />
+      <Route
+        exact
+        path={"/admin/student/add"}
+        component={AddStudent}
+      />
+      <Route
+        exact
+        path={"/admin/teacher/add"}
+        component={AddTeacher}
+      />
+      <Route
+        exact
+        path={"/admin/schedule/add"}
+        component={AddSchedule}
+      />
+      <Route
+        exact
+        path={"/admin/Theory/add"}
+        component={AddTheoryTest}
+      />
+    </>
   )
 }
 const Admin = (props) => {

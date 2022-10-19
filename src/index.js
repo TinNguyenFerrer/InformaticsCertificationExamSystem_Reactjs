@@ -27,6 +27,7 @@ import AdminLayout from "layouts/Admin.js";
 import AuthLayout from "layouts/Auth.js";
 
 import Teacher from "layouts/Teacher";
+import Teacher1 from "layouts/Teacher1";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
@@ -34,6 +35,7 @@ root.render(
     <Switch>
       <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
       <Route path="/teacher" render={(props) => <Teacher {...props}  />} />
+      <Route path="/teacher1" render={(props) => <Teacher1 {...props}  />} />
       <Route path="/auth" render={(props) => <AuthLayout {...props} />} />
       <Redirect from="/" to="/admin/index" />
     </Switch>

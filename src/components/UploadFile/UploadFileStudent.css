@@ -1,0 +1,24 @@
+.input_uploadFile_student{
+    width: 100px;
+    height: 35px;
+}
+.input_uploadFile_student_lable{
+    width: 270px;
+}
+.input_uploadFile_student_lable{
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 1;
+    height: calc(1.5em + 1.25rem + 2px);
+    padding: 0.625rem 0.75rem;
+    overflow: hidden;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #8898aa;
+    background-color: #fff;
+    border: 1px solid #a8abae;
+    border-radius: 0.375rem;
+    box-shadow: none;
+}
