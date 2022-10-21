@@ -18,6 +18,7 @@ import DateTimeRange from "components/Datepiker/DateTimeRange";
 */
 import React from "react";
 import { useState } from "react";
+import { useHistory } from "react-router-dom";
 // reactstrap components
 import { Card, Container, Row } from "reactstrap";
 
@@ -33,35 +34,51 @@ import {
   Input,
   Col
 } from "reactstrap";
-
+import * as request from "Until/request";
 //import "assets/css/Examination.css";
 import "./AddExamination.css";
 
 
 
 const AddExamination = () => {
-  const teacherInformInit = {
-    Name: "",
-    IdentifierCode: "",
-    PhoneNumber: "",
-    Email: "",
-  }
-  const addressInit = {
-    province: "",
-    district: "",
-    ward: "",
-    Street: ""
-  }
+  const history = useHistory()
+  const examinationInformInit = [{
+    id: null,
+    name: "",
+    starTime: "",
+    endTime: "",
+    location: "",
+    minimumTheoreticalMark: 0,
+    minimumPracticeMark: 0,
+    gradingDeadline: ""
+  }]
   const toDate = new Date()
-  const [teacherInfor, setTeacherInfor] = useState(teacherInformInit);
-  const [address, setAddress] = useState(addressInit)
+  const [examinationInfor, setExaminationInfor] = useState(examinationInformInit);
   // console.log(address)
   // console.log(teacherInfor)
-  const handelSubmitTeacherInfo = () => {
-    const addressSubmit = `${address.province}, ${address.district}, ${address.ward}, ${address.Street}`
-    const teacherInformSubmit = {...teacherInfor, Address:addressSubmit}
-    console.log(teacherInformSubmit)
-    console.log(addressSubmit)
+  const addTeacherServices = async (teacher) => {
+    try {
+      let res = await request.postAPI("Examination",teacher)
+      if(res.status === 200){
+        history.push('/admin/examination')
+      }else{
+        window.alert("Thêm giáo viên thất bại kiểm tra lại dữ liệu")
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  const handelSubmitExaminationInfo = () => {
+    try{
+    let examinationSubmit= examinationInfor
+    examinationSubmit.starTime = new Date(examinationInfor.starTime).toISOString()
+    examinationSubmit.endTime = new Date(examinationInfor.endTime).toISOString()
+    examinationSubmit.gradingDeadline = new Date(examinationInfor.gradingDeadline).toISOString()
+    console.log(examinationSubmit)
+    addTeacherServices(examinationSubmit)
+    }catch(e){
+      window.alert("Thêm giáo viên thất bại kiểm tra lại dữ liệu")
+    }
     // let t= addressSubmit.split(",")
     // console.log(addressSubmit.split(",",3))
     // console.log(t.slice(3,t.length).join(","))
@@ -93,17 +110,18 @@ const AddExamination = () => {
                             </label>
                             <Input
                               className="form-control-alternative addExamination_input_userinfor"
-                              defaultValue={teacherInfor.Name}
+                              value={examinationInfor.Name||""}
                               id="input-username"
                               placeholder="Thi chứng chỉ UD công nghệ thông tin"
                               type="text"
-                              // onChange={e => {
-                              //   setTeacherInfor(pre => {
-                              //     let newTeacherInfo = { ...pre }
-                              //     newTeacherInfo.Name = e.target.value
-                              //     return newTeacherInfo
-                              //   })
-                              // }}
+                              onChange={e => {
+                                setExaminationInfor(pre => {
+                                  let newExaminationInfor = { ...pre }
+                                  console.log(typeof( e.target.value))
+                                  newExaminationInfor.Name = e.target.value
+                                  return newExaminationInfor
+                                })
+                              }}
                             />
                           </FormGroup>
                         </Col>
@@ -117,11 +135,17 @@ const AddExamination = () => {
                             </label>
                             <Input
                               className="form-control-alternative addExamination_input_userinfor"
-                              
-                              defaultValue = ""
+                              value={examinationInfor.location||""}
                               id="input-username"
                               placeholder="Đại học cần thơ"
                               type="text"
+                              onChange={e => {
+                                setExaminationInfor(pre => {
+                                  let newExaminationInfor = { ...pre }
+                                  newExaminationInfor.location = e.target.value
+                                  return newExaminationInfor
+                                })
+                              }}
                             />
 
                           </FormGroup>
@@ -142,7 +166,14 @@ const AddExamination = () => {
                               id="input-mark"
                               placeholder="5"
                               type="number"
-                              
+                              value={examinationInfor.minimumTheoreticalMark}
+                              onChange={e => {
+                                setExaminationInfor(pre => {
+                                  let newExaminationInfor = { ...pre }
+                                  newExaminationInfor.minimumTheoreticalMark = e.target.value
+                                  return newExaminationInfor
+                                })
+                              }}
                             />
                           </FormGroup>
                         </Col>
@@ -159,7 +190,14 @@ const AddExamination = () => {
                               className="form-control-alternative addExamination_input_userinfor"
                               id="input-mark"
                               type="number"
-                              value="5"
+                              value={examinationInfor.minimumTheoreticalMark||5}
+                              onChange={e => {
+                                setExaminationInfor(pre => {
+                                  let newExaminationInfor = { ...pre }
+                                  newExaminationInfor.minimumTheoreticalMark = e.target.value
+                                  return newExaminationInfor
+                                })
+                              }}
                             />
                           </FormGroup>
 
@@ -186,6 +224,17 @@ const AddExamination = () => {
                               Ngày bắt đầu 
                             </label>
                             <Input
+                              value={examinationInfor.starTime||''}
+                              onChange={(date)=>{
+                                setExaminationInfor(pre => {
+                                  let newExaminationInfor = { ...pre }
+                                  console.log(date.target.value)
+                                  newExaminationInfor.starTime = date.target.value
+                                  newExaminationInfor.endTime ="" 
+                                  newExaminationInfor.gradingDeadline ="" 
+                                  return newExaminationInfor
+                                })
+                              }}
                               className="form-control-alternative"
                               name="input-city"
                               id="input-city"
@@ -204,13 +253,22 @@ const AddExamination = () => {
                               Ngày kết thúc
                             </label>
                             <Input
+                              disabled={examinationInfor.starTime?false:true}
                               className="form-control-alternative"
-                              value={address.district}
                               id="input-country"
                               placeholder="Huyện"
                               type="date"
-                              min={`${toDate.getFullYear()}-${toDate.getMonth()+1}-${toDate.getDate()}`}
-                              
+                              //min={`${toDate.getFullYear()}-${toDate.getMonth()+1}-${toDate.getDate()}`}
+                              min={examinationInfor.starTime}
+                              value={examinationInfor.endTime||''}
+                              onChange={(date)=>{
+                                setExaminationInfor(pre => {
+                                  let newExaminationInfor = { ...pre }
+                                  newExaminationInfor.endTime = date.target.value
+                                  newExaminationInfor.gradingDeadline ="" 
+                                  return newExaminationInfor
+                                })
+                              }}
                             />
                           </FormGroup>
                         </Col>
@@ -226,13 +284,22 @@ const AddExamination = () => {
                               Thời hạn chấm bài
                             </label>
                             <Input
+                              disabled={examinationInfor.endTime?false:true}
                               className="form-control-alternative"
-                              value={address.district}
                               id="input-country"
                               placeholder="Huyện"
                               type="date"
-                              min={`${toDate.getFullYear()}-${toDate.getMonth()+1}-${toDate.getDate()}`}
-                              
+                              //min={`${toDate.getFullYear()}-${toDate.getMonth()+1}-${toDate.getDate()}`}
+                              min={examinationInfor.starTime}
+                              max={examinationInfor.endTime}
+                              value={examinationInfor.gradingDeadline}
+                              onChange={(date)=>{
+                                setExaminationInfor(pre => {
+                                  let newExaminationInfor = { ...pre }
+                                  newExaminationInfor.gradingDeadline = date.target.value
+                                  return newExaminationInfor
+                                })
+                              }}
                             />
                           </FormGroup>
                         </Col>
@@ -241,7 +308,7 @@ const AddExamination = () => {
                     <div className="d-flex flex-row-reverse">
                       <Button
                         color="primary"
-                        onClick={handelSubmitTeacherInfo}
+                        onClick={handelSubmitExaminationInfo}
                         size=""
                         className="align-items-end"
                       >Tạo mới</Button>

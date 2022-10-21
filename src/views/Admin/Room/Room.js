@@ -1,5 +1,5 @@
 import { useLocation, Route, Switch } from "react-router-dom";
-import AddExamination from "views/Examination/AddExamination.js";
+import AddExamination from "views/Admin/Examination/AddExamination.js";
 /*!
 
 =========================================================

@@ -18,7 +18,7 @@
 */
 import React from "react";
 import { useHistory } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 // reactstrap components
 import { Card, Container, Row } from "reactstrap";
 
@@ -40,8 +40,14 @@ import "./AddTeacher.css";
 import * as request from "Until/request";
 
 
-const AddTeacher = () => {
+const EditTeacher = () => {
+  //let { id } = useParams();
+  const queryParams = new URLSearchParams(window.location.search);
+  const id = queryParams.get('id');
+  console.log(id);
   const teacherInformInit = {
+    id: null,
+    address: "",
     fullName: "",
     identifierCode: "",
     phoneNumber: "",
@@ -57,20 +63,39 @@ const AddTeacher = () => {
   const history = useHistory()
   const [teacherInfor, setTeacherInfor] = useState(teacherInformInit);
   const [address, setAddress] = useState(addressInit)
-  // console.log(address)
-  // console.log(teacherInfor)
+  //get Teacher Infor
+  useEffect(() => {
+    const GetTeacherInforAPI = async (id) => {
+      const res = await request.getAPI("Teacher/" + id)
+      let t = res.data
+      setTeacherInfor(t);
+      let addr = t.address.split(",")
+      console.log(t.address.split(",", 4))
+      setAddress(() => ({
+        province: addr[0],
+        district: addr[1],
+        ward: addr[2],
+        Street: addr[3]
+      }))
+      console.log(address)
+      console.log(teacherInfor)
+    }
+    const queryParams = new URLSearchParams(window.location.search);
+    const id = queryParams.get('id');
+    GetTeacherInforAPI(id)
+  }, [])
   const handelSubmitTeacherInfo = () => {
     const addressSubmit = `${address.province}, ${address.district}, ${address.ward}, ${address.Street}`
-    const teacherInformSubmit = { ...teacherInfor, Address: addressSubmit }
+    const teacherInformSubmit = { ...teacherInfor, address: addressSubmit }
     console.log(teacherInformSubmit)
     console.log(addressSubmit)
 
     const addTecherAPI = async () => {
       try {
-        const response = await request.postAPI("Teacher/Create/", { ...teacherInformSubmit })
+        const response = await request.postAPI("Teacher/Update/", { ...teacherInformSubmit })
         console.log(response)
         if (response.status == 200) {
-          console.log("thành cong")
+          // console.log("thành cong")
           history.push('/admin/teacher')
         }
         else {
@@ -87,6 +112,7 @@ const AddTeacher = () => {
     // console.log(addressSubmit.split(",",3))
     // console.log(t.slice(3,t.length).join(","))
   }
+  console.log(teacherInfor)
   return (
     <>
       <HeaderEmpty />
@@ -97,13 +123,6 @@ const AddTeacher = () => {
             <Card className="shadow border-0">
               <div>
                 <CardBody>
-                  <h6 className="heading-small text-muted mb-4">
-                    Thêm từ một danh sách giáo viên
-                  </h6>
-                  <UpoadFileStudent >
-                    Tải danh sách
-                  </UpoadFileStudent>
-                  <br></br>
                   <Form>
                     <h6 className="heading-small text-muted mb-4">
                       Thông tin cá nhân cán bộ
@@ -122,7 +141,7 @@ const AddTeacher = () => {
                               className="form-control-alternative addExamination_input_userinfor"
                               value={teacherInfor.fullName}
                               id="input-username"
-                              placeholder="Trần Minh Tân"
+
                               type="text"
                               onChange={e => {
                                 setTeacherInfor(pre => {
@@ -144,7 +163,7 @@ const AddTeacher = () => {
                             </label>
                             <Input
                               className="form-control-alternative addExamination_input_userinfor"
-                              value={teacherInfor.IdentifierCode}
+                              value={teacherInfor.identifierCode}
                               id="input-username"
                               placeholder="000122"
                               type="number"
@@ -172,9 +191,9 @@ const AddTeacher = () => {
                             </label>
                             <Input
                               className="form-control-alternative addExamination_input_userinfor"
-                              value={teacherInfor.PhoneNumber}
+                              value={teacherInfor.phoneNumber}
                               id="input-first-name"
-                              placeholder="xxxx xxx xxx"
+
                               type="number"
                               onChange={e => {
                                 setTeacherInfor(pre => {
@@ -199,7 +218,7 @@ const AddTeacher = () => {
                               id="input-email"
                               placeholder="tantran@ctu.edu.vn"
                               type="email"
-                              value={teacherInfor.Email}
+                              value={teacherInfor.email}
                               onChange={e => {
                                 setTeacherInfor(pre => {
                                   let newTeacherInfo = { ...pre }
@@ -354,7 +373,7 @@ const AddTeacher = () => {
                         onClick={handelSubmitTeacherInfo}
                         size="lg"
                         className="align-items-end"
-                      >Tạo mới</Button>
+                      >Sửa</Button>
                     </div>
                   </Form>
 
@@ -372,4 +391,4 @@ const AddTeacher = () => {
   );
 };
 
-export default AddTeacher;
+export default EditTeacher;

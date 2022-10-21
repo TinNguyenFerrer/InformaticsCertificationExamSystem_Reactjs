@@ -1,4 +1,4 @@
-import { useLocation, Route, Switch, Link } from "react-router-dom";
+import { useLocation, Route, Switch } from "react-router-dom";
 
 /*!
 
@@ -17,12 +17,13 @@ import { useLocation, Route, Switch, Link } from "react-router-dom";
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
 import * as request from "Until/request";
+import React from "react";
 import { useState, useEffect } from 'react';
 // reactstrap components
 import { Card, Container, DropdownItem, Row } from "reactstrap";
 import { Redirect } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 // core components
 import HeaderEmpty from "components/Headers/HeaderEmpty";
 // reactstrap added
@@ -37,73 +38,49 @@ import {
   Table,
   UncontrolledDropdown,
   DropdownToggle,
-  DropdownMenu,
-  Spinner
+  DropdownMenu
 } from "reactstrap";
-import { useHistory } from "react-router-dom";
-import "./Teacher.css"
-import DropdownList from "components/Dropdown/DropdownList.js";
+import "./Examination.css";
 
-const Teacher = () => {
-  
+const Examination = () => {
   const history = useHistory()
-  const handleRedirectAddTeacher = () => {
-    history.push("teacher/add")
+  const handleRedirectAddExam = () => {
+    history.push("examination/add")
   };
-  const handleRedirectToEdit = (id) => {
-    history.push("teacher/edit?id=" + id)
-  }
-  const teacherInformInit = [{
-    id: "",
-    fullName: "",
-    identifierCode: "",
-    phoneNumber: "",
-    email: "",
-    address: ""
+  //=======-------- get list of examination---------=========
+  const examinationInformInit = [{
+    id: null,
+    name: "",
+    starTime: "",
+    endTime: "",
+    location: "",
+    minimumTheoreticalMark: 0,
+    minimumPracticeMark: 0,
+    gradingDeadline: ""
   }]
-  let [teachers, setTeachers] = useState([])
+  let [examinations, setExaminations] = useState(examinationInformInit)
   //console.log("rerender")
   //console.log(teachers)
-  const getAllTeacherServices = () =>{
-    request.getAPI("Teacher/GetAll")
-      .then((res) => {
 
-        const t = res.data
-        setTeachers(t);
-        console.log(t)
-      }).catch((e) => {
-        console.log(e)
-      })
+  const getAllTeacherServices = async () => {
+    try {
+      let res = await request.getAPI("Examination/GetAll")
+      const data = res.data;
+      setExaminations([...data])
+      console.log(examinations)
+      //console.log(data)
+    } catch (e) {
+      console.log(e)
+    }
   }
   useEffect(() => {
     getAllTeacherServices()
-  },[])
-  
-  const deleteTeacher = (e) => {
-    //console.log(e)
-    const deleteTecherAPI = async (e) => {
-      try {
-        const response = await request.deleteAPI("Teacher/" + e)
-        //console.log(response)
-        if (response.status == 200) {
-          console.log("thành cong")
-          getAllTeacherServices()
-          
-        }
-        else {
-          window.alert("xóa giáo viên thất bại")
-          console.log("thất bại")
-        }
-      } catch (e) {
-        window.alert("Xóa giáo viên thất bại")
-        console.log(e)
-      }
-    }
-    deleteTecherAPI(e)
-  }
+  }, [])
+  //console.log(examinations)
   return (
     <>
-    
+
+
       <HeaderEmpty />
       {/* Page content */}
       <Container className="mt--8 Body_Content" fluid>
@@ -112,16 +89,15 @@ const Teacher = () => {
             <Card className="shadow border-0">
               <div>
                 <CardBody>
-
                   <CardHeader className="bg-white border-0">
                     <Row className="align-items-center">
                       <Col xs="8">
-                        <h3 className="mb-0">Danh sách giáo viên</h3>
+                        <h3 className="mb-0">Danh sách các kì thi</h3>
                       </Col>
                       <Col className="text-right" xs="4">
                         <Button
                           color="primary"
-                          onClick={handleRedirectAddTeacher}
+                          onClick={handleRedirectAddExam}
                           size="sm"
                         >
                           Tạo mới
@@ -133,31 +109,29 @@ const Teacher = () => {
                     <Table className="align-items-center table-flush" responsive>
                       <thead className="thead-light">
                         <tr>
-                          <th scope="col">STT</th>
-                          <th scope="col">Tên giáo viên</th>
-                          <th scope="col">địa chỉ</th>
-                          <th scope="col">mã giáo viên</th>
-                          <th scope="col">sdt</th>
-                          <th scope="col">Email</th>
+                          <th scope="col">Tên Kì Thi</th>
+                          <th scope="col">Địa điểm thi</th>
+                          <th scope="col">Bắt Đầu</th>
+                          <th scope="col">Kết Thúc</th>
+                          <th scope="col">Hạn Chấm Thi</th>
                           <th scope="col"></th>
                         </tr>
                       </thead>
-
-                      {(teachers.lenght != 0) &&
-                        (<tbody>{teachers.map((teacher, index) =>
+                      {(examinations.lenght != 0) &&
+                        (<tbody>{examinations.map((examinations, index) =>
                         (
-                          <tr key={teacher.id}>
-                            <td>{index}</td>
-                            <td>{teacher.fullName}</td>
-                            <td>{teacher.address}</td>
-                            <td>{teacher.identifierCode}</td>
-                            <td>{teacher.phoneNumber}</td>
-                            <td>{teacher.email}</td>
+                          <tr key={examinations.id}>
+                            <td>{examinations.name}</td>
+                            <td>{examinations.location}</td>
+                            <td>{ new Date(examinations.starTime).toLocaleDateString()}</td>
+                            <td>{new Date(examinations.endTime).toLocaleDateString()}</td>
+                            <td>{new Date(examinations.gradingDeadline).toLocaleDateString()}</td>
+
                             <td className="text-right">
                               <UncontrolledDropdown>
                                 <DropdownToggle
                                   className="btn-icon-only text-light"
-
+                                  href="#pablo"
                                   role="button"
                                   size="sm"
                                   color=""
@@ -166,39 +140,25 @@ const Teacher = () => {
                                   <i className="fas fa-ellipsis-v" />
                                 </DropdownToggle>
                                 <DropdownMenu className="dropdown-menu-arrow" right>
-                                    <DropdownItem
-
-                                      idteacher={teacher.id}
-                                    onClick={() => (handleRedirectToEdit(teacher.id))}
-                                    >
-                                      Sửa
-                                    </DropdownItem>
-
                                   <DropdownItem
-
-                                    idteacher={teacher.id}
-                                    onClick={() => (deleteTeacher(teacher.id))}
+                                    href="#pablo"
+                                    onClick={(e) => e.preventDefault()}
                                   >
-                                    Xóa
+                                    Edit
+                                  </DropdownItem>
+                                  <DropdownItem
+                                    href="#pablo"
+                                    onClick={(e) => e.preventDefault()}
+                                  >
+                                    Delete
                                   </DropdownItem>
                                 </DropdownMenu>
                               </UncontrolledDropdown>
                             </td>
                           </tr>
-                        ))//if fase----------------
-                        }
+                        ))}
                         </tbody>)}
-
                     </Table>
-                    {(teachers.length == 0) && (<div className="d-flex justify-content-center">
-                      <br></br>
-                      <Spinner style={{
-                        height: '3rem',
-                        width: '3rem'
-                      }} color="primary">
-                        Loading...
-                      </Spinner>
-                    </div>)}
                   </div>
                   <hr className="my-4" />
 
@@ -209,9 +169,9 @@ const Teacher = () => {
             </Card>
           </div>
         </Row>
-      </Container >
+      </Container>
     </>
   );
 };
 
-export default Teacher;
+export default Examination;

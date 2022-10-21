@@ -1,7 +1,7 @@
 import "./UploadFileStudent.css"
 import React, { useState } from 'react';
 import { Button, Input, FormGroup, Label } from 'reactstrap';
-const UpoadFileStudent = () => {
+const UpoadFileStudent = ({children,prop,url}) => {
     const [selectedFile, setSelectedFile] = useState();
     const [isSelected, setIsSelected] = useState(false);
 

@@ -22,7 +22,8 @@ import Register from "views/examples/Register.js";
 import Login from "views/examples/Login.js";
 import Tables from "views/examples/Tables.js";
 import Icons from "views/examples/Icons.js";
-import Examination from "views/Examination/Examination.js";
+
+import Examination from "views/Admin/Examination/Examination.js";
 import Room from "views/Admin/Room/Room.js";
 import TestSchedule from "views/Admin/Schedule/TestSchedule";
 import Student from "views/Admin/Student/Student";

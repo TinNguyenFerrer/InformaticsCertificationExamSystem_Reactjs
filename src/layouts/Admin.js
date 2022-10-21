@@ -1,4 +1,4 @@
-import AddExamination from "views/Examination/AddExamination.js";
+import AddExamination from "views/Admin/Examination/AddExamination.js";
 import AddRoom from "views/Admin/Room/AddRoom.js";
 import Icons from "views/examples/Icons.js";
 
@@ -32,6 +32,7 @@ import SidebarAdmin from "components/Sidebar/SidebarAdmin";
 import { routesAdmin } from "routes.js";
 import AddStudent from "views/Admin/Student/AddStudent";
 import AddTeacher from "views/Admin/Teacher/AddTeacher";
+import EditTeacher from "views/Admin/Teacher/EditTeacher";
 import AddSchedule from "views/Admin/Schedule/AddSchedule";
 import AddTheoryTest from "views/Admin/TheoryTest/AddTheoryTest";
 const RouteChil = () => {
@@ -56,6 +57,11 @@ const RouteChil = () => {
         exact
         path={"/admin/teacher/add"}
         component={AddTeacher}
+      />
+      <Route
+        exact
+        path={"/admin/teacher/edit"}
+        component={EditTeacher}
       />
       <Route
         exact
