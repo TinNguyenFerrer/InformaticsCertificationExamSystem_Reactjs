@@ -122,13 +122,24 @@ const TestShedule = () => {
       console.log(e)
     }
   }
+  const GetAllTestScheduleByIdExaminationServices = async (id) =>{
+    try {
+      let res = await request.getAPI("TestShedule/GetAllByIdExamination?IdExam=" + id)
+      const data = res.data;
+      setTestSchedules([...data])
+      console.log(data)
+      //console.log(data)
+    } catch (e) {
+      console.log(e)
+    }
+  }
   useEffect(() => {
     getAllTestScheduleServices()
   }, [])
   const onExaminationSelected = (exam) => {
     setExaminationSeleted(exam)
     console.log(exam)
-    getAllTestScheduleByIdExaminationServices(exam.id)
+    GetAllTestScheduleByIdExaminationServices(exam.id)
   };
   return (
     <>

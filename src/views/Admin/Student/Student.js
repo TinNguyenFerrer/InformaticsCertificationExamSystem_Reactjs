@@ -141,7 +141,6 @@ const Student = () => {
             <Card className="shadow border-0">
               <div>
                 <CardBody>
-
                   <DropdownList
                     item={examinations}
                     onItemSelected={onExaminationSelected}
