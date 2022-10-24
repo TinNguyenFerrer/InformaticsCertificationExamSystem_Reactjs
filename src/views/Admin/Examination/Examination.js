@@ -43,11 +43,6 @@ import {
 import "./Examination.css";
 
 const Examination = () => {
-  const history = useHistory()
-  const handleRedirectAddExam = () => {
-    history.push("examination/add")
-  };
-  //=======-------- get list of examination---------=========
   const examinationInformInit = [{
     id: null,
     name: "",
@@ -59,9 +54,39 @@ const Examination = () => {
     gradingDeadline: ""
   }]
   let [examinations, setExaminations] = useState(examinationInformInit)
+  const history = useHistory()
+  const handleRedirectAddExam = () => {
+    history.push("examination/add")
+  };
+  const handleRedirectToEdit = (id) => {
+    history.push(history.location.pathname+"/edit?id=" + id)
+  }
+  const deleteExamination = (e) => {
+    //console.log(e)
+    const deleteExaminationService = async (e) => {
+      try {
+        const response = await request.deleteAPI("Examination/" + e)
+        console.log(response)
+        if (response.status == 200) {
+          console.log("thành cong"+e)
+          getAllTeacherServices()
+          
+        }
+        else {
+          window.alert("xóa giáo viên thất bại")
+          console.log("thất bại")
+        }
+      } catch (e) {
+        window.alert("Xóa giáo viên thất bại")
+        console.log(e)
+      }
+    }
+    deleteExaminationService(e)
+  }
+  
   //console.log("rerender")
   //console.log(teachers)
-
+//=======-------- get list of examination---------=========
   const getAllTeacherServices = async () => {
     try {
       let res = await request.getAPI("Examination/GetAll")
@@ -141,14 +166,12 @@ const Examination = () => {
                                 </DropdownToggle>
                                 <DropdownMenu className="dropdown-menu-arrow" right>
                                   <DropdownItem
-                                    href="#pablo"
-                                    onClick={(e) => e.preventDefault()}
+                                    onClick={() => (handleRedirectToEdit(examinations.id))}
                                   >
                                     Edit
                                   </DropdownItem>
                                   <DropdownItem
-                                    href="#pablo"
-                                    onClick={(e) => e.preventDefault()}
+                                    onClick={() => (deleteExamination(examinations.id))}
                                   >
                                     Delete
                                   </DropdownItem>

@@ -41,21 +41,95 @@ import {
 import { useHistory } from "react-router-dom";
 import "./TestSchedule.css";
 import DropdownList from "components/Dropdown/DropdownList.js";
+import * as request from "Until/request";
 
 const TestShedule = () => {
-
+  const examinationInformInit = [{
+    id: null,
+    name: "Chọn kì thi",
+    starTime: "",
+    endTime: "",
+    location: "",
+    minimumTheoreticalMark: 0,
+    minimumPracticeMark: 0,
+    gradingDeadline: ""
+  }]
   let te = { id: -1, name: "" };
 
   const history = useHistory()
   const handleRedirectAddSchedule = () => {
-    history.push("schedule/add")
+    if (examinationSeleted.id == null) {
+      window.alert("Xin chọn kì thi trước")
+    } else {
+      history.push(`schedule/add?idexamination=${examinationSeleted.id}`)
+    }
   };
+  const handleRedirectToEdit = (id) => {
+    if (examinationSeleted.id == null) {
+      window.alert("Xin chọn kì thi trước")
+    } else {
+      history.push(history.location.pathname + `/edit?id=${id}&idexamination=${examinationSeleted.id}`)
+    }
+  }
+  const deleteExamination = (e) => {
+    // //console.log(e)
+    // const deleteExaminationService = async (e) => {
+    //   try {
+    //     const response = await request.deleteAPI("Examination/" + e)
+    //     console.log(response)
+    //     if (response.status == 200) {
+    //       console.log("thành cong"+e)
+    //       getAllTeacherServices()
+
+    //     }
+    //     else {
+    //       window.alert("xóa giáo viên thất bại")
+    //       console.log("thất bại")
+    //     }
+    //   } catch (e) {
+    //     window.alert("Xóa giáo viên thất bại")
+    //     console.log(e)
+    //   }
+    // }
+    // deleteExaminationService(e)
+  }
   const [DropdowItem, setDropdowItem] = useState(te)
   const callbackFunction = (childData) => {
     console.log(childData.target.id)
   }
-  
-  
+  let [examinations, setExaminations] = useState([])
+  let [testSchedules, setTestSchedules] = useState([])
+  let [examinationSeleted, setExaminationSeleted] = useState({})
+  const getAllTestScheduleServices = async () => {
+    try {
+      let res = await request.getAPI("Examination/GetAll")
+      const data = res.data;
+      setExaminations([...data])
+      //console.log(examinations)
+      console.log(data)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  const getAllTestScheduleByIdExaminationServices = async (id) => {
+    try {
+      let res = await request.getAPI("TestShedule/GetAllByIdExamination?id=" + id)
+      const data = res.data;
+      setTestSchedules([...data])
+      console.log(data)
+      //console.log(data)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  useEffect(() => {
+    getAllTestScheduleServices()
+  }, [])
+  const onExaminationSelected = (exam) => {
+    setExaminationSeleted(exam)
+    console.log(exam)
+    getAllTestScheduleByIdExaminationServices(exam.id)
+  };
   return (
     <>
       <HeaderEmpty />
@@ -63,19 +137,18 @@ const TestShedule = () => {
       <Container className="mt--8 Body_Content" fluid>
         <Row>
           <div className="col">
-            
+
             <Card className="shadow border-0">
-              
+
               <div>
                 <CardBody>
-                <DropdownList 
-                item={[   { id: 1, name: "tin" },
-                          { id: 2, name: "nguyen" }]}
-                          onItemSelected={callbackFunction}
-                        >Chọn kì thi</DropdownList>
+                  <DropdownList
+                    item={examinations}
+                    onItemSelected={onExaminationSelected}
+                  >{examinationSeleted.name || "chọn kì thi"}</DropdownList>
                   <CardHeader className="bg-white border-0">
                     <Row className="align-items-center">
-                      
+
                       <Col xs="8">
                         <h3 className="mb-0">Danh sách các ca thi</h3>
                       </Col>
@@ -87,7 +160,7 @@ const TestShedule = () => {
                         >
                           Tạo mới
                         </Button>
-                        
+
                       </Col>
                     </Row>
                   </CardHeader>
@@ -96,49 +169,55 @@ const TestShedule = () => {
                       <thead className="thead-light">
                         <tr>
                           <th scope="col">STT</th>
-                          <th scope="col">Ca</th>
-                          <th scope="col">Vị trí</th>
-                          <th scope="col">Sức chứa</th>
+                          <th scope="col">Ca thi</th>
+                          <th scope="col">Thời gian bắt đầu</th>
+                          <th scope="col">Thời gian kết thúc</th>
                           <th scope="col"></th>
                         </tr>
                       </thead>
-                      <tbody>
-                        <tr>
-                          <td>80</td>
-                          <td>Phòng 202</td>
-                          <td>Lầu 2 khoa, công nghệ thông tin</td>
-                          <td>80</td>
-                          <td className="text-right">
-                            <UncontrolledDropdown>
-                              <DropdownToggle
-                                className="btn-icon-only text-light"
-                                href="#pablo"
-                                role="button"
-                                size="sm"
-                                color=""
-                                onClick={(e) => e.preventDefault()}
-                              >
-                                <i className="fas fa-ellipsis-v" />
-                              </DropdownToggle>
-                              <DropdownMenu className="dropdown-menu-arrow" right>
-                                <DropdownItem
-                                  href="#pablo"
-                                  onClick={(e) => e.preventDefault()}
-                                >
-                                  Edit
-                                </DropdownItem>
-                                <DropdownItem
-                                  href="#pablo"
-                                  onClick={(e) => e.preventDefault()}
-                                >
-                                  Delete
-                                </DropdownItem>
-                              </DropdownMenu>
-                            </UncontrolledDropdown>
-                          </td>
-                        </tr>
+                      {(testSchedules.lenght != 0) &&
+                        (<tbody>{testSchedules.map((testSchedule, index) =>
+                        (
+                          <tr key={testSchedule.id}>
+                            <td>{index}</td>
+                            <td>{testSchedule.name}</td>
+                            <td>{new Date(testSchedule.starTime).toLocaleString()}</td>
+                            <td>{new Date(testSchedule.endTime).toLocaleString()}</td>
+                            <td className="text-right">
+                              <UncontrolledDropdown>
+                                <DropdownToggle
+                                  className="btn-icon-only text-light"
 
-                      </tbody>
+                                  role="button"
+                                  size="sm"
+                                  color=""
+                                  onClick={(e) => e.preventDefault()}
+                                >
+                                  <i className="fas fa-ellipsis-v" />
+                                </DropdownToggle>
+                                <DropdownMenu className="dropdown-menu-arrow" right>
+                                  <DropdownItem
+
+                                    idteacher={testSchedule.id}
+                                    onClick={() => (handleRedirectToEdit(testSchedule.id))}
+                                  >
+                                    Sửa
+                                  </DropdownItem>
+
+                                  <DropdownItem
+
+                                    idteacher={testSchedule.id}
+                                    onClick={() => (deleteExamination(testSchedule.id))}
+                                  >
+                                    Xóa
+                                  </DropdownItem>
+                                </DropdownMenu>
+                              </UncontrolledDropdown>
+                            </td>
+                          </tr>
+                        ))//if fase----------------
+                        }
+                        </tbody>)}
                     </Table>
                   </div>
                   <hr className="my-4" />

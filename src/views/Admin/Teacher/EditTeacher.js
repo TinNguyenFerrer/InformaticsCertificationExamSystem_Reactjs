@@ -65,7 +65,7 @@ const EditTeacher = () => {
   const [address, setAddress] = useState(addressInit)
   //get Teacher Infor
   useEffect(() => {
-    const GetTeacherInforAPI = async (id) => {
+    const GetTeacherInforService = async (id) => {
       const res = await request.getAPI("Teacher/" + id)
       let t = res.data
       setTeacherInfor(t);
@@ -82,7 +82,7 @@ const EditTeacher = () => {
     }
     const queryParams = new URLSearchParams(window.location.search);
     const id = queryParams.get('id');
-    GetTeacherInforAPI(id)
+    GetTeacherInforService(id)
   }, [])
   const handelSubmitTeacherInfo = () => {
     const addressSubmit = `${address.province}, ${address.district}, ${address.ward}, ${address.Street}`
@@ -90,7 +90,7 @@ const EditTeacher = () => {
     console.log(teacherInformSubmit)
     console.log(addressSubmit)
 
-    const addTecherAPI = async () => {
+    const editTecherService = async () => {
       try {
         const response = await request.postAPI("Teacher/Update/", { ...teacherInformSubmit })
         console.log(response)
@@ -107,7 +107,7 @@ const EditTeacher = () => {
         console.log(e)
       }
     }
-    addTecherAPI()
+    editTecherService()
     // let t= addressSubmit.split(",")
     // console.log(addressSubmit.split(",",3))
     // console.log(t.slice(3,t.length).join(","))

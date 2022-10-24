@@ -1,5 +1,13 @@
 import AddExamination from "views/Admin/Examination/AddExamination.js";
 import AddRoom from "views/Admin/Room/AddRoom.js";
+import EditRoom from "views/Admin/Room/EditRoom.js";
+import AddStudent from "views/Admin/Student/AddStudent";
+import EditStudent from "views/Admin/Student/EditStudent";
+import AddTeacher from "views/Admin/Teacher/AddTeacher";
+import EditTeacher from "views/Admin/Teacher/EditTeacher";
+import AddSchedule from "views/Admin/Schedule/AddSchedule";
+import AddTheoryTest from "views/Admin/TheoryTest/AddTheoryTest";
+import EditExamination from "views/Admin/Examination/EditExamination.js";
 import Icons from "views/examples/Icons.js";
 
 import "./Admin.css"
@@ -30,11 +38,7 @@ import AdminFooter from "components/Footers/AdminFooter.js";
 import SidebarAdmin from "components/Sidebar/SidebarAdmin";
 
 import { routesAdmin } from "routes.js";
-import AddStudent from "views/Admin/Student/AddStudent";
-import AddTeacher from "views/Admin/Teacher/AddTeacher";
-import EditTeacher from "views/Admin/Teacher/EditTeacher";
-import AddSchedule from "views/Admin/Schedule/AddSchedule";
-import AddTheoryTest from "views/Admin/TheoryTest/AddTheoryTest";
+
 const RouteChil = () => {
   return (
     <>
@@ -45,13 +49,28 @@ const RouteChil = () => {
       />
       <Route
         exact
+        path={"/admin/examination/edit"}
+        component={EditExamination}
+      />
+      <Route
+        exact
         path={"/admin/room/add"}
         component={AddRoom}
       />
       <Route
         exact
+        path={"/admin/room/edit"}
+        component={EditRoom}
+      />
+      <Route
+        exact
         path={"/admin/student/add"}
         component={AddStudent}
+      />
+      <Route
+        exact
+        path={"/admin/student/edit"}
+        component={EditStudent}
       />
       <Route
         exact

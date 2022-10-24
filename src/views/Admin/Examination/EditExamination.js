@@ -17,7 +17,7 @@ import DateTimeRange from "components/Datepiker/DateTimeRange";
 
 */
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 // reactstrap components
 import { Card, Container, Row } from "reactstrap";
@@ -40,7 +40,7 @@ import "./AddExamination.css";
 
 
 
-const AddExamination = () => {
+const EditExamination = () => {
   const history = useHistory()
   const examinationInformInit = [{
     id: null,
@@ -54,15 +54,29 @@ const AddExamination = () => {
   }]
   const toDate = new Date()
   const [examinationInfor, setExaminationInfor] = useState(examinationInformInit);
-  // console.log(address)
-  // console.log(teacherInfor)
-  const addTeacherServices = async (teacher) => {
+  //------------======== GetTeacherInfor ==========---------------
+  console.log(examinationInfor)
+  useEffect(() => {
+    const GetExaminatiionInforService = async (id) => {
+      const res = await request.getAPI("Examination/" + id)
+      let t = res.data
+      console.log("thong tin kì thi")
+      console.log(t)
+      setExaminationInfor(t);
+    }
+    const queryParams = new URLSearchParams(window.location.search);
+    const id = queryParams.get('id');
+    GetExaminatiionInforService(id)
+  }, [])
+  const editTeacherServices = async (teacher) => {
     try {
-      let res = await request.postAPI("Examination",teacher)
+      let res = await request.putAPI("Examination",teacher)
+      console.log(res)
       if(res.status === 200){
         history.push('/admin/examination')
+        //window.alert("Sửa giáo viên thành công kiểm tra lại dữ liệu")
       }else{
-        window.alert("Thêm giáo viên thất bại kiểm tra lại dữ liệu")
+        window.alert("Sửa thông tin kì thi thất bại kiểm tra lại dữ liệu")
       }
     } catch (e) {
       console.log(e)
@@ -75,7 +89,7 @@ const AddExamination = () => {
     examinationSubmit.endTime = new Date(examinationInfor.endTime).toISOString()
     examinationSubmit.gradingDeadline = new Date(examinationInfor.gradingDeadline).toISOString()
     console.log(examinationSubmit)
-    addTeacherServices(examinationSubmit)
+    editTeacherServices(examinationSubmit)
     }catch(e){
       window.alert("Thêm giáo viên thất bại kiểm tra lại dữ liệu")
     }
@@ -110,7 +124,7 @@ const AddExamination = () => {
                             </label>
                             <Input
                               className="form-control-alternative addExamination_input_userinfor"
-                              value={examinationInfor.Name||""}
+                              value={examinationInfor.name||""}
                               id="input-username"
                               placeholder="Thi chứng chỉ UD công nghệ thông tin"
                               type="text"
@@ -118,7 +132,7 @@ const AddExamination = () => {
                                 setExaminationInfor(pre => {
                                   let newExaminationInfor = { ...pre }
                                   console.log(typeof( e.target.value))
-                                  newExaminationInfor.Name = e.target.value
+                                  newExaminationInfor.name = e.target.value
                                   return newExaminationInfor
                                 })
                               }}
@@ -162,7 +176,6 @@ const AddExamination = () => {
                             </label>
                             <Input
                               className="form-control-alternative addExamination_input_userinfor"
-                              defaultValue="5"
                               id="input-mark"
                               placeholder="5"
                               type="number"
@@ -224,7 +237,7 @@ const AddExamination = () => {
                               Ngày bắt đầu 
                             </label>
                             <Input
-                              value={examinationInfor.starTime||''}
+                              value={new Date(examinationInfor.starTime).toLocaleDateString('en-CA')}
                               onChange={(date)=>{
                                 setExaminationInfor(pre => {
                                   let newExaminationInfor = { ...pre }
@@ -259,8 +272,8 @@ const AddExamination = () => {
                               placeholder="Huyện"
                               type="date"
                               //min={`${toDate.getFullYear()}-${toDate.getMonth()+1}-${toDate.getDate()}`}
-                              min={examinationInfor.starTime}
-                              value={examinationInfor.endTime||''}
+                              min={new Date(examinationInfor.starTime).toLocaleDateString('en-CA')}
+                              value={new Date(examinationInfor.endTime).toLocaleDateString('en-CA')}
                               onChange={(date)=>{
                                 setExaminationInfor(pre => {
                                   let newExaminationInfor = { ...pre }
@@ -290,9 +303,9 @@ const AddExamination = () => {
                               placeholder="Huyện"
                               type="date"
                               //min={`${toDate.getFullYear()}-${toDate.getMonth()+1}-${toDate.getDate()}`}
-                              min={examinationInfor.starTime}
-                              max={examinationInfor.endTime}
-                              value={examinationInfor.gradingDeadline}
+                              min={new Date(examinationInfor.starTime).toLocaleDateString('en-CA')}
+                              max={new Date(examinationInfor.endTime).toLocaleDateString('en-CA')}
+                              value={new Date(examinationInfor.gradingDeadline).toLocaleDateString('en-CA')}
                               onChange={(date)=>{
                                 setExaminationInfor(pre => {
                                   let newExaminationInfor = { ...pre }
@@ -311,7 +324,7 @@ const AddExamination = () => {
                         onClick={handelSubmitExaminationInfo}
                         size=""
                         className="align-items-end"
-                      >Tạo mới</Button>
+                      >Sửa</Button>
                     </div>
                   </Form>
                 </CardBody>
@@ -324,4 +337,4 @@ const AddExamination = () => {
   );
 };
 
-export default AddExamination;
+export default EditExamination;

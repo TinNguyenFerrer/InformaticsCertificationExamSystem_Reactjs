@@ -18,7 +18,7 @@ import { useLocation, Route, Switch } from "react-router-dom";
 
 */
 import React from "react";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 // reactstrap components
 import { Card, Container, DropdownItem, Row } from "reactstrap";
 import { Redirect } from "react-router-dom";
@@ -36,18 +36,100 @@ import {
   Table,
   UncontrolledDropdown,
   DropdownToggle,
-  DropdownMenu
+  DropdownMenu,
+  Label
 } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import "./Student.css"
 import DropdownList from "components/Dropdown/DropdownList.js";
 import UpoadFileStudent from "components/UploadFile/UploadFileStudent";
+import * as request from "Until/request";
 
 const Student = () => {
   const history = useHistory()
-  const handleRedirectAddStudent = () => {
-    history.push("student/add")
+  const studentInformInit = [{
+    name: "",
+    email: "",
+    phoneNumber: "",
+    identifierCode: "",
+    password: "",
+  }]
+  let [students, setStudents] = useState(studentInformInit)
+  let [examinations, setExaminations] = useState([])
+  let [examinationSeleted, setExaminationSeleted] = useState({})
+  let [freelanceStudent, setFreelanceStudent] = useState(false)
+  const getAllExaminationsServices = async () => {
+    try {
+      let res = await request.getAPI("Examination/GetAll")
+      const data = res.data;
+      setExaminations([...data])
+      //console.log(examinations)
+      console.log(data)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  const getAllStudentByIdExaminationServices = async (id) => {
+    try {
+      let res = await request.getAPI("Student/GetAllByIdExamination?id=" + id)
+      const data = res.data;
+      setStudents([...data])
+      console.log(data)
+      //console.log(data)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  const onExaminationSelected = (exam) => {
+    setExaminationSeleted(exam)
+    console.log(exam)
+    getAllStudentByIdExaminationServices(exam.id)
   };
+  const handleRedirectAddStudent = () => {
+    if (examinationSeleted.id == null) {
+      window.alert("Bạn phải chọn kì thi trước")
+    } else {
+      history.push("student/add?idexamination=" + examinationSeleted.id)
+    }
+  };
+  const getAllStudentServices = async () => {
+    try {
+      let res = await request.getAPI("Student/GetAll")
+      const data = res.data;
+      setStudents([...data])
+      console.log(data)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  const deleteStudentService = async (e) => {
+    try {
+      const response = await request.deleteAPI("Student/" + e)
+      console.log(response)
+      if (response.status == 200) {
+        console.log("thành cong" + e)
+        getAllStudentServices()
+
+      }
+      else {
+        window.alert("xóa giáo viên thất bại")
+        console.log("thất bại")
+      }
+    } catch (e) {
+      window.alert("Xóa giáo viên thất bại")
+      console.log(e)
+    }
+  }
+  const handleDeleteStudent = (e) => {
+    deleteStudentService(e)
+  }
+  useEffect(() => {
+    getAllStudentServices()
+    getAllExaminationsServices()
+  }, [])
+  const handleRedirectToEdit = (id) => {
+    history.push(history.location.pathname + "/edit?id=" + id)
+  }
 
   return (
     <>
@@ -59,6 +141,23 @@ const Student = () => {
             <Card className="shadow border-0">
               <div>
                 <CardBody>
+
+                  <DropdownList
+                    item={examinations}
+                    onItemSelected={onExaminationSelected}
+                  >{examinationSeleted.name || "chọn kì thi"}
+                  </DropdownList>
+                  <br></br>
+                  <div className="student-input-freelanceStudent">
+                    <Input 
+                      type="checkbox"
+                      checked={freelanceStudent}
+                      onChange={() => {
+                        setFreelanceStudent(!freelanceStudent);
+                      }}
+                    />
+                    <Label check>Sinh viên tự do</Label>
+                  </div>
                   <UpoadFileStudent >
                     Tải từ file
                   </UpoadFileStudent>
@@ -83,49 +182,48 @@ const Student = () => {
                       <thead className="thead-light">
                         <tr>
                           <th scope="col">STT</th>
-                          <th scope="col">Phòng</th>
-                          <th scope="col">Vị trí</th>
-                          <th scope="col">Sức chứa</th>
+                          <th scope="col">Tên Sinh viên</th>
+                          <th scope="col">Email</th>
+                          <th scope="col">SĐT</th>
                           <th scope="col"></th>
                         </tr>
                       </thead>
-                      <tbody>
-                        <tr>
-                          <td>80</td>
-                          <td>Phòng 202</td>
-                          <td>Lầu 2 khoa, công nghệ thông tin</td>
-                          <td>80</td>
-                          <td className="text-right">
-                            <UncontrolledDropdown>
-                              <DropdownToggle
-                                className="btn-icon-only text-light"
-                                href="#pablo"
-                                role="button"
-                                size="sm"
-                                color=""
-                                onClick={(e) => e.preventDefault()}
-                              >
-                                <i className="fas fa-ellipsis-v" />
-                              </DropdownToggle>
-                              <DropdownMenu className="dropdown-menu-arrow" right>
-                                <DropdownItem
+                      {(students.lenght != 0) &&
+                        (<tbody>{students.map((student, index) =>
+                        (
+                          <tr key={index}>
+                            <td>{index}</td>
+                            <td>{student.name}</td>
+                            <td>{student.email}</td>
+                            <td>{student.phoneNumber}</td>
+                            <td className="text-right">
+                              <UncontrolledDropdown>
+                                <DropdownToggle
+                                  className="btn-icon-only text-light"
                                   href="#pablo"
+                                  role="button"
+                                  size="sm"
+                                  color=""
                                   onClick={(e) => e.preventDefault()}
                                 >
-                                  Edit
-                                </DropdownItem>
-                                <DropdownItem
-                                  href="#pablo"
-                                  onClick={(e) => e.preventDefault()}
-                                >
-                                  Delete
-                                </DropdownItem>
-                              </DropdownMenu>
-                            </UncontrolledDropdown>
-                          </td>
-                        </tr>
-
-                      </tbody>
+                                  <i className="fas fa-ellipsis-v" />
+                                </DropdownToggle>
+                                <DropdownMenu className="dropdown-menu-arrow" right>
+                                  <DropdownItem
+                                    onClick={() => (handleRedirectToEdit(student.id))}
+                                  >
+                                    Edit
+                                  </DropdownItem>
+                                  <DropdownItem
+                                    onClick={() => (handleDeleteStudent(student.id))}
+                                  >
+                                    Delete
+                                  </DropdownItem>
+                                </DropdownMenu>
+                              </UncontrolledDropdown>
+                            </td>
+                          </tr>))}
+                        </tbody>)}
                     </Table>
                   </div>
                   <hr className="my-4" />

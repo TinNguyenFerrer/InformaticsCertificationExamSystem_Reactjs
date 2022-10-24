@@ -52,14 +52,39 @@ const AddSchedule = () => {
     ward: "",
     Street: ""
   }
+  // const queryParams = new URLSearchParams(window.location.search);
+  // const idexamination = queryParams.get('idexamination');
   const toDate = new Date()
-  const [teacherInfor, setTeacherInfor] = useState(studentInformInit);
+  const [testScheduleInfor, setTestScheduleInfor] = useState({});
   const [address, setAddress] = useState(addressInit)
-  // console.log(address)
-  // console.log(teacherInfor)
-  const handelSubmitStudentInfo = () => {
+  
+  // const addTeacherServices = async (teacher) => {
+  //   try {
+  //     let res = await request.postAPI("Examination",teacher)
+  //     if(res.status === 200){
+  //       history.push('/admin/examination')
+  //     }else{
+  //       window.alert("Thêm giáo viên thất bại kiểm tra lại dữ liệu")
+  //     }
+  //   } catch (e) {
+  //     console.log(e)
+  //   }
+  // }
+  // const handelSubmitTestScheduleInfo = () => {
+  //   try{
+  //   let examinationSubmit= examinationInfor
+  //   examinationSubmit.starTime = new Date(examinationInfor.starTime).toISOString()
+  //   examinationSubmit.endTime = new Date(examinationInfor.endTime).toISOString()
+  //   examinationSubmit.gradingDeadline = new Date(examinationInfor.gradingDeadline).toISOString()
+  //   console.log(examinationSubmit)
+  //   addTeacherServices(examinationSubmit)
+  //   }catch(e){
+  //     window.alert("Thêm giáo viên thất bại kiểm tra lại dữ liệu")
+  //   }
+  // }
+  const handelSubmitScheduleInfo = () => {
     const addressSubmit = `${address.province}, ${address.district}, ${address.ward}, ${address.Street}`
-    const teacherInformSubmit = {...teacherInfor, Address:addressSubmit}
+    const teacherInformSubmit = {...testScheduleInfor, Address:addressSubmit}
     console.log(teacherInformSubmit)
     console.log(addressSubmit)
     // let t= addressSubmit.split(",")
@@ -93,7 +118,7 @@ const AddSchedule = () => {
                             </label>
                             <Input
                               className="form-control-alternative addExamination_input_userinfor"
-                              defaultValue={teacherInfor.Name}
+                              defaultValue={testScheduleInfor.Name}
                               id="input-username"
                               placeholder="Phòng 202"
                               type="text"
@@ -147,11 +172,12 @@ const AddSchedule = () => {
                         </Col>
                         <Col lg="3"></Col>
                       </Row>
+                      
                     </div>
                     <div className="d-flex flex-row-reverse">
                       <Button
                         color="primary"
-                        onClick={handelSubmitStudentInfo}
+                        onClick={handelSubmitScheduleInfo}
                         size=""
                         className="align-items-end"
                       >Tạo mới</Button>

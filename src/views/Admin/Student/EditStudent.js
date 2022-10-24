@@ -17,7 +17,7 @@ import DateTimeRange from "components/Datepiker/DateTimeRange";
 
 */
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 // reactstrap components
 import { Card, Container, Row } from "reactstrap";
@@ -51,38 +51,40 @@ const AddStudent = () => {
     birthDay: "",
     birthPlace: ""
   }]
-  const addressInit = {
-    province: "",
-    district: "",
-    ward: "",
-    Street: ""
-  }
-  const toDate = new Date()
-  const queryParams = new URLSearchParams(window.location.search);
-  const idexamination = queryParams.get('idexamination');
   const [studentsInfor, setStudentInfor] = useState(studentInformInit);
-  const addStudentServices = async (students) => {
+  const GetExaminatiionInforService = async (id) => {
+    const res = await request.getAPI("Student/" + id)
+    let t = res.data
+    console.log("thong tin kì thi")
+    console.log(t)
+    setStudentInfor(t);
+  }
+  useEffect(() => {
+    const queryParams = new URLSearchParams(window.location.search);
+    const id = queryParams.get('id');
+    GetExaminatiionInforService(id)
+  },[])
+  const editStudentServices = async (students) => {
     try {
-      let res = await request.postAPI("Student",students)
+      let res = await request.putAPI("Student",students)
       console.log(res)
       if(res.status === 200){
         history.push('/admin/student')
         
       }else{
-        window.alert("Thêm giáo viên thất bại kiểm tra lại dữ liệu")
+        window.alert("Sửa giáo viên thất bại kiểm tra lại dữ liệu")
       }
     } catch (e) {
       console.log(e)
     }
   }
-  const handelSubmitStudentInfo = () => {
+  const handelEditStudentInfo = () => {
     
     try{
       let students= studentsInfor
       students.birthDay = new Date(studentsInfor.birthDay).toISOString()
-      students.examinationId=idexamination
       console.log(students)
-      addStudentServices(students)
+      editStudentServices(students)
     }catch(e){
       console.log(e)
     }
@@ -132,7 +134,7 @@ const AddStudent = () => {
                           <FormGroup>
                             <label
                               className="form-control-label"
-                              htmlFor="input-email"
+                              htmlFor="input-phoneNumber"
                             >
                               Số điện thoại
                             </label>
@@ -140,7 +142,7 @@ const AddStudent = () => {
                               className="form-control-alternative addExamination_input_userinfor"
                               value={studentsInfor.phoneNumber}
                               defaultValue=""
-                              id="input-username"
+                              id="input-phoneNumber"
                               placeholder="xxxx xxx xxx"
                               type="number"
                               onChange={e => {
@@ -160,7 +162,7 @@ const AddStudent = () => {
                           <FormGroup>
                             <label
                               className="form-control-label"
-                              htmlFor="input-first-name"
+                              htmlFor="input-email"
                             >
                               Email
                             </label>
@@ -183,14 +185,14 @@ const AddStudent = () => {
                           <FormGroup>
                             <label
                               className="form-control-label"
-                              htmlFor="input-first-name"
+                              htmlFor="input-password"
                             >
                               Mật khẩu
                             </label>
                             <Input
                               className="form-control-alternative addExamination_input_userinfor"
                               value={studentsInfor.password}
-                              id="input-text"
+                              id="input-password"
                               type="password"
                               onChange={e => {
                                 setStudentInfor(pre => {
@@ -209,12 +211,13 @@ const AddStudent = () => {
                           <FormGroup>
                             <label
                               className="form-control-label"
-                              htmlFor="input-city"
+                              htmlFor="input-birthDay"
                             >
                               Ngày sinh
                             </label>
                             <Input
-                              value={studentsInfor.birthDay}
+                              value={new Date(studentsInfor.birthDay).toLocaleDateString('en-CA')}
+                              id="input-birthDay"
                               onChange={(date) => {
                                 setStudentInfor(pre => {
                                   let newStudentInfor = { ...pre }
@@ -223,8 +226,6 @@ const AddStudent = () => {
                                 })
                               }}
                               className="form-control-alternative"
-                              name="input-city"
-                              id="input-city"
                               placeholder=""
                               type="date"
                             />
@@ -234,7 +235,7 @@ const AddStudent = () => {
                           <FormGroup>
                             <label
                               className="form-control-label"
-                              htmlFor="input-city"
+                              htmlFor="input-birthplace"
                             >
                               Nơi sinh
                             </label>
@@ -249,7 +250,7 @@ const AddStudent = () => {
                               }}
                               className="form-control-alternative"
                               name="input-city"
-                              id="input-city"
+                              id="input-birthplace"
                               placeholder=""
                               type="text"
                             />
@@ -261,10 +262,10 @@ const AddStudent = () => {
                     <div className="d-flex flex-row-reverse">
                       <Button
                         color="primary"
-                        onClick={handelSubmitStudentInfo}
+                        onClick={handelEditStudentInfo}
                         size=""
                         className="align-items-end"
-                      >Tạo mới</Button>
+                      >Sửa</Button>
                     </div>
                   </Form>
 

@@ -17,7 +17,7 @@ import DateTimeRange from "components/Datepiker/DateTimeRange";
 
 */
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 // reactstrap components
 import { Card, Container, Row } from "reactstrap";
 
@@ -46,29 +46,38 @@ const AddRoom = () => {
     location: "",
     capacity:0
   }
-  const toDate = new Date()
   const [roomInfor, setRoomInfor] = useState(RoomInformInit);
-
-  const addRoomServices = async (students) => {
+  const getRoomInforService = async (id) => {
+    const res = await request.getAPI("ExaminationRoom/" + id)
+    let t = res.data
+    console.log("thong tin phòng")
+    console.log(t)
+    setRoomInfor(t);
+  }
+  useEffect(() => {
+    const queryParams = new URLSearchParams(window.location.search);
+    const id = queryParams.get('id');
+    getRoomInforService(id)
+  },[])
+  const editRoomServices = async (room) => {
     try {
-      let res = await request.postAPI("ExaminationRoom",students)
+      let res = await request.putAPI("ExaminationRoom",room)
       console.log(res)
       if(res.status === 200){
         history.push('/admin/room')
-        console.log("thêm room thành công")
+        
       }else{
-        window.alert("Thêm phòng thi thất bại kiểm tra lại dữ liệu")
+        window.alert("Sửa phòng thất bại kiểm tra lại dữ liệu")
       }
     } catch (e) {
-      window.alert("Thêm phòng thi thất bại kiểm tra lại dữ liệu")
       console.log(e)
     }
   }
-  const handelSubmitRoomInfo = () => {
+  const handelEditRoomInfo = () => {
     
     try{
       console.log(roomInfor)
-      addRoomServices(roomInfor)
+      editRoomServices(roomInfor)
     }catch(e){
       console.log(e)
     }
@@ -173,10 +182,10 @@ const AddRoom = () => {
                     <div className="d-flex flex-row-reverse">
                       <Button
                         color="primary"
-                        onClick={handelSubmitRoomInfo}
+                        onClick={handelEditRoomInfo}
                         size=""
                         className="align-items-end"
-                      >Tạo mới</Button>
+                      >Sửa</Button>
                     </div>
                   </Form>
 

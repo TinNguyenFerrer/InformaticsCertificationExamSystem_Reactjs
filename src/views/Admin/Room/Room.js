@@ -1,5 +1,5 @@
-import { useLocation, Route, Switch } from "react-router-dom";
-import AddExamination from "views/Admin/Examination/AddExamination.js";
+import { useLocation, Route, Switch, Link } from "react-router-dom";
+
 /*!
 
 =========================================================
@@ -18,7 +18,8 @@ import AddExamination from "views/Admin/Examination/AddExamination.js";
 
 */
 import React from "react";
-import { useState } from 'react';
+import * as request from "Until/request";
+import { useState, useEffect } from 'react';
 // reactstrap components
 import { Card, Container, DropdownItem, Row } from "reactstrap";
 import { Redirect } from "react-router-dom";
@@ -36,19 +37,70 @@ import {
   Table,
   UncontrolledDropdown,
   DropdownToggle,
-  DropdownMenu
+  DropdownMenu,
+  Spinner
 } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import "./Room.css"
+import DropdownList from "components/Dropdown/DropdownList.js";
 
 const Room = () => {
+  
   const history = useHistory()
-  const handleRedirectAddRoom = () => {
+  const handleRedirectAddTeacher = () => {
     history.push("room/add")
   };
-
+  const handleRedirectToEdit = (id) => {
+    history.push("room/edit?id=" + id)
+  }
+  const RoomInformInit = [{
+    id: "",
+    name: "",
+    location: "",
+    capacity: ""
+  }]
+  let [rooms, setRooms] = useState([])
+  let [loading, setLoading] = useState(true)
+  const getAllRoomServices = async () =>{
+    try {
+      let res = await request.getAPI("ExaminationRoom/GetAll")
+      const data = res.data;
+      if(res.status === 200) setLoading(false)
+      setRooms([...data])
+      console.log(data)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  useEffect(() => {
+    getAllRoomServices()
+  },[])
+  
+  const deleteTeacher = (e) => {
+    //console.log(e)
+    const deleteTecherAPI = async (e) => {
+      try {
+        const response = await request.deleteAPI("ExaminationRoom/" + e)
+        //console.log(response)
+        if (response.status == 200) {
+          console.log("thành cong")
+          getAllRoomServices()
+          
+        }
+        else {
+          window.alert("xóa giáo viên thất bại")
+          console.log("thất bại")
+        }
+      } catch (e) {
+        window.alert("Xóa giáo viên thất bại")
+        console.log(e)
+      }
+    }
+    deleteTecherAPI(e)
+  }
   return (
     <>
+    
       <HeaderEmpty />
       {/* Page content */}
       <Container className="mt--8 Body_Content" fluid>
@@ -57,15 +109,16 @@ const Room = () => {
             <Card className="shadow border-0">
               <div>
                 <CardBody>
+
                   <CardHeader className="bg-white border-0">
                     <Row className="align-items-center">
                       <Col xs="8">
-                        <h3 className="mb-0">Danh sách các phòng thi</h3>
+                        <h3 className="mb-0">Danh sách giáo viên</h3>
                       </Col>
                       <Col className="text-right" xs="4">
                         <Button
                           color="primary"
-                          onClick={handleRedirectAddRoom}
+                          onClick={handleRedirectAddTeacher}
                           size="sm"
                         >
                           Tạo mới
@@ -78,50 +131,67 @@ const Room = () => {
                       <thead className="thead-light">
                         <tr>
                           <th scope="col">STT</th>
-                          <th scope="col">Phòng</th>
-                          <th scope="col">Vị trí</th>
+                          <th scope="col">Tên Phòng</th>
+                          <th scope="col">địa chỉ</th>
                           <th scope="col">Sức chứa</th>
                           <th scope="col"></th>
                         </tr>
                       </thead>
-                      <tbody>
-                        <tr>
-                          <td>80</td>
-                          <td>Phòng 202</td>
-                          <td>Lầu 2 khoa, công nghệ thông tin</td>
-                          <td>80</td>
-                          <td className="text-right">
-                            <UncontrolledDropdown>
-                              <DropdownToggle
-                                className="btn-icon-only text-light"
-                                href="#pablo"
-                                role="button"
-                                size="sm"
-                                color=""
-                                onClick={(e) => e.preventDefault()}
-                              >
-                                <i className="fas fa-ellipsis-v" />
-                              </DropdownToggle>
-                              <DropdownMenu className="dropdown-menu-arrow" right>
-                                <DropdownItem
-                                  href="#pablo"
-                                  onClick={(e) => e.preventDefault()}
-                                >
-                                  Edit
-                                </DropdownItem>
-                                <DropdownItem
-                                  href="#pablo"
-                                  onClick={(e) => e.preventDefault()}
-                                >
-                                  Delete
-                                </DropdownItem>
-                              </DropdownMenu>
-                            </UncontrolledDropdown>
-                          </td>
-                        </tr>
 
-                      </tbody>
+                      {(rooms.lenght != 0) &&
+                        (<tbody>{rooms.map((room, index) =>
+                        (
+                          <tr key={room.id}>
+                            <td>{index}</td>
+                            <td>{room.name}</td>
+                            <td>{room.location}</td>
+                            <td>{room.capacity}</td>
+                            <td className="text-right">
+                              <UncontrolledDropdown>
+                                <DropdownToggle
+                                  className="btn-icon-only text-light"
+
+                                  role="button"
+                                  size="sm"
+                                  color=""
+                                  onClick={(e) => e.preventDefault()}
+                                >
+                                  <i className="fas fa-ellipsis-v" />
+                                </DropdownToggle>
+                                <DropdownMenu className="dropdown-menu-arrow" right>
+                                    <DropdownItem
+
+                                      idteacher={room.id}
+                                    onClick={() => (handleRedirectToEdit(room.id))}
+                                    >
+                                      Sửa
+                                    </DropdownItem>
+
+                                  <DropdownItem
+
+                                    idteacher={room.id}
+                                    onClick={() => (deleteTeacher(room.id))}
+                                  >
+                                    Xóa
+                                  </DropdownItem>
+                                </DropdownMenu>
+                              </UncontrolledDropdown>
+                            </td>
+                          </tr>
+                        ))//if fase----------------
+                        }
+                        </tbody>)}
+
                     </Table>
+                    {(loading) && (<div className="d-flex justify-content-center">
+                      <br></br>
+                      <Spinner style={{
+                        height: '3rem',
+                        width: '3rem'
+                      }} color="primary">
+                        Loading...
+                      </Spinner>
+                    </div>)}
                   </div>
                   <hr className="my-4" />
 
@@ -132,7 +202,7 @@ const Room = () => {
             </Card>
           </div>
         </Row>
-      </Container>
+      </Container >
     </>
   );
 };
