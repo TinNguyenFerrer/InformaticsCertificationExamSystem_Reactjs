@@ -5,7 +5,7 @@ import AddStudent from "views/Admin/Student/AddStudent";
 import EditStudent from "views/Admin/Student/EditStudent";
 import AddTeacher from "views/Admin/Teacher/AddTeacher";
 import EditTeacher from "views/Admin/Teacher/EditTeacher";
-import AddSchedule from "views/Admin/Schedule/AddSchedule";
+import DetailSchedule from "views/Admin/Schedule/DetailSchedule";
 import AddTheoryTest from "views/Admin/TheoryTest/AddTheoryTest";
 import EditExamination from "views/Admin/Examination/EditExamination.js";
 import Icons from "views/examples/Icons.js";
@@ -84,8 +84,8 @@ const RouteChil = () => {
       />
       <Route
         exact
-        path={"/admin/schedule/add"}
-        component={AddSchedule}
+        path={"/admin/testschedules/detailschedule"}
+        component={DetailSchedule}
       />
       <Route
         exact

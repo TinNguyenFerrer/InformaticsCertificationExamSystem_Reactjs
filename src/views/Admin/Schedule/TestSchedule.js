@@ -1,4 +1,4 @@
-import { useLocation, Route, Switch } from "react-router-dom";
+import { useLocation, Route, Switch, Link } from "react-router-dom";
 
 /*!
 
@@ -57,46 +57,30 @@ const TestShedule = () => {
   let te = { id: -1, name: "" };
 
   const history = useHistory()
-  const handleRedirectAddSchedule = () => {
-    if (examinationSeleted.id == null) {
-      window.alert("Xin chọn kì thi trước")
-    } else {
-      history.push(`schedule/add?idexamination=${examinationSeleted.id}`)
-    }
+  const handleAutoCreateSchedule = async (id) => {
+    try {
+          const response = await request.postAPI("TestShedule/AutoCreateTestSchedule?IdExam=" + id)
+          console.log(response)
+          if (response.status == 200) {
+            //console.log("thành cong"+e)
+            //getAllTeacherServices()
+            examinations.map(exam=>{
+              if(exam.id == id)
+              onExaminationSelected(exam)
+            })
+            
+          }
+          else {
+            window.alert("xóa giáo viên thất bại")
+            console.log("thất bại")
+          }
+        } catch (e) {
+          window.alert("Xóa giáo viên thất bại")
+          console.log(e)
+        }
   };
-  const handleRedirectToEdit = (id) => {
-    if (examinationSeleted.id == null) {
-      window.alert("Xin chọn kì thi trước")
-    } else {
-      history.push(history.location.pathname + `/edit?id=${id}&idexamination=${examinationSeleted.id}`)
-    }
-  }
-  const deleteExamination = (e) => {
-    // //console.log(e)
-    // const deleteExaminationService = async (e) => {
-    //   try {
-    //     const response = await request.deleteAPI("Examination/" + e)
-    //     console.log(response)
-    //     if (response.status == 200) {
-    //       console.log("thành cong"+e)
-    //       getAllTeacherServices()
-
-    //     }
-    //     else {
-    //       window.alert("xóa giáo viên thất bại")
-    //       console.log("thất bại")
-    //     }
-    //   } catch (e) {
-    //     window.alert("Xóa giáo viên thất bại")
-    //     console.log(e)
-    //   }
-    // }
-    // deleteExaminationService(e)
-  }
+  
   const [DropdowItem, setDropdowItem] = useState(te)
-  const callbackFunction = (childData) => {
-    console.log(childData.target.id)
-  }
   let [examinations, setExaminations] = useState([])
   let [testSchedules, setTestSchedules] = useState([])
   let [examinationSeleted, setExaminationSeleted] = useState({})
@@ -111,17 +95,7 @@ const TestShedule = () => {
       console.log(e)
     }
   }
-  const getAllTestScheduleByIdExaminationServices = async (id) => {
-    try {
-      let res = await request.getAPI("TestShedule/GetAllByIdExamination?id=" + id)
-      const data = res.data;
-      setTestSchedules([...data])
-      console.log(data)
-      //console.log(data)
-    } catch (e) {
-      console.log(e)
-    }
-  }
+  
   const GetAllTestScheduleByIdExaminationServices = async (id) =>{
     try {
       let res = await request.getAPI("TestShedule/GetAllByIdExamination?IdExam=" + id)
@@ -166,10 +140,10 @@ const TestShedule = () => {
                       <Col className="text-right" xs="4">
                         <Button
                           color="primary"
-                          onClick={handleRedirectAddSchedule}
+                          onClick={()=>handleAutoCreateSchedule(examinationSeleted.id)}
                           size="sm"
                         >
-                          Tạo mới
+                          Tạo tự động
                         </Button>
 
                       </Col>
@@ -181,6 +155,7 @@ const TestShedule = () => {
                         <tr>
                           <th scope="col">STT</th>
                           <th scope="col">Ca thi</th>
+                          <th scope="col">Phòng thi</th>
                           <th scope="col">Thời gian bắt đầu</th>
                           <th scope="col">Thời gian kết thúc</th>
                           <th scope="col"></th>
@@ -191,11 +166,13 @@ const TestShedule = () => {
                         (
                           <tr key={testSchedule.id}>
                             <td>{index}</td>
-                            <td>{testSchedule.name}</td>
-                            <td>{new Date(testSchedule.starTime).toLocaleString()}</td>
-                            <td>{new Date(testSchedule.endTime).toLocaleString()}</td>
+                            <td>{testSchedule.schedu.name}</td>
+                            <td>{testSchedule.room}</td>
+                            <td>{new Date(testSchedule.schedu.starTime).toLocaleString()}</td>
+                            <td>{new Date(testSchedule.schedu.endTime).toLocaleString()}</td>
                             <td className="text-right">
-                              <UncontrolledDropdown>
+                              <Link to ={()=>`/admin/testschedules/detailschedule?id=${testSchedule.schedu.id}&exam_testscheid=${testSchedule.exam_testscheid}`}> Danh sách</Link>
+                              {/* <UncontrolledDropdown>
                                 <DropdownToggle
                                   className="btn-icon-only text-light"
 
@@ -212,7 +189,7 @@ const TestShedule = () => {
                                     idteacher={testSchedule.id}
                                     onClick={() => (handleRedirectToEdit(testSchedule.id))}
                                   >
-                                    Sửa
+                                    Danh sách thí sinh
                                   </DropdownItem>
 
                                   <DropdownItem
@@ -223,7 +200,7 @@ const TestShedule = () => {
                                     Xóa
                                   </DropdownItem>
                                 </DropdownMenu>
-                              </UncontrolledDropdown>
+                              </UncontrolledDropdown> */}
                             </td>
                           </tr>
                         ))//if fase----------------
