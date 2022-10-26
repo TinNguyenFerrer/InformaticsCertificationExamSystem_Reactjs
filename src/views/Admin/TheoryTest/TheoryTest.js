@@ -65,12 +65,12 @@ const TheoryTest = () => {
   const onExaminationSelected = (exam) => {
     setExaminationSeleted(exam)
     console.log(exam)
-    //getAllTheoryByExaminationIdService(exam.id)
+    getAllTheoryByExaminationIdService(exam.id)
   };
   //========================= lấy danh sách đề thi theo kì thi=============
   const getAllTheoryByExaminationIdService = async (id) => {
     try {
-      let res = await request.getAPI("TheoryTest/getAllByIdExam?IdTest="+id)
+      let res = await request.getAPI("TheoryTest/getAllByIdExam?IdTest=" + id)
       const data = res.data;
       setTheoryTests([...data])
       console.log(res)
@@ -79,8 +79,32 @@ const TheoryTest = () => {
       console.log(e)
     }
   }
-  //===================================lấy danh sách đề thi===================
-  
+  //===================================tài đề đi===================
+  const dowloadTheory = async(id) => {
+    try {
+      let res = await request.getAPI("TheoryTest/DownloadPdfFile?id=" + id)
+      const type = res.headers['content-type']
+      const blob = new Blob([res.data], { type: type, encoding: 'UTF-8' })
+      const link = document.createElement('a')
+      link.href = window.URL.createObjectURL(blob)
+      link.download = `${id}.pdf`
+      link.click()
+      link.remove();
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  //==================xóa đề thi===============
+  const deleteTheory = async (id) => {
+    try {
+      let res = await request.getAPI("TheoryTest/DownloadPdfFile?id=" + id)
+      const type = res.headers['content-type']
+      
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   //----------------------------------------------------------------
   const history = useHistory()
   const handleRedirectAddTheoryTest = () => {
@@ -92,9 +116,9 @@ const TheoryTest = () => {
   }
   useEffect(() => {
     getAllExaminationsServices()
-    
+
   }, [])
-  
+
   return (
     <>
       <HeaderEmpty />
@@ -102,19 +126,19 @@ const TheoryTest = () => {
       <Container className="mt--8 Body_Content" fluid>
         <Row>
           <div className="col">
-            
+
             <Card className="shadow border-0">
-              
+
               <div>
                 <CardBody>
-                <DropdownList
+                  <DropdownList
                     item={examinations}
                     onItemSelected={onExaminationSelected}
                   >{examinationSeleted.name || "chọn kì thi"}
                   </DropdownList>
                   <CardHeader className="bg-white border-0">
                     <Row className="align-items-center">
-                      
+
                       <Col xs="8">
                         <h3 className="mb-0">Danh sách các đề thi</h3>
                       </Col>
@@ -126,7 +150,7 @@ const TheoryTest = () => {
                         >
                           Tạo mới
                         </Button>
-                        
+
                       </Col>
                     </Row>
                   </CardHeader>
@@ -137,47 +161,56 @@ const TheoryTest = () => {
                           <th scope="col">STT</th>
                           <th scope="col">Tên đề</th>
                           <th scope="col">review</th>
-                          <th scope="col">Sức chứa</th>
                           <th scope="col"></th>
                         </tr>
                       </thead>
-                      <tbody>
-                        <tr>
-                          <td>80</td>
-                          <td>Phòng 202</td>
-                          <td>Lầu 2 khoa, công nghệ thông tin</td>
-                          <td>80</td>
-                          <td className="text-right">
-                            <UncontrolledDropdown>
-                              <DropdownToggle
-                                className="btn-icon-only text-light"
-                                href="#pablo"
-                                role="button"
+                      {(theoryTests.lenght != 0) &&
+                        (<tbody>{theoryTests.map((theory, index) =>
+                        (
+                          <tr key={theory.id}>
+                            <td>{index + 1}</td>
+                            <td>{theory.name}</td>
+                            <td>
+                              <Button
+                                onClick={()=>dowloadTheory(theory.id)}
                                 size="sm"
-                                color=""
-                                onClick={(e) => e.preventDefault()}
                               >
-                                <i className="fas fa-ellipsis-v" />
-                              </DropdownToggle>
-                              <DropdownMenu className="dropdown-menu-arrow" right>
-                                <DropdownItem
-                                  href="#pablo"
-                                  onClick={(e) => e.preventDefault()}
-                                >
-                                  Edit
-                                </DropdownItem>
-                                <DropdownItem
-                                  href="#pablo"
-                                  onClick={(e) => e.preventDefault()}
-                                >
-                                  Delete
-                                </DropdownItem>
-                              </DropdownMenu>
-                            </UncontrolledDropdown>
-                          </td>
-                        </tr>
+                                Tải đề
+                              </Button>
+                            </td>
+                            <td className="text-right">
+                              <UncontrolledDropdown>
+                                <DropdownToggle
+                                  className="btn-icon-only text-light"
 
-                      </tbody>
+                                  role="button"
+                                  size="sm"
+                                  color=""
+                                  //onClick={(e) => e.preventDefault()}
+                                >
+                                  <i className="fas fa-ellipsis-v" />
+                                </DropdownToggle>
+                                <DropdownMenu className="dropdown-menu-arrow" right>
+                                  {/* <DropdownItem
+
+                                    idteacher={theory.id}
+                                    //onClick={() => (handleRedirectToEdit(theory.id))}
+                                  >
+                                    Sửa
+                                  </DropdownItem> */}
+
+                                  <DropdownItem
+                                    onClick={() => (deleteTheory(theory.id))}
+                                  >
+                                    Xóa
+                                  </DropdownItem>
+                                </DropdownMenu>
+                              </UncontrolledDropdown>
+                            </td>
+                          </tr>
+                        ))//if fase----------------
+                        }
+                        </tbody>)}
                     </Table>
                   </div>
                   <hr className="my-4" />

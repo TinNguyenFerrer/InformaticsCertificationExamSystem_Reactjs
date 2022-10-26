@@ -172,9 +172,9 @@ const AddTheoryTest = () => {
                     </div>
                     <div className="d-flex flex-row-reverse">
                       <Button
+                        
                         color="primary"
                         onClick={uploadFile}
-                        size=""
                         className="align-items-end"
                       >Tạo mới</Button>
                     </div>
