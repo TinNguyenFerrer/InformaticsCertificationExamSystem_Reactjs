@@ -1,5 +1,5 @@
 import axios from "axios";
-const request = axios.create({
+const reques = axios.create({
     baseURL: 'https://localhost:7257/api/',
     timeout: 10000,
     headers: {'X-Custom-Header': 'foobar'}
@@ -7,19 +7,19 @@ const request = axios.create({
 
 //params
 export const getAPI = async(path,options={})=>{
-    const response = await request.get(path,options);
+    const response = await reques.get(path,options);
     return response;
 }
 export const postAPI = async(path,options={})=>{
-    const response = await request.post(path,options);
+    const response = await reques.post(path,options);
     return response;
 }
 export const deleteAPI = async(path,options={})=>{
-    const response = await request.delete(path,options);
+    const response = await reques.delete(path,options);
     return response;
 }
 export const putAPI = async(path,options={})=>{
-    const response = await request.put(path,options);
+    const response = await reques.put(path,options);
     return response;
 }
-export default request;
+export default reques;

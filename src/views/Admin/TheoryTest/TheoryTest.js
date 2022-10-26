@@ -41,11 +41,47 @@ import {
 import { useHistory } from "react-router-dom";
 import "./TheoryTest.css";
 import DropdownList from "components/Dropdown/DropdownList.js";
-
+import * as request from "Until/request";
+import { info } from "sass";
 const TheoryTest = () => {
 
   let te = { id: -1, name: "" };
-
+  //========--------------lấy danh sách kì thi------------============
+  let [examinations, setExaminations] = useState([])
+  let [examinationSeleted, setExaminationSeleted] = useState({})
+  let [theoryTests, setTheoryTests] = useState([])
+  const getAllExaminationsServices = async () => {
+    try {
+      let res = await request.getAPI("Examination/GetAll")
+      const data = res.data;
+      setExaminations([...data])
+      //console.log(examinations)
+      console.log(data)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  // khi một kì thi được chọn trong dropdown
+  const onExaminationSelected = (exam) => {
+    setExaminationSeleted(exam)
+    console.log(exam)
+    //getAllTheoryByExaminationIdService(exam.id)
+  };
+  //========================= lấy danh sách đề thi theo kì thi=============
+  const getAllTheoryByExaminationIdService = async (id) => {
+    try {
+      let res = await request.getAPI("TheoryTest/getAllByIdExam?IdTest="+id)
+      const data = res.data;
+      setTheoryTests([...data])
+      console.log(res)
+      console.log(data)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  //===================================lấy danh sách đề thi===================
+  
+  //----------------------------------------------------------------
   const history = useHistory()
   const handleRedirectAddTheoryTest = () => {
     history.push("Theory/add")
@@ -54,7 +90,10 @@ const TheoryTest = () => {
   const callbackFunction = (childData) => {
     console.log(childData.target.id)
   }
-  
+  useEffect(() => {
+    getAllExaminationsServices()
+    
+  }, [])
   
   return (
     <>
@@ -68,11 +107,11 @@ const TheoryTest = () => {
               
               <div>
                 <CardBody>
-                <DropdownList 
-                item={[   { id: 1, name: "tin" },
-                          { id: 2, name: "nguyen" }]}
-                          onItemSelected={callbackFunction}
-                        >Chọn kì thi</DropdownList>
+                <DropdownList
+                    item={examinations}
+                    onItemSelected={onExaminationSelected}
+                  >{examinationSeleted.name || "chọn kì thi"}
+                  </DropdownList>
                   <CardHeader className="bg-white border-0">
                     <Row className="align-items-center">
                       

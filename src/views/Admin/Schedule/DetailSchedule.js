@@ -44,6 +44,7 @@ import "./DetailSchedule.css"
 import DropdownList from "components/Dropdown/DropdownList.js";
 import UpoadFileStudent from "components/UploadFile/UploadFileStudent";
 import * as request from "Until/request";
+import { param } from "jquery";
 
 const DetailSchedule = () => {
     const history = useHistory()
@@ -92,11 +93,20 @@ const DetailSchedule = () => {
             history.push("student/add?idexamination=" + examinationSeleted.id)
         }
     };
-    const getAllStudentByIdTestScheduleServices = async () => {
+    //lấy danh sách dự thi theo ca và phòng
+    const getAllStudentByTestScheduleServicesAndRoom = async () => {
         try {
             const queryParams = new URLSearchParams(window.location.search);
             const id = queryParams.get('id');
-            let res = await request.getAPI("Student/GetAllByIdTestSchedule?id=" + id)
+            const examroom_testscheid = queryParams.get('examroom_testscheid');
+            param = {
+                params: {
+                    Id: id,
+                    ExamRom_TestScheid:examroom_testscheid
+                }
+            }
+            let res = await request.getAPI(`Student/GetAllByRoomAndTestSchedule`, param)
+            console.log(res)
             const data = res.data;
             setStudents([...data])
             console.log(data)
@@ -104,30 +114,14 @@ const DetailSchedule = () => {
             console.log(e)
         }
     }
-    const deleteStudentService = async (e) => {
-        try {
-            const response = await request.deleteAPI("Student/" + e)
-            console.log(response)
-            if (response.status == 200) {
-                console.log("thành cong" + e)
-                getAllStudentByIdTestScheduleServices()
-
-            }
-            else {
-                window.alert("xóa giáo viên thất bại")
-                console.log("thất bại")
-            }
-        } catch (e) {
-            window.alert("Xóa giáo viên thất bại")
-            console.log(e)
-        }
-    }
+    // 
     const handleDeleteStudent = (e) => {
-        deleteStudentService(e)
+        //deleteStudentService(e)
     }
     useEffect(() => {
-        getAllStudentByIdTestScheduleServices()
+        //getAllStudentByIdTestScheduleServices()
         getAllExaminationsServices()
+        getAllStudentByTestScheduleServicesAndRoom()
     }, [])
     const handleRedirectToEdit = (id) => {
         history.push(history.location.pathname + "/edit?id=" + id)

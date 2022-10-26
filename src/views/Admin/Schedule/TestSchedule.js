@@ -171,7 +171,7 @@ const TestShedule = () => {
                             <td>{new Date(testSchedule.schedu.starTime).toLocaleString()}</td>
                             <td>{new Date(testSchedule.schedu.endTime).toLocaleString()}</td>
                             <td className="text-right">
-                              <Link to ={()=>`/admin/testschedules/detailschedule?id=${testSchedule.schedu.id}&exam_testscheid=${testSchedule.exam_testscheid}`}> Danh sách</Link>
+                              <Link to ={()=>`/admin/testschedules/detailschedule?id=${testSchedule.schedu.id}&examroom_testscheid=${testSchedule.exam_testscheid}`}> Danh sách</Link>
                               {/* <UncontrolledDropdown>
                                 <DropdownToggle
                                   className="btn-icon-only text-light"

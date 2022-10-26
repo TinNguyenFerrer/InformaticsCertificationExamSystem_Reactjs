@@ -16,7 +16,7 @@ import DateTimeRange from "components/Datepiker/DateTimeRange";
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 // reactstrap components
 import { Card, Container, Row } from "reactstrap";
@@ -31,42 +31,78 @@ import {
   FormGroup,
   Form,
   Input,
-  Col
+  Col,
+  Label
 } from "reactstrap";
 import UpoadFileStudent from "components/UploadFile/UploadFileStudent";
 
 //import "assets/css/Examination.css";
 import "./AddTheoryTest.css";
+import reques from "Until/request";
+import * as request from "Until/request";
+import DropdownList from "components/Dropdown/DropdownList.js";
 
-
-
-const AddSchedule = () => {
-  const studentInformInit = {
-    Name: "",
-    IdentifierCode: "",
-    PhoneNumber: "",
-    Email: "",
+const AddTheoryTest = () => {
+  const [theoryInfor, setTheoryInfor] = useState({});
+  
+  
+  
+  //--------------=========-------lấy danh sách kì thi -----------===============---------
+  let [examinations, setExaminations] = useState([])
+  let [examinationSeleted, setExaminationSeleted] = useState({})
+  // khi một kì thi được chọn trong dropdown
+  const onExaminationSelected = (exam) => {
+    setExaminationSeleted(exam)
+    console.log(exam)
+  };
+  //lấy danh sách kì thi
+  const getAllExaminationsServices = async () => {
+    try {
+      let res = await request.getAPI("Examination/GetAll")
+      const data = res.data;
+      setExaminations([...data])
+      //console.log(examinations)
+      console.log(data)
+    } catch (e) {
+      console.log(e)
+    }
   }
-  const addressInit = {
-    province: "",
-    district: "",
-    ward: "",
-    Street: ""
+  // -------------=========-----sử lý upload file -----======-----------
+  const [selectedFile, setSelectedFile] = useState();
+  const changeHandler = (e) => {
+    setSelectedFile(e.target.files[0]);
   }
-  const toDate = new Date()
-  const [teacherInfor, setTeacherInfor] = useState(studentInformInit);
-  const [address, setAddress] = useState(addressInit)
-  // console.log(address)
-  // console.log(teacherInfor)
-  const handelSubmitStudentInfo = () => {
-    const addressSubmit = `${address.province}, ${address.district}, ${address.ward}, ${address.Street}`
-    const teacherInformSubmit = { ...teacherInfor, Address: addressSubmit }
-    console.log(teacherInformSubmit)
-    console.log(addressSubmit)
-    // let t= addressSubmit.split(",")
-    // console.log(addressSubmit.split(",",3))
-    // console.log(t.slice(3,t.length).join(","))
+  async function uploadFile() {
+    try {
+      const formData = new FormData();
+      
+      if(selectedFile.type != "application/pdf"){
+        window.alert("file không phải định dạng PDF")
+        return;
+       }
+       if(!theoryInfor.Name){
+        window.alert("Nhập tên đề thi")
+        return;
+       }
+      formData.append("file", selectedFile);
+      // formData.append("Name", theoryInfor.Name);
+      // formData.append("ExaminationId",examinationSeleted.id )
+      //console.log(formData.get("ExaminationId"))
+      const response = await reques.post(`TheoryTest/UploadFileTheoryTest?Name=${theoryInfor.Name}&ExaminationId=${examinationSeleted.id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        }
+      });
+      console.log(response);
+      window.alert("thành công");
+    } catch (error) {
+      console.log(error);
+      window.alert("Có lỗi trong quá trình UploadFile")
+    }
   }
+  useEffect(() => {
+    getAllExaminationsServices()
+  }, [])
   return (
     <>
       <HeaderEmpty />
@@ -94,17 +130,16 @@ const AddSchedule = () => {
                             </label>
                             <Input
                               className="form-control-alternative addExamination_input_userinfor"
-                              defaultValue={teacherInfor.Name}
+                              value={theoryInfor.Name||""}
                               id="input-username"
-                              placeholder="Phòng 202"
                               type="text"
-                            // onChange={e => {
-                            //   setTeacherInfor(pre => {
-                            //     let newTeacherInfo = { ...pre }
-                            //     newTeacherInfo.Name = e.target.value
-                            //     return newTeacherInfo
-                            //   })
-                            // }}
+                            onChange={e => {
+                              setTheoryInfor(pre => {
+                                let newTeacherInfo = { ...pre }
+                                newTeacherInfo.Name = e.target.value
+                                return newTeacherInfo
+                              })
+                            }}
                             />
                           </FormGroup>
                         </Col>
@@ -114,40 +149,31 @@ const AddSchedule = () => {
                               className="form-control-label"
                               htmlFor="input-email"
                             >
-                              Vị trí ca thi
+                              Fill đề
                             </label>
-                            <UpoadFileStudent >
-                              Tải từ file
-                            </UpoadFileStudent>
+                            <FormGroup className='custom-file '>
+                              <Input className='custom-file-input input_uploadFile_student ' id="customFile" type="file" name="file" onChange={changeHandler} />
+                              <Label className=" input_uploadFile_student_lable" for="customFile">{selectedFile?selectedFile.name:"Chọn file .csv"}</Label>
+                            </FormGroup>
 
                           </FormGroup>
                         </Col>
                       </Row>
                       <Row>
-                        <Col lg="3">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-first-name"
-                            >
-                              Số lượng sinh viên tối đa
-                            </label>
-                            <Input
-                              className="form-control-alternative addExamination_input_userinfor"
-                              defaultValue="5"
-                              id="input-mark"
-                              placeholder="5"
-                              type="number"
-                            />
-                          </FormGroup>
+                        <Col lg="6">
+                          <DropdownList
+                            item={examinations}
+                            onItemSelected={onExaminationSelected}
+                          >{examinationSeleted.name || "chọn kì thi trong danh sách"}
+                          </DropdownList>
                         </Col>
-                        <Col lg="3"></Col>
                       </Row>
+
                     </div>
                     <div className="d-flex flex-row-reverse">
                       <Button
                         color="primary"
-                        onClick={handelSubmitStudentInfo}
+                        onClick={uploadFile}
                         size=""
                         className="align-items-end"
                       >Tạo mới</Button>
@@ -165,4 +191,4 @@ const AddSchedule = () => {
   );
 };
 
-export default AddSchedule;
+export default AddTheoryTest;
