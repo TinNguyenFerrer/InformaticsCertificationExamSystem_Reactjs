@@ -76,7 +76,7 @@ const Room = () => {
     getAllRoomServices()
   },[])
   
-  const deleteTeacher = (e) => {
+  const deleteRoom = (e) => {
     //console.log(e)
     const deleteTecherAPI = async (e) => {
       try {
@@ -88,16 +88,42 @@ const Room = () => {
           
         }
         else {
-          window.alert("xóa giáo viên thất bại")
+          window.alert("xóa phòng thất bại")
           console.log("thất bại")
         }
       } catch (e) {
-        window.alert("Xóa giáo viên thất bại")
+        window.alert("Xóa phòng thất bại")
         console.log(e)
       }
     }
     deleteTecherAPI(e)
   }
+  //==========================khóa và mở khóa phòng==================
+  const unLockRoom = async (id) => {
+      try {
+        const response = await request.getAPI("ExaminationRoom/UnLockExaminationRoom?id=" + id)
+        if (response.status === 200) {
+          getAllRoomServices()
+        }else{
+          window.alert("Mở khóa thất bại")
+        }
+      }catch(e){
+        console.log(e);
+      }
+  }
+  const lockRoom = async (id) => {
+    try {
+      const response = await request.getAPI("ExaminationRoom/LockExaminationRoom?id=" + id)
+      if (response.status === 200) {
+        getAllRoomServices()
+      }else{
+        window.alert("Khóa phòng thất bại")
+      }
+    }catch(e){
+      console.log(e);
+    }
+}
+
   return (
     <>
     
@@ -134,6 +160,7 @@ const Room = () => {
                           <th scope="col">Tên Phòng</th>
                           <th scope="col">địa chỉ</th>
                           <th scope="col">Sức chứa</th>
+                          <th scope="col">Khóa</th>
                           <th scope="col"></th>
                         </tr>
                       </thead>
@@ -146,6 +173,7 @@ const Room = () => {
                             <td>{room.name}</td>
                             <td>{room.location}</td>
                             <td>{room.capacity}</td>
+                            <td>{room.locked?(<i className="fas fa-lock"></i>):""}</td>
                             <td className="text-right">
                               <UncontrolledDropdown>
                                 <DropdownToggle
@@ -160,20 +188,34 @@ const Room = () => {
                                 </DropdownToggle>
                                 <DropdownMenu className="dropdown-menu-arrow" right>
                                     <DropdownItem
-
                                       idteacher={room.id}
                                     onClick={() => (handleRedirectToEdit(room.id))}
                                     >
                                       Sửa
                                     </DropdownItem>
-
                                   <DropdownItem
-
                                     idteacher={room.id}
-                                    onClick={() => (deleteTeacher(room.id))}
+                                    onClick={() => (deleteRoom(room.id))}
                                   >
                                     Xóa
                                   </DropdownItem>
+                                  {room.locked?
+                                  (
+                                    <DropdownItem
+                                    idteacher={room.id}
+                                    onClick={() => (unLockRoom(room.id))}
+                                  >
+                                    Mở khóa
+                                  </DropdownItem>
+                                  ):(
+                                    <DropdownItem
+                                    idteacher={room.id}
+                                    onClick={() => (lockRoom(room.id))}
+                                  >
+                                    Khóa
+                                  </DropdownItem>
+                                  )
+                                }
                                 </DropdownMenu>
                               </UncontrolledDropdown>
                             </td>

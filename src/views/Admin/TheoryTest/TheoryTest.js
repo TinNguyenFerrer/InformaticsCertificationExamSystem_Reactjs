@@ -41,6 +41,7 @@ import {
 import { useHistory } from "react-router-dom";
 import "./TheoryTest.css";
 import DropdownList from "components/Dropdown/DropdownList.js";
+import DropdownListInline from "components/Dropdown/DropdownListInline.js";
 import * as request from "Until/request";
 import { info } from "sass";
 const TheoryTest = () => {
@@ -49,6 +50,8 @@ const TheoryTest = () => {
   //========--------------lấy danh sách kì thi------------============
   let [examinations, setExaminations] = useState([])
   let [examinationSeleted, setExaminationSeleted] = useState({})
+  let [testSchedules, setTestSchedules] = useState([])
+  let [testScheduleSeleted, setTestSchedulesSeleted] = useState({})
   let [theoryTests, setTheoryTests] = useState([])
   const getAllExaminationsServices = async () => {
     try {
@@ -65,12 +68,29 @@ const TheoryTest = () => {
   const onExaminationSelected = (exam) => {
     setExaminationSeleted(exam)
     console.log(exam)
-    getAllTheoryByExaminationIdService(exam.id)
+    getAllScheduleTestByExaminationIdService(exam.id)
+  };
+  //========================= lấy danh sách ca thi theo kì thi=============
+  const getAllScheduleTestByExaminationIdService = async (id) => {
+    try {
+      let res = await request.getAPI("TestShedule/GetAllScheduleByIdExamination?IdExam=" + id)
+      const data = res.data;
+      setTestSchedules([...data])
+      console.log(data)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  // khi một ca thi được chọn trong dropdown
+  const onScheduleTestSelected = (schedu) => {
+    setTestSchedulesSeleted(schedu)
+    console.log(schedu)
+    getAllTheoryByExaminationIdAndScheduleTestService(schedu.id)
   };
   //========================= lấy danh sách đề thi theo kì thi=============
-  const getAllTheoryByExaminationIdService = async (id) => {
+  const getAllTheoryByExaminationIdAndScheduleTestService = async (idSche) => {
     try {
-      let res = await request.getAPI("TheoryTest/getAllByIdExam?IdTest=" + id)
+      let res = await request.getAPI("TheoryTest/getAllByIdSchedule?IdSche=" + idSche)
       const data = res.data;
       setTheoryTests([...data])
       console.log(res)
@@ -80,11 +100,12 @@ const TheoryTest = () => {
     }
   }
   //===================================tài đề đi===================
-  const dowloadTheory = async(id) => {
+  const dowloadTheory = async (id) => {
     try {
-      let res = await request.getAPI("TheoryTest/DownloadPdfFile?id=" + id)
+      let res = await request.getAPI("TheoryTest/DownloadPdfFile?id=" + id,{responseType: 'blob'})
+      console.log(res);
       const type = res.headers['content-type']
-      const blob = new Blob([res.data], { type: type, encoding: 'UTF-8' })
+      const blob = new Blob([res.data], { type: type, encoding: "UTF-8" })
       const link = document.createElement('a')
       link.href = window.URL.createObjectURL(blob)
       link.download = `${id}.pdf`
@@ -97,9 +118,10 @@ const TheoryTest = () => {
   //==================xóa đề thi===============
   const deleteTheory = async (id) => {
     try {
-      let res = await request.getAPI("TheoryTest/DownloadPdfFile?id=" + id)
-      const type = res.headers['content-type']
-      
+      let res = await request.deleteAPI("TheoryTest/" + id)
+      console.log(res);
+      if (res.statusCode === 200) window.alert("xóa thành công")
+      getAllTheoryByExaminationIdAndScheduleTestService(testScheduleSeleted.id)
     } catch (e) {
       console.log(e)
     }
@@ -131,11 +153,23 @@ const TheoryTest = () => {
 
               <div>
                 <CardBody>
-                  <DropdownList
-                    item={examinations}
-                    onItemSelected={onExaminationSelected}
-                  >{examinationSeleted.name || "chọn kì thi"}
-                  </DropdownList>
+                  <div>
+                    Chọn kì thi: &ensp;
+                    <DropdownListInline
+                      item={examinations}
+                      onItemSelected={onExaminationSelected}
+                    >{examinationSeleted.name || "chọn kì thi"}
+                    </DropdownListInline>
+                  </div>
+                  <br></br>
+                  <div>
+                    Chọn ca thi: &ensp;
+                    <DropdownListInline
+                      item={testSchedules}
+                      onItemSelected={onScheduleTestSelected}
+                    >{testScheduleSeleted.name || "chọn ca thi"}
+                    </DropdownListInline>
+                  </div>
                   <CardHeader className="bg-white border-0">
                     <Row className="align-items-center">
 
@@ -172,7 +206,7 @@ const TheoryTest = () => {
                             <td>{theory.name}</td>
                             <td>
                               <Button
-                                onClick={()=>dowloadTheory(theory.id)}
+                                onClick={() => dowloadTheory(theory.id)}
                                 size="sm"
                               >
                                 Tải đề
@@ -186,7 +220,7 @@ const TheoryTest = () => {
                                   role="button"
                                   size="sm"
                                   color=""
-                                  //onClick={(e) => e.preventDefault()}
+                                //onClick={(e) => e.preventDefault()}
                                 >
                                   <i className="fas fa-ellipsis-v" />
                                 </DropdownToggle>

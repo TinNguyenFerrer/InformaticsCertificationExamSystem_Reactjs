@@ -59,27 +59,31 @@ const TestShedule = () => {
   const history = useHistory()
   const handleAutoCreateSchedule = async (id) => {
     try {
-          const response = await request.postAPI("TestShedule/AutoCreateTestSchedule?IdExam=" + id)
-          console.log(response)
-          if (response.status == 200) {
-            //console.log("thành cong"+e)
-            //getAllTeacherServices()
-            examinations.map(exam=>{
-              if(exam.id == id)
-              onExaminationSelected(exam)
-            })
-            
-          }
-          else {
-            window.alert("xóa giáo viên thất bại")
-            console.log("thất bại")
-          }
-        } catch (e) {
-          window.alert("Xóa giáo viên thất bại")
-          console.log(e)
-        }
+      if (id == null) {
+        window.alert("Xin chọn kì thi trước")
+        return;
+      }
+      const response = await request.postAPI("TestShedule/AutoCreateTestSchedule?IdExam=" + id)
+      console.log(response)
+      if (response.status == 200) {
+        //console.log("thành cong"+e)
+        //getAllTeacherServices()
+        examinations.map(exam => {
+          if (exam.id == id)
+            onExaminationSelected(exam)
+        })
+
+      }
+      else {
+        window.alert("Tạo tự động thất bại")
+        console.log("thất bại")
+      }
+    } catch (e) {
+      window.alert("Tạo tự động thất bại")
+      console.log(e)
+    }
   };
-  
+
   const [DropdowItem, setDropdowItem] = useState(te)
   let [examinations, setExaminations] = useState([])
   let [testSchedules, setTestSchedules] = useState([])
@@ -95,8 +99,8 @@ const TestShedule = () => {
       console.log(e)
     }
   }
-  
-  const GetAllTestScheduleByIdExaminationServices = async (id) =>{
+
+  const GetAllTestScheduleByIdExaminationServices = async (id) => {
     try {
       let res = await request.getAPI("TestShedule/GetAllByIdExamination?IdExam=" + id)
       const data = res.data;
@@ -140,7 +144,7 @@ const TestShedule = () => {
                       <Col className="text-right" xs="4">
                         <Button
                           color="primary"
-                          onClick={()=>handleAutoCreateSchedule(examinationSeleted.id)}
+                          onClick={() => handleAutoCreateSchedule(examinationSeleted.id)}
                           size="sm"
                         >
                           Tạo tự động
@@ -171,7 +175,7 @@ const TestShedule = () => {
                             <td>{new Date(testSchedule.schedu.starTime).toLocaleString()}</td>
                             <td>{new Date(testSchedule.schedu.endTime).toLocaleString()}</td>
                             <td className="text-right">
-                              <Link to ={()=>`/admin/testschedules/detailschedule?id=${testSchedule.schedu.id}&examroom_testscheid=${testSchedule.exam_testscheid}`}> Danh sách</Link>
+                              <Link to={() => `/admin/testschedules/detailschedule?id=${testSchedule.schedu.id}&examroom_testscheid=${testSchedule.exam_testscheid}`}> Danh sách</Link>
                               {/* <UncontrolledDropdown>
                                 <DropdownToggle
                                   className="btn-icon-only text-light"
