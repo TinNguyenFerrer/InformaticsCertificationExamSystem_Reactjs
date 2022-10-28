@@ -15,7 +15,6 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import Login from "views/Admin/Login/Login.js";
 import React from "react";
 import { useLocation, Route, Switch, Redirect } from "react-router-dom";
 // reactstrap components
@@ -25,7 +24,7 @@ import { Container, Row, Col } from "reactstrap";
 import AuthNavbar from "components/Navbars/AuthNavbar.js";
 import AuthFooter from "components/Footers/AuthFooter.js";
 
-import { routesAdmin } from "routes.js";
+import routes from "routes.js";
 
 const Auth = (props) => {
   const mainContent = React.useRef(null);
@@ -62,12 +61,17 @@ const Auth = (props) => {
   return (
     <>
       <div className="main-content" ref={mainContent}>
+        <AuthNavbar />
         <div className="header bg-gradient-info py-7 py-lg-8">
           <Container>
             <div className="header-body text-center mb-7">
               <Row className="justify-content-center">
                 <Col lg="5" md="6">
                   <h1 className="text-white">Welcome!</h1>
+                  <p className="text-lead text-light">
+                    Use these awesome forms to login or create new account in
+                    your project for free.
+                  </p>
                 </Col>
               </Row>
             </div>
@@ -92,18 +96,13 @@ const Auth = (props) => {
         <Container className="mt--8 pb-5">
           <Row className="justify-content-center">
             <Switch>
-              <Route
-                exact
-                path={"/auth/login"}
-                component={Login}
-              />
-              {getRoutes(routesAdmin)}
+              {getRoutes(routes)}
               <Redirect from="*" to="/auth/login" />
             </Switch>
           </Row>
         </Container>
       </div>
-
+      <AuthFooter />
     </>
   );
 };

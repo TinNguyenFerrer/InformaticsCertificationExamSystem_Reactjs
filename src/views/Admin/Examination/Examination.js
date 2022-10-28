@@ -59,7 +59,7 @@ const Examination = () => {
     history.push("examination/add")
   };
   const handleRedirectToEdit = (id) => {
-    history.push(history.location.pathname+"/edit?id=" + id)
+    history.push(history.location.pathname + "/edit?id=" + id)
   }
   const deleteExamination = (e) => {
     //console.log(e)
@@ -68,9 +68,9 @@ const Examination = () => {
         const response = await request.deleteAPI("Examination/" + e)
         console.log(response)
         if (response.status == 200) {
-          console.log("thành cong"+e)
+          console.log("thành cong" + e)
           getAllTeacherServices()
-          
+
         }
         else {
           window.alert("xóa giáo viên thất bại")
@@ -83,13 +83,21 @@ const Examination = () => {
     }
     deleteExaminationService(e)
   }
-  
+
   //console.log("rerender")
+  
   //console.log(teachers)
-//=======-------- get list of examination---------=========
+  //=======-------- get list of examination---------=========
+  
+
   const getAllTeacherServices = async () => {
     try {
+
       let res = await request.getAPI("Examination/GetAll")
+      console.log(res.status)
+      if (res.status == 401) {
+        console.log("login")
+      }
       const data = res.data;
       setExaminations([...data])
       console.log(examinations)
@@ -148,7 +156,7 @@ const Examination = () => {
                           <tr key={examinations.id}>
                             <td>{examinations.name}</td>
                             <td>{examinations.location}</td>
-                            <td>{ new Date(examinations.starTime).toLocaleDateString()}</td>
+                            <td>{new Date(examinations.starTime).toLocaleDateString()}</td>
                             <td>{new Date(examinations.endTime).toLocaleDateString()}</td>
                             <td>{new Date(examinations.gradingDeadline).toLocaleDateString()}</td>
 

@@ -8,6 +8,7 @@ import EditTeacher from "views/Admin/Teacher/EditTeacher";
 import DetailSchedule from "views/Admin/Schedule/DetailSchedule";
 import AddTheoryTest from "views/Admin/TheoryTest/AddTheoryTest";
 import EditExamination from "views/Admin/Examination/EditExamination.js";
+import Login from "views/Admin/Login/Login.js";
 import Icons from "views/examples/Icons.js";
 
 import "./Admin.css"
@@ -92,6 +93,7 @@ const RouteChil = () => {
         path={"/admin/Theory/add"}
         component={AddTheoryTest}
       />
+      
     </>
   )
 }

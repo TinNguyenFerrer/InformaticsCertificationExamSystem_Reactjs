@@ -19,7 +19,7 @@ import Index from "views/Index.js";
 import Profile from "views/examples/Profile.js";
 import Maps from "views/examples/Maps.js";
 import Register from "views/examples/Register.js";
-import Login from "views/examples/Login.js";
+import Login from "views/Admin/Login/Login.js";
 import Tables from "views/examples/Tables.js";
 import Icons from "views/examples/Icons.js";
 
@@ -29,6 +29,7 @@ import TestSchedule from "views/Admin/Schedule/TestSchedule";
 import Student from "views/Admin/Student/Student";
 import Teacher from "views/Admin/Teacher/Teacher";
 import TheoryTest from "views/Admin/TheoryTest/TheoryTest";
+import Supervisor from "views/Admin/Supervisor/Supervisor";
 var routes = [
   {
     path: "/index",
@@ -227,13 +228,21 @@ var routesAdmin = [
     component: TheoryTest,
     layout: "/admin"
   },
+  {
+    path: "/supervisor",
+    name: "Sắp xếp giám thị",
+    icon: "ni ni-badge text-info",
+    component: Supervisor,
+    layout: "/admin"
+  }
+  //,
   // {
   //   path: "/login",
   //   name: "Login",
   //   icon: "ni ni-key-25 text-info",
   //   component: Login,
   //   layout: "/auth"
-  // },
+  // }
   // {
   //   path: "/register",
   //   name: "Register",
