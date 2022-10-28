@@ -17,7 +17,7 @@ import { useLocation, Route, Switch } from "react-router-dom";
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React, { useEffect } from "react";
+import React, { Fragment, useEffect } from "react";
 import { useState } from 'react';
 // reactstrap components
 import { Card, Container, DropdownItem, Row } from "reactstrap";
@@ -106,11 +106,14 @@ const Supervisor = () => {
   // --------------------tự động chia giáo viên---------------
   const handleAutoMergeRoomAndTeacher = async () => {
     try {
-      let res = await request.postAPI("Supervisor/AutoCreateSupervisor?IdTestSchedule=" +testScheduleSeleted.id )
+      let res = await request.postAPI("Supervisor/AutoCreateSupervisor?IdTestSchedule=" + testScheduleSeleted.id)
       console.log(res)
+      
       getRoomByIdScheduleTest(testScheduleSeleted.id)
-      //if(res.statu)
     } catch (e) {
+      if(e.response.status== 400 && e.response.data =="not enough teachers"){
+        window.alert("số lượng giáo viên không đủ để chia phòng" )
+      }
       console.log(e)
     }
   };
@@ -118,6 +121,39 @@ const Supervisor = () => {
   const callbackFunction = (childData) => {
     console.log(childData.target.id)
   }
+
+  //=====================
+  const SupervisorInf = (teacherInf) => {
+
+    console.log(teacherInf)
+    let count = 0
+    for (var t in teacherInf) {
+      count++;
+    }
+    console.log(count)
+    if (count >= 2) {
+      return (
+        <React.Fragment>
+          <td>
+            {teacherInf[0].fullName}<br></br>
+            MSCB - {teacherInf[0].identifierCode}
+          </td>
+          <td>
+            {teacherInf[1].fullName}<br></br>
+            MSCB - {teacherInf[1].identifierCode}
+          </td>
+        </React.Fragment>
+      )
+    }
+    else
+      return (
+        <React.Fragment>
+          <td>chưa có giám thị</td>
+          <td>chưa có giám thị</td>
+        </React.Fragment>
+      )
+  }
+  //=====================
   useEffect(() => {
     getAllExaminationsServices()
 
@@ -190,26 +226,8 @@ const Supervisor = () => {
                             <td>{room.examinationRoom.name}</td>
                             <td>{room.examinationRoom.capacity}</td>
                             <td>{room.examinationRoom.location}</td>
-                            {console.log(room.teachers)}
-                            {room.teachers?
-                              (
-                                <>
-                                  <td>
-                                    {room.teachers[0].fullName}<br></br>
-                                    MSCB - {room.teachers[0].identifierCode}
-                                  </td>
-                                  <td>
-                                    {room.teachers[1].fullName}<br></br>
-                                    MSCB - {room.teachers[1].identifierCode}
-                                  </td>
-                                </>) 
-                                : 
-                                (
-                                  <>
-                                    <td>chưa có giám thị</td>
-                                    <td>chưa có giám thị</td>
-                                  </>)
-                            }
+                            {SupervisorInf(room.teachers)}
+
                           </tr>
                         ))//if fase----------------
                         }
