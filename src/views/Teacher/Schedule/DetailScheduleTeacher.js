@@ -94,7 +94,7 @@ const DetailSchedule = () => {
         }
     };
     //lấy danh sách dự thi theo ca và phòng
-    const getAllStudentByTestScheduleAndRoomService = async () => {
+    const getAllStudentByTestScheduleServicesAndRoom = async () => {
         try {
             const queryParams = new URLSearchParams(window.location.search);
             const id = queryParams.get('id');
@@ -121,7 +121,7 @@ const DetailSchedule = () => {
     useEffect(() => {
         //getAllStudentByIdTestScheduleServices()
         getAllExaminationsServices()
-        getAllStudentByTestScheduleAndRoomService()
+        getAllStudentByTestScheduleServicesAndRoom()
     }, [])
     const handleRedirectToEdit = (id) => {
         history.push(history.location.pathname + "/edit?id=" + id)
@@ -166,7 +166,7 @@ const DetailSchedule = () => {
                                                         <td>{student.name}</td>
                                                         <td>{student.email}</td>
                                                         <td>{student.phoneNumber}</td>
-                                                        <td>{new Date(student.birthDay).toLocaleDateString()}</td>
+                                                        <td>{student.birthDay}</td>
                                                     </tr>))}
                                                 </tbody>)}
                                         </Table>

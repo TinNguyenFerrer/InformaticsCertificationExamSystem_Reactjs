@@ -126,9 +126,7 @@ const TestShedule = () => {
       <Container className="mt--8 Body_Content" fluid>
         <Row>
           <div className="col">
-
             <Card className="shadow border-0">
-
               <div>
                 <CardBody>
                   <DropdownList

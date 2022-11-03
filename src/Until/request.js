@@ -6,7 +6,7 @@ const reques = axios.create({
     headers: {
         appID: 8,
         version: "1.1.0",
-        Authorization: `Bearer ${token}`
+        // Authorization: `Bearer ${token}`
     }
 })
 // reques.interceptors.response.use(undefined, err => {
@@ -19,6 +19,11 @@ const reques = axios.create({
 //     }
 //   })
 //params
+reques.interceptors.request.use(function (config) {
+    const token = localStorage.getItem('tokenICE');
+    config.headers.Authorization =  token ? `Bearer ${token}` : '';
+    return config;
+  });
 export const getAPI = async (path, options = {}) => {
     const response = await reques.get(path, options);
     return response;

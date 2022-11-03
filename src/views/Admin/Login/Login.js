@@ -46,7 +46,7 @@ const Login = () => {
         history.push("/admin/examination")
       }
       if(data.permission=="teacher"){
-        history.push("/teacher/examination")
+        history.push("/teacher/studentmanage")
       }
     } catch (e) {
       console.log(e)

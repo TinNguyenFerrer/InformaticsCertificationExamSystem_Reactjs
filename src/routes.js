@@ -30,6 +30,12 @@ import Student from "views/Admin/Student/Student";
 import Teacher from "views/Admin/Teacher/Teacher";
 import TheoryTest from "views/Admin/TheoryTest/TheoryTest";
 import Supervisor from "views/Admin/Supervisor/Supervisor";
+import StudentAccount from "views/Admin/StudentAccount/StudentAccount";
+//===layout teacher
+import ScheduleTeacher from "views/Teacher/Schedule/ScheduleTeacher";
+import ProfileTeacher from "views/Teacher/Profile/ProfileTeacher";
+import StudentManagement from "views/Teacher/StudentManagement/StudentManagement";
+import SubmitFileManageTeacher from "views/Teacher/SubmitFileManage/SubmitFileManageTeacher";
 var routes = [
   {
     path: "/index",
@@ -88,35 +94,35 @@ var routesTeacher1 = [
     name: "Dashboard",
     icon: "ni ni-tv-2 text-primary",
     component: Index,
-    layout: "/teacher"
+    layout: "/teacher1"
   },
   {
     path: "/icons",
     name: "Icons",
     icon: "ni ni-planet text-blue",
     component: Icons,
-    layout: "/teacher"
+    layout: "/teacher1"
   },
   {
     path: "/maps",
     name: "Maps",
     icon: "ni ni-pin-3 text-orange",
     component: Maps,
-    layout: "/teacher"
+    layout: "/teacher1"
   },
   {
     path: "/user-profile",
     name: "User Profile",
     icon: "ni ni-single-02 text-yellow",
     component: Profile,
-    layout: "/teacher"
+    layout: "/teacher1"
   },
   {
     path: "/tables",
     name: "Tables",
     icon: "ni ni-bullet-list-67 text-red",
     component: Tables,
-    layout: "/teacher"
+    layout: "/teacher1"
   },
   {
     path: "/login",
@@ -135,54 +141,34 @@ var routesTeacher1 = [
 ];
 var routesTeacher = [
   {
-    path: "/index",
-    name: "Dashboard",
+    path: "/profile",
+    name: "Thông tin cá nhân",
     icon: "ni ni-tv-2 text-primary",
-    component: Index,
+    component: ProfileTeacher,
     layout: "/teacher"
   },
   {
-    path: "/icons",
-    name: "Icons",
+    path: "/schedule",
+    name: "Lịch coi thi",
     icon: "ni ni-planet text-blue",
-    component: Icons,
+    component: ScheduleTeacher,
     layout: "/teacher"
   },
   {
-    path: "/maps",
-    name: "Maps",
+    path: "/studentmanage",
+    name: "Quản lý thí sinh",
     icon: "ni ni-pin-3 text-orange",
-    component: Maps,
+    component: StudentManagement,
     layout: "/teacher"
   },
   {
-    path: "/user-profile",
-    name: "User Profile",
+    path: "/submitfile",
+    name: "Quản lý nộp bài",
     icon: "ni ni-single-02 text-yellow",
-    component: Profile,
+    component: SubmitFileManageTeacher,
     layout: "/teacher"
-  },
-  {
-    path: "/tables",
-    name: "Tables",
-    icon: "ni ni-bullet-list-67 text-red",
-    component: Tables,
-    layout: "/teacher"
-  },
-  {
-    path: "/login",
-    name: "Login",
-    icon: "ni ni-key-25 text-info",
-    component: Login,
-    layout: "/auth"
-  },
-  {
-    path: "/register",
-    name: "Register",
-    icon: "ni ni-circle-08 text-pink",
-    component: Register,
-    layout: "/auth"
   }
+  
 ];
 
 var routesAdmin = [
@@ -201,13 +187,6 @@ var routesAdmin = [
     layout: "/admin"
   },
   {
-    path: "/testschedules",
-    name: "Ca thi",
-    icon: "ni ni-calendar-grid-58 text-orange",
-    component: TestSchedule,
-    layout: "/admin"
-  },
-  {
     path: "/student",
     name: "Thí sinh",
     icon: "ni ni-hat-3 text-orange",
@@ -215,10 +194,24 @@ var routesAdmin = [
     layout: "/admin"
   },
   {
+    path: "/studentAccount",
+    name: "Tạo tài khoản thí sinh ",
+    icon: "ni ni-key-25 text-orange",
+    component: StudentAccount,
+    layout: "/admin"
+  },
+  {
     path: "/teacher",
     name: "Cán bộ",
     icon: "ni ni-single-02 text-yellow",
     component: Teacher,
+    layout: "/admin"
+  },
+  {
+    path: "/testschedules",
+    name: "Ca thi",
+    icon: "ni ni-calendar-grid-58 text-orange",
+    component: TestSchedule,
     layout: "/admin"
   },
   {

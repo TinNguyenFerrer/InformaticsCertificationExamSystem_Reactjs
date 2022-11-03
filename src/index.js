@@ -28,16 +28,19 @@ import AuthLayout from "layouts/Auth.js";
 
 import Teacher from "layouts/Teacher";
 import Teacher1 from "layouts/Teacher1";
+import StoreProvider from "./Until/StoreProvider";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <BrowserRouter>
-    <Switch>
-      <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
-      <Route path="/teacher" render={(props) => <Teacher {...props}  />} />
-      <Route path="/teacher1" render={(props) => <Teacher1 {...props}  />} />
-      <Route path="/auth" render={(props) => <AuthLayout {...props} />} />
-      <Redirect from="/" to="/admin/index" />
-    </Switch>
+    <StoreProvider>
+      <Switch>
+        <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
+        <Route path="/teacher" render={(props) => <Teacher {...props} />} />
+        <Route path="/teacher1" render={(props) => <Teacher1 {...props} />} />
+        <Route path="/auth" render={(props) => <AuthLayout {...props} />} />
+        <Redirect from="/" to="/admin/index" />
+      </Switch>
+    </StoreProvider>
   </BrowserRouter>
 );

@@ -1,4 +1,5 @@
 import DateTimeRange from "components/Datepiker/DateTimeRange";
+import { useHistory } from "react-router-dom";
 /*!
 
 =========================================================
@@ -44,7 +45,7 @@ import DropdownList from "components/Dropdown/DropdownList.js";
 import DropdownListInline from "components/Dropdown/DropdownListInline.js";
 const AddTheoryTest = () => {
   const [theoryInfor, setTheoryInfor] = useState({});
-
+  const history = useHistory()
 
 
   //--------------=========-------lấy danh sách kì thi -----------===============---------
@@ -102,6 +103,8 @@ const AddTheoryTest = () => {
       });
       console.log(response);
       window.alert("thành công");
+      history.push("/admin/theoryTests")
+
     } catch (error) {
       console.log(error);
       window.alert("Có lỗi trong quá trình UploadFile")
@@ -168,11 +171,11 @@ const AddTheoryTest = () => {
                               className="form-control-label"
                               htmlFor="input-email"
                             >
-                              Fill đề
+                              File đề
                             </label>
                             <FormGroup className='custom-file '>
-                              <Input className='custom-file-input input_uploadFile_student ' id="customFile" type="file" name="file" onChange={changeHandler} />
-                              <Label className=" input_uploadFile_student_lable" for="customFile">{selectedFile ? selectedFile.name : "Chọn file .csv"}</Label>
+                              <Input className='custom-file-input input_uploadFile_student ' id="customFile" type="file" name="file" onChange={changeHandler} accept=".pdf" />
+                              <Label className=" input_uploadFile_student_lable" for="customFile">{selectedFile ? selectedFile.name : "Chọn file .pdf"}</Label>
                             </FormGroup>
 
                           </FormGroup>

@@ -3,12 +3,13 @@ import { useLocation, Route, Switch, Redirect } from "react-router-dom";
 // reactstrap components
 import { Container } from "reactstrap";
 // core components
-import AdminNavbar from "components/Navbars/AdminNavbar.js";
+import TeacherNavbar from "components/Navbars/TeacherNavbar";
 import AdminFooter from "components/Footers/AdminFooter.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
-
+import SidebarAdmin from "components/Sidebar/SidebarAdmin";
 import {routesTeacher as routes} from "routes.js";
-
+import DetailStudent  from "views/Teacher/StudentManagement/DetailStudent";
+import {default as DetailStudentFileSubmit} from "views/Teacher/SubmitFileManage/DetailStudent";
 const Teacher = (props) => {
   const mainContent = React.useRef(null);
   const location = useLocation();
@@ -24,7 +25,7 @@ const Teacher = (props) => {
       console.log(prop)
       if (prop.layout === "/teacher") {
         return (
-          <Route
+          <Route exact
             path={prop.layout + prop.path}
             component={prop.component}
             key={key}
@@ -36,6 +37,25 @@ const Teacher = (props) => {
       }
     });
   };
+
+  const RouteChil = () => {
+    return (
+      <>
+        <Route
+          exact
+          path={"/teacher/studentmanage/detail"}
+          component={DetailStudent}
+        />
+        <Route
+          exact
+          path={"/teacher/submitfile/detail"}
+          component={DetailStudentFileSubmit}
+        />
+        
+        
+      </>
+    )
+  }
 
   const getBrandText = (path) => {
     for (let i = 0; i < routes.length; i++) {
@@ -51,23 +71,24 @@ const Teacher = (props) => {
 
   return (
     <>
-      <Sidebar
+      <SidebarAdmin
         {...props}
         routes={routes}
         logo={{
           innerLink: "/admin/index",
-          imgSrc: require("../assets/img/brand/argon-react.png"),
+          imgSrc: require("../assets/img/brand/Logo.png"),
           imgAlt: "..."
         }}
       />
       <div className="main-content" ref={mainContent}>
-        <AdminNavbar
+        <TeacherNavbar
           {...props}
           brandText={getBrandText(props.location.pathname)}
         />
         <Switch>
           {getRoutes(routes)
           }
+          <RouteChil />
           <Redirect from="*" to="/teacher/index" />
         </Switch>
         <Container fluid>

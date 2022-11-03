@@ -64,10 +64,12 @@ const Supervisor = () => {
       console.log(e)
     }
   }
-  // khi một kì thi được chọn trong dropdown
+  // ================khi một kì thi được chọn trong dropdown===============
   const onExaminationSelected = (exam) => {
     setExaminationSeleted(exam)
+    setTestSchedulesSeleted({})
     console.log(exam)
+    getRoomByIdScheduleTest(null)
     getAllScheduleTestByExaminationIdService(exam.id)
   };
   //========================= lấy danh sách ca thi theo kì thi=============
@@ -91,6 +93,7 @@ const Supervisor = () => {
 
   const getRoomByIdScheduleTest = async (id) => {
     try {
+      if(id==null)setexaminationRooms([])
       let res = await request.getAPI("ExaminationRoom/GetAllByIdTestSchedule?idTestSchedule=" + id)
       const data = res.data;
       setexaminationRooms([...data])
@@ -106,13 +109,25 @@ const Supervisor = () => {
   // --------------------tự động chia giáo viên---------------
   const handleAutoMergeRoomAndTeacher = async () => {
     try {
-      let res = await request.postAPI("Supervisor/AutoCreateSupervisor?IdTestSchedule=" + testScheduleSeleted.id)
-      console.log(res)
-      
-      getRoomByIdScheduleTest(testScheduleSeleted.id)
+      if (testScheduleSeleted.id == null) {
+        if (examinationSeleted !== null) {
+          testSchedules.map(async (sche) => {
+            let res = await request.postAPI("Supervisor/AutoCreateSupervisor?IdTestSchedule=" + sche.id)
+            console.log(res)
+            
+            return;
+          })
+        } else {
+          Window.alert("Xin chọn kì thi trước")
+        }
+      } else {
+        let res = await request.postAPI("Supervisor/AutoCreateSupervisor?IdTestSchedule=" + testScheduleSeleted.id)
+        console.log(res)
+        getRoomByIdScheduleTest(testScheduleSeleted.id)
+      }
     } catch (e) {
-      if(e.response.status== 400 && e.response.data =="not enough teachers"){
-        window.alert("số lượng giáo viên không đủ để chia phòng" )
+      if (e.response.status == 400 && e.response.data == "not enough teachers") {
+        window.alert("số lượng giáo viên không đủ để chia phòng")
       }
       console.log(e)
     }

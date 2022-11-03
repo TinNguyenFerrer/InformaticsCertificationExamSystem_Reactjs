@@ -15,8 +15,11 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import { useState, useEffect } from 'react';
+import React from "react";
+import { StoreContext } from "../../Until/StoreProvider";
+
 import { Link } from "react-router-dom";
+import { useState, useEffect } from 'react';
 import * as request from "Until/request";
 // reactstrap components
 import {
@@ -37,6 +40,9 @@ import {
 } from "reactstrap";
 
 const AdminNavbar = (props) => {
+  
+  const [nameTeacher, setNameTeacher] = React.useContext(StoreContext).nameTeacher;
+  console.log(nameTeacher);
   const [teacherInfor, setTeacherInfor] = useState();
   const getTeacherInforByToken = async () => {
     try {
@@ -48,7 +54,6 @@ const AdminNavbar = (props) => {
     }
   }
   useEffect(() => {getTeacherInforByToken()},[])
-
   return (
     <>
       <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
@@ -83,7 +88,8 @@ const AdminNavbar = (props) => {
                   </span>
                   <Media className="ml-2 d-none d-lg-block">
                     <span className="mb-0 text-sm font-weight-bold">
-                      {teacherInfor?teacherInfor.fullName:""}(Admin)
+                      {/* {teacherInfor?teacherInfor.fullName:""} */}
+                      {nameTeacher}
                     </span>
                   </Media>
                 </Media>

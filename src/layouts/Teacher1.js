@@ -22,7 +22,7 @@ const Teacher1 = (props) => {
   const getRoutes = (routes) => {
     return routes.map((prop, key) => {
       console.log(prop)
-      if (prop.layout === "/teacher") {
+      if (prop.layout === "/teacher1") {
         return (
           <Route
             path={prop.layout + prop.path}
@@ -68,7 +68,7 @@ const Teacher1 = (props) => {
         <Switch>
           {getRoutes(routes)
           }
-          <Redirect from="*" to="/teacher/index" />
+          {/* <Redirect from="*" to="/teacher/index" /> */}
         </Switch>
         <Container fluid>
           <AdminFooter />
