@@ -42,7 +42,7 @@ import {
 } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import "./SubmitFileManageTeacher.css"
-import DropdownList from "components/Dropdown/DropdownList.js";
+import DropdownListMedium from "components/Dropdown/DropdownListMedium";
 import UpoadFileStudent from "components/UploadFile/UploadFileStudent";
 import * as request from "Until/request";
 
@@ -107,10 +107,10 @@ const SubmitFileManageTeacher = () => {
 
       {/* Page content */}
       <Container className="mt--8 Body_Content bg-gradient-info" fluid style={{ minHeight: "600px" }}>
-        <DropdownList
+        <DropdownListMedium
           item={examinations}
           onItemSelected={onExaminationSelected}
-        >{examinationSeleted.name || "chọn kì thi"}</DropdownList>
+        >{examinationSeleted.name || "Chọn kì thi"}</DropdownListMedium>
         <Row>
           {schedules.map((t, index) => (
             <Col key={index} lg="6" xl="4" className="pt-2" onClick={()=>redirectToDetail(t.room_scheduleId)}>

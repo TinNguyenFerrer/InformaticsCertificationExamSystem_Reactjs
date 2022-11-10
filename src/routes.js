@@ -147,13 +147,13 @@ var routesTeacher = [
     component: ProfileTeacher,
     layout: "/teacher"
   },
-  {
-    path: "/schedule",
-    name: "Lịch coi thi",
-    icon: "ni ni-planet text-blue",
-    component: ScheduleTeacher,
-    layout: "/teacher"
-  },
+  // {
+  //   path: "/schedule",
+  //   name: "Lịch coi thi",
+  //   icon: "ni ni-planet text-blue",
+  //   component: ScheduleTeacher,
+  //   layout: "/teacher"
+  // },
   {
     path: "/studentmanage",
     name: "Quản lý thí sinh",

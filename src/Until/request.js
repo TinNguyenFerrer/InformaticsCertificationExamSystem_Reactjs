@@ -19,6 +19,18 @@ const reques = axios.create({
 //     }
 //   })
 //params
+
+reques.interceptors.response.use(
+    response => {
+      //maybe process here
+      return response;
+    },
+    error => {
+      //do some global magic with error and pass back to caller
+      console.log("LOOOOOOOOOOOOOOOO")
+      return Promise.reject(error);
+    }
+  );
 reques.interceptors.request.use(function (config) {
     const token = localStorage.getItem('tokenICE');
     config.headers.Authorization =  token ? `Bearer ${token}` : '';

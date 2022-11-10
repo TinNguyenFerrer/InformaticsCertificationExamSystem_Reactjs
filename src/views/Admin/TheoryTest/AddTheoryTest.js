@@ -1,22 +1,6 @@
 import DateTimeRange from "components/Datepiker/DateTimeRange";
 import { useHistory } from "react-router-dom";
-/*!
 
-=========================================================
-* Argon Dashboard React - v1.2.2
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2022 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React, { useEffect } from "react";
 import { useState } from "react";
 // reactstrap components
@@ -77,15 +61,24 @@ const AddTheoryTest = () => {
   };
   // -------------=========-----sử lý upload file -----======-----------
   const [selectedFile, setSelectedFile] = useState();
+  const [selectedFileExcel, setSelectedFileExcel] = useState();
   const changeHandler = (e) => {
     setSelectedFile(e.target.files[0]);
+  }
+  const changeFileExcelHandler = (e) => {
+    console.log(e.target.files[0].type)
+    setSelectedFileExcel(e.target.files[0]);
   }
   async function uploadFile() {
     try {
       const formData = new FormData();
 
       if (selectedFile.type != "application/pdf") {
-        window.alert("file không phải định dạng PDF")
+        window.alert("File không phải định dạng PDF")
+        return;
+      }
+      if (selectedFileExcel.type != "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
+        window.alert("File không phải định dạng Excel")
         return;
       }
       if (!theoryInfor.Name) {
@@ -93,6 +86,7 @@ const AddTheoryTest = () => {
         return;
       }
       formData.append("file", selectedFile);
+      formData.append("fileExel", selectedFileExcel);
       // formData.append("Name", theoryInfor.Name);
       // formData.append("ExaminationId",examinationSeleted.id )
       //console.log(formData.get("ExaminationId"))
@@ -165,7 +159,10 @@ const AddTheoryTest = () => {
                             />
                           </FormGroup>
                         </Col>
-                        <Col lg="6">
+                        
+                      </Row>
+                      <Row>
+                      <Col lg="6">
                           <FormGroup>
                             <label
                               className="form-control-label"
@@ -175,7 +172,22 @@ const AddTheoryTest = () => {
                             </label>
                             <FormGroup className='custom-file '>
                               <Input className='custom-file-input input_uploadFile_student ' id="customFile" type="file" name="file" onChange={changeHandler} accept=".pdf" />
-                              <Label className=" input_uploadFile_student_lable" for="customFile">{selectedFile ? selectedFile.name : "Chọn file .pdf"}</Label>
+                              <Label className=" input_uploadFile_student_lable" for="customFile">{selectedFile ? selectedFile.name : "Chọn file PDF"}</Label>
+                            </FormGroup>
+
+                          </FormGroup>
+                        </Col>
+                        <Col lg="6">
+                          <FormGroup>
+                            <label
+                              className="form-control-label"
+                              htmlFor="input-email"
+                            >
+                              File Excel
+                            </label>
+                            <FormGroup className='custom-file '>
+                              <Input className='custom-file-input input_uploadFile_student ' id="customFileExcel" type="file" name="fileExcel" onChange={changeFileExcelHandler} accept=".xlsx" />
+                              <Label className=" input_uploadFile_student_lable" for="customFileExcel">{selectedFileExcel ? selectedFileExcel.name : "Chọn file Excel"}</Label>
                             </FormGroup>
 
                           </FormGroup>

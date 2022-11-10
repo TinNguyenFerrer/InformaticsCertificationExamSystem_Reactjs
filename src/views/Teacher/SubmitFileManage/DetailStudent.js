@@ -52,6 +52,7 @@ const DetailStudent = () => {
   };
 
   let [students, setStudents] = useState([])
+  let [lockStudents, setLockStudents] = useState(true)
   //console.log("rerender")
   //console.log(teachers)
   const getAllInfoSubmitFileOfStudentBySchedule_RoomIdService = async () => {
@@ -71,7 +72,8 @@ const DetailStudent = () => {
       console.log(e)
     }
   }
-  const UnlockUserService = async () => {
+  //-----------mở bài làm----------
+  const unlockUserService = async () => {
     try {
       const queryParams = new URLSearchParams(window.location.search);
       const examroom_testscheid = queryParams.get('examroom_testscheid');
@@ -84,6 +86,31 @@ const DetailStudent = () => {
       const data = res.data;
       if (res.status == 200) {
         window.alert("Thí sinh có thể bắt đầu làm bài");
+        setLockStudents(pre=>!pre)
+      } else {
+        window.alert("Kích hoạt thất bại xin thử lại")
+      }
+      //setStudents([...data])
+      console.log(data)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  //-----------khóa bài làm----------
+  const lockUserService = async () => {
+    try {
+      const queryParams = new URLSearchParams(window.location.search);
+      const examroom_testscheid = queryParams.get('examroom_testscheid');
+      const param = {
+        params: {
+          ExamRom_TestScheid: examroom_testscheid
+        }
+      }
+      let res = await request.getAPI(`Student/LockStudent`, param)
+      const data = res.data;
+      if (res.status == 200) {
+        window.alert("Bài thi kết thúc");
+        setLockStudents(pre=>!pre)
       } else {
         window.alert("Kích hoạt thất bại xin thử lại")
       }
@@ -110,8 +137,10 @@ const DetailStudent = () => {
             <Card className="shadow border-0">
               <div>
                 <CardBody>
-                  <Button color="success" onClick={UnlockUserService}>Bắt đầu làm bài</Button>
-
+                  {lockStudents?
+                  (<Button color="success" onClick={unlockUserService}>Mở bài làm</Button>):
+                  <Button color="danger" onClick={lockUserService}>Khóa làm bài</Button>
+                  }
                   <CardHeader className="bg-white border-0">
                     <Row className="align-items-center">
                       <Col xs="8">

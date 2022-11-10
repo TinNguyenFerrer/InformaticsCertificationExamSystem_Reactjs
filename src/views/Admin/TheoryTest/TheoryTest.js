@@ -111,6 +111,15 @@ const TheoryTest = () => {
       link.download = `${id}.pdf`
       link.click()
       link.remove();
+      let res1 = await request.getAPI("TheoryTest/DownloadExcelFile?id=" + id,{responseType: 'blob'})
+      console.log(res1);
+      const type1 = res1.headers['content-type']
+      const blob1 = new Blob([res1.data], { type: type, encoding: "UTF-8" })
+      const link1= document.createElement('a')
+      link1.href = window.URL.createObjectURL(blob1)
+      link1.download = `${id}.xlsx`
+      link1.click()
+      link1.remove();
     } catch (e) {
       console.log(e)
     }

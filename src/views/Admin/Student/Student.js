@@ -147,19 +147,7 @@ const Student = () => {
                   >{examinationSeleted.name || "chọn kì thi"}
                   </DropdownList>
                   <br></br>
-                  <div className="student-input-freelanceStudent">
-                    <Input 
-                      type="checkbox"
-                      checked={freelanceStudent}
-                      onChange={() => {
-                        setFreelanceStudent(!freelanceStudent);
-                      }}
-                    />
-                    <Label check>Sinh viên tự do</Label>
-                  </div>
-                  <UpoadFileStudent >
-                    Tải từ file
-                  </UpoadFileStudent>
+                  
                   <CardHeader className="bg-white border-0">
                     <Row className="align-items-center">
                       <Col xs="8">

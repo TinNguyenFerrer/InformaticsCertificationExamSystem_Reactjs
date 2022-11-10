@@ -37,12 +37,14 @@ import {
     UncontrolledDropdown,
     DropdownToggle,
     DropdownMenu,
-    Label
+    Label,
+    Modal, ModalHeader, ModalBody, ModalFooter
 } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import "./DetailSchedule.css"
 import DropdownList from "components/Dropdown/DropdownList.js";
 import UpoadFileStudent from "components/UploadFile/UploadFileStudent";
+import ModalSwapSchedule from "components/Modals/ModalsSwapSchedule";
 import * as request from "Until/request";
 import { param } from "jquery";
 
@@ -56,6 +58,8 @@ const DetailSchedule = () => {
         password: "",
     }]
     let [students, setStudents] = useState(studentInformInit)
+    let [modal, setModal] = useState(false);
+    let [idStudentModal,SetIdStudentModal ] = useState()
     let [examinations, setExaminations] = useState([])
     let [examinationSeleted, setExaminationSeleted] = useState({})
     let [freelanceStudent, setFreelanceStudent] = useState(false)
@@ -102,7 +106,7 @@ const DetailSchedule = () => {
             param = {
                 params: {
                     Id: id,
-                    ExamRom_TestScheid:examroom_testscheid
+                    ExamRom_TestScheid: examroom_testscheid
                 }
             }
             let res = await request.getAPI(`Student/GetAllByRoomAndTestSchedule`, param)
@@ -131,6 +135,11 @@ const DetailSchedule = () => {
         <>
             <HeaderEmpty />
             {/* Page content */}
+
+            <div>
+                <ModalSwapSchedule onExecute={getAllStudentByTestScheduleAndRoomService} displayUseState = {[modal, setModal]} idStudent={idStudentModal} />
+            </div>
+
             <Container className="mt--8 Body_Content" fluid>
                 <Row>
                     <div className="col">
@@ -156,6 +165,7 @@ const DetailSchedule = () => {
                                                     <th scope="col">Email</th>
                                                     <th scope="col">SĐT</th>
                                                     <th scope="col">Ngày sinh</th>
+                                                    <th scope="col"></th>
                                                 </tr>
                                             </thead>
                                             {(students.lenght != 0) &&
@@ -167,6 +177,22 @@ const DetailSchedule = () => {
                                                         <td>{student.email}</td>
                                                         <td>{student.phoneNumber}</td>
                                                         <td>{new Date(student.birthDay).toLocaleDateString()}</td>
+                                                        <td >
+                                                            <UncontrolledDropdown>
+                                                                <DropdownToggle
+                                                                    className="btn-icon-only"
+                                                                    role="button"
+                                                                    size="sm"
+                                                                    color=""
+                                                                    onClick={() => {
+                                                                        SetIdStudentModal(student.id)
+                                                                        setModal(!modal)
+                                                                    }}
+                                                                >
+                                                                    <i className="fas fa-retweet"></i>
+                                                                </DropdownToggle>
+                                                            </UncontrolledDropdown>
+                                                        </td>
                                                     </tr>))}
                                                 </tbody>)}
                                         </Table>

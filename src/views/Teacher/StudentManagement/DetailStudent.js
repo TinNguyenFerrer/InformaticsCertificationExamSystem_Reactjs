@@ -45,41 +45,41 @@ import { useHistory } from "react-router-dom";
 import DropdownList from "components/Dropdown/DropdownList.js";
 
 const DetailStudent = () => {
-  
+
   const history = useHistory()
   const handleRedirectAddTeacher = () => {
     history.push("teacher/add")
   };
-  
+
   let [students, setStudents] = useState([])
   //console.log("rerender")
   //console.log(teachers)
   const getAllStudentByTestScheduleAndRoomService = async () => {
     try {
-        const queryParams = new URLSearchParams(window.location.search);
-        const examroom_testscheid = queryParams.get('examroom_testscheid');
-        const param = {
-            params: {
-                ExamRom_TestScheid:examroom_testscheid
-            }
+      const queryParams = new URLSearchParams(window.location.search);
+      const examroom_testscheid = queryParams.get('examroom_testscheid');
+      const param = {
+        params: {
+          ExamRom_TestScheid: examroom_testscheid
         }
-        let res = await request.getAPI(`Student/GetAllByRoomAndTestSchedule`, param)
-        console.log(res)
-        const data = res.data;
-        setStudents([...data])
-        console.log(data)
+      }
+      let res = await request.getAPI(`Student/GetAllByRoomAndTestSchedule`, param)
+      console.log(res)
+      const data = res.data;
+      setStudents([...data])
+      console.log(data)
     } catch (e) {
-        console.log(e)
+      console.log(e)
     }
-}
+  }
   useEffect(() => {
     getAllStudentByTestScheduleAndRoomService()
-  },[])
-  
-  
+  }, [])
+
+
   return (
     <>
-    
+
       <HeaderEmpty />
       {/* Page content */}
       <Container className="mt--8 Body_Content" fluid>
@@ -99,25 +99,27 @@ const DetailStudent = () => {
                     </Row>
                   </CardHeader>
                   <div >
-                  <Table className="align-items-center table-flush" responsive>
+                    <Table className="align-items-center table-flush" responsive>
                       <thead className="thead-light">
                         <tr>
                           <th scope="col">STT</th>
                           <th scope="col">Tên Sinh viên</th>
+                          <th scope="col">Mã học viên</th>
+                          <th scope="col">Mật khẩu</th>
                           <th scope="col">Email</th>
                           <th scope="col">SĐT</th>
-                          <th scope="col"></th>
                         </tr>
                       </thead>
                       {(students.lenght != 0) &&
                         (<tbody>{students.map((student, index) =>
                         (
                           <tr key={index}>
-                            <td>{index}</td>
+                            <td>{index+1}</td>
                             <td>{student.name}</td>
+                            <td>{student.identifierCode}</td>
+                            <td>{student.password}</td>
                             <td>{student.email}</td>
                             <td>{student.phoneNumber}</td>
-                            
                           </tr>))}
                         </tbody>)}
                     </Table>

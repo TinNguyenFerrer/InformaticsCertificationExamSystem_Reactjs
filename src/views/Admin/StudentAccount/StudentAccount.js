@@ -201,6 +201,7 @@ const Student = () => {
                                                     <th scope="col">Ngày sinh</th>
                                                     <th scope="col">Mã Thí Sinh</th>
                                                     <th scope="col">Mật khẩu</th>
+                                                    <th scope="col">Mã Phách</th>
                                                 </tr>
                                             </thead>
                                             {(students.lenght != 0) &&
@@ -212,6 +213,7 @@ const Student = () => {
                                                         <td>{new Date(student.birthDay).toLocaleDateString()}</td>
                                                         <td>{student.identifierCode||""}</td>
                                                         <td>{student.password||""}</td>
+                                                        <td>{student.hashCode||""}</td>
                                                         {/* <td className="text-right">
                                                             <UncontrolledDropdown>
                                                                 <DropdownToggle

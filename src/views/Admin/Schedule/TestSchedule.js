@@ -152,10 +152,9 @@ const TestShedule = () => {
                     </Row>
                   </CardHeader>
                   <div >
-                    <Table className="align-items-center table-flush" responsive>
-                      <thead className="thead-light">
-                        <tr>
-                          <th scope="col">STT</th>
+                    <Table className="align-items-center table-flush " responsive>
+                      <thead className="">
+                        <tr className="table-success">
                           <th scope="col">Ca thi</th>
                           <th scope="col">Phòng thi</th>
                           <th scope="col">Thời gian bắt đầu</th>
@@ -164,48 +163,35 @@ const TestShedule = () => {
                         </tr>
                       </thead>
                       {(testSchedules.lenght != 0) &&
-                        (<tbody>{testSchedules.map((testSchedule, index) =>
-                        (
-                          <tr key={testSchedule.id}>
-                            <td>{index}</td>
-                            <td>{testSchedule.schedu.name}</td>
-                            <td>{testSchedule.room}</td>
-                            <td>{new Date(testSchedule.schedu.starTime).toLocaleString()}</td>
-                            <td>{new Date(testSchedule.schedu.endTime).toLocaleString()}</td>
-                            <td className="text-right">
-                              <Link to={() => `/admin/testschedules/detailschedule?id=${testSchedule.schedu.id}&examroom_testscheid=${testSchedule.exam_testscheid}`}> Danh sách</Link>
-                              {/* <UncontrolledDropdown>
-                                <DropdownToggle
-                                  className="btn-icon-only text-light"
+                        (<tbody>{testSchedules.map((testSchedule, index) => {
+                          let td;
+                          if ((index > 0) && testSchedules[index - 1].schedu.name == testSchedule.schedu.name) {
+                            return (
+                              <tr key={index}>
+                                <td className="border-0"></td>
+                                <td >{testSchedule.room}</td>
+                                <td>{new Date(testSchedule.schedu.starTime).toLocaleTimeString()}</td>
+                                <td>{new Date(testSchedule.schedu.endTime).toLocaleTimeString()}</td>
+                                <td className="text-right">
+                                  <Link to={() => `/admin/testschedules/detailschedule?id=${testSchedule.schedu.id}&examroom_testscheid=${testSchedule.exam_testscheid}`}> Danh sách</Link>
+                                </td>
+                              </tr>
+                            )
+                          } else {
 
-                                  role="button"
-                                  size="sm"
-                                  color=""
-                                  onClick={(e) => e.preventDefault()}
-                                >
-                                  <i className="fas fa-ellipsis-v" />
-                                </DropdownToggle>
-                                <DropdownMenu className="dropdown-menu-arrow" right>
-                                  <DropdownItem
-
-                                    idteacher={testSchedule.id}
-                                    onClick={() => (handleRedirectToEdit(testSchedule.id))}
-                                  >
-                                    Danh sách thí sinh
-                                  </DropdownItem>
-
-                                  <DropdownItem
-
-                                    idteacher={testSchedule.id}
-                                    onClick={() => (deleteExamination(testSchedule.id))}
-                                  >
-                                    Xóa
-                                  </DropdownItem>
-                                </DropdownMenu>
-                              </UncontrolledDropdown> */}
-                            </td>
-                          </tr>
-                        ))//if fase----------------
+                            return (
+                              <tr key={index}>
+                                <td className="font-weight-bold border-top-1  border-success">{testSchedule.schedu.name}</td>
+                                <td  className=" border-success">{testSchedule.room}</td>
+                                <td className="border-success">{new Date(testSchedule.schedu.starTime).toLocaleTimeString()}</td>
+                                <td className="border-success">{new Date(testSchedule.schedu.endTime).toLocaleTimeString()}</td>
+                                <td className="text-right border-success">
+                                  <Link to={() => `/admin/testschedules/detailschedule?id=${testSchedule.schedu.id}&examroom_testscheid=${testSchedule.exam_testscheid}`}> Danh sách</Link>
+                                </td>
+                              </tr>
+                            )
+                          }
+                        })//if fase----------------
                         }
                         </tbody>)}
                     </Table>
