@@ -40,8 +40,8 @@ export const getAPI = async (path, options = {}) => {
     const response = await reques.get(path, options);
     return response;
 }
-export const postAPI = async (path, options = {}) => {
-    const response = await reques.post(path, options);
+export const postAPI = async (path,data, options = {}) => {
+    const response = await reques.post(path,data, options);
     return response;
 }
 export const deleteAPI = async (path, options = {}) => {

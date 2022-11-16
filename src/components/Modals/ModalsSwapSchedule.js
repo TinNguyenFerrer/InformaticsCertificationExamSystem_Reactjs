@@ -125,8 +125,8 @@ const ModalSwapSchedule = (props) => {
           </DropdownListInline>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={changeStudentScheduleExamService}>Do Something</Button>{' '}
-          <Button color="secondary" onClick={toggle}>Cancel</Button>
+          <Button color="primary" onClick={changeStudentScheduleExamService}>Lưu</Button>{' '}
+          <Button color="secondary" onClick={toggle}>Thoát</Button>
         </ModalFooter>
       </Modal>
     </div>

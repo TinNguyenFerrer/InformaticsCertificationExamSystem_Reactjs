@@ -69,7 +69,7 @@ const Supervisor = () => {
     setExaminationSeleted(exam)
     setTestSchedulesSeleted({})
     console.log(exam)
-    getRoomByIdScheduleTest(null)
+    //getRoomByIdScheduleTest(null)
     getAllScheduleTestByExaminationIdService(exam.id)
   };
   //========================= lấy danh sách ca thi theo kì thi=============
@@ -114,7 +114,11 @@ const Supervisor = () => {
           testSchedules.map(async (sche) => {
             let res = await request.postAPI("Supervisor/AutoCreateSupervisor?IdTestSchedule=" + sche.id)
             console.log(res)
-            
+            if(res.status===200){
+              window.alert("Tạo tự động thành ông")
+            }else{
+              window.alert("tạo tự đông thất bại")
+            }
             return;
           })
         } else {
@@ -123,7 +127,12 @@ const Supervisor = () => {
       } else {
         let res = await request.postAPI("Supervisor/AutoCreateSupervisor?IdTestSchedule=" + testScheduleSeleted.id)
         console.log(res)
-        getRoomByIdScheduleTest(testScheduleSeleted.id)
+        if(res.status===200){
+          getRoomByIdScheduleTest(testScheduleSeleted.id)
+          window.alert("Tạo tự động thành ông")
+        }else{
+          window.alert("tạo tự đông thất bại")
+        }
       }
     } catch (e) {
       if (e.response.status == 400 && e.response.data == "not enough teachers") {
