@@ -77,10 +77,10 @@ const Scorecard = () => {
     console.log(response)
     if (response.status === 200) {
       const type = response.headers['content-type']
-      const headerLine = response.headers["content-disposition"];
-      console.log(response)
+      const fileName = response.headers["content-disposition"].split('filename=')[1].split(';')[0].replaceAll('"', '');
+      console.log(fileName)
       const blob = new Blob([response.data], { type: 'application/zip', encoding: "UTF-8" })
-      saveAs(blob, `${TestScheduleId}.zip`)
+      saveAs(blob, fileName)
       e.target.className = "fas fa-download fa-lg text-success"
     }
 
