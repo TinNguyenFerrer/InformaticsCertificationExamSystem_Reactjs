@@ -60,8 +60,44 @@ const Student = () => {
     let [examinationSeleted, setExaminationSeleted] = useState({})
     let [freelanceStudent, setFreelanceStudent] = useState(false)
 
+    const [data, setdata] = useState({
+        listOfUsers: [],
+        loading: false
+    });
 
-    ////----------------tao j mất khẩu từ dộng
+    const getUsers = async (idExam) => {
+        if (!data.loading) {
+            try {
+                setdata(pre => ({ ...pre, loading: true }));
+                const response = await request.getAPI(`Examination/${idExam}/student-accounts-for-export`)
+                console.log(response)
+                const accounts = [];
+                response.data.map((user) => {
+                    var { name, ...rest } = user;
+                    console.log(typeof name)
+                    accounts.push({
+                        ...rest,
+                        firstname: name.lastIndexOf(" ") != -1 ? name.slice(name.lastIndexOf(" ") + 1) : name,
+                        lastname: name.lastIndexOf(" ") != -1 ? name.slice(0, name.lastIndexOf(" ")) : name
+                    })
+                })
+                setdata({
+                    listOfUsers: accounts,
+                    loading: false
+                });
+                console.log(data)
+                //done(true)
+            } catch (e) {
+                console.log(e)
+                setdata(pre => ({
+                    ...pre,
+                    loading: false
+                }));
+            };
+        }
+    }
+
+    ////----------------tao mật khẩu tự động
     const handleAutoCreatePass = async (id) => {
         try {
             if (id == null) {
@@ -115,15 +151,9 @@ const Student = () => {
     }
     const onExaminationSelected = (exam) => {
         setExaminationSeleted(exam)
-        console.log(exam)
+        console.log(exam.id)
+        getUsers(exam.id)
         getAllStudentByIdExaminationServices(exam.id)
-    };
-    const handleRedirectAddStudent = () => {
-        if (examinationSeleted.id == null) {
-            window.alert("Bạn phải chọn kì thi trước")
-        } else {
-            history.push("student/add?idexamination=" + examinationSeleted.id)
-        }
     };
     const getAllStudentServices = async () => {
         try {
@@ -153,16 +183,10 @@ const Student = () => {
             console.log(e)
         }
     }
-    const handleDeleteStudent = (e) => {
-        deleteStudentService(e)
-    }
     useEffect(() => {
         getAllStudentServices()
         getAllExaminationsServices()
     }, [])
-    const handleRedirectToEdit = (id) => {
-        history.push(history.location.pathname + "/edit?id=" + id)
-    }
 
     return (
         <>
@@ -185,7 +209,7 @@ const Student = () => {
                                         </Col>
                                     </Row>
                                     <Col className="text-right" xs="12">
-                                        <ExportAccountCSVButton idExam = {examinationSeleted.id}>
+                                        <ExportAccountCSVButton className="btn btn-info" idExam = {examinationSeleted.id} dataExport={data}>
                                             <span className="svg-icon svg-icon-2">
                                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                     <rect opacity="1" x="12.75" y="4.25" width="12" height="2" rx="1" transform="rotate(90 12.75 4.25)" fill="currentColor"></rect>

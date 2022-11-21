@@ -143,6 +143,7 @@ const Examination = () => {
                       <thead className="thead-light">
                         <tr>
                           <th scope="col">Tên Kì Thi</th>
+                          <th scope="col">Mã kì thi</th>
                           <th scope="col">Địa điểm thi</th>
                           <th scope="col">Bắt Đầu</th>
                           <th scope="col">Kết Thúc</th>
@@ -155,6 +156,7 @@ const Examination = () => {
                         (
                           <tr key={examinations.id}>
                             <td>{examinations.name}</td>
+                            <td>{examinations.examCode}</td>
                             <td>{examinations.location}</td>
                             <td>{new Date(examinations.starTime).toLocaleDateString()}</td>
                             <td>{new Date(examinations.endTime).toLocaleDateString()}</td>
