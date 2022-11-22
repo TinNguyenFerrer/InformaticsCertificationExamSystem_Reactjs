@@ -17,7 +17,8 @@ import { useLocation, Route, Switch } from "react-router-dom";
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React, { Fragment, useEffect } from "react";
+import { useEffect,useContext,Fragment } from "react";
+import {StoreContext} from "Until/StoreProvider"
 import { useState } from 'react';
 // reactstrap components
 import { Card, Container, DropdownItem, Row } from "reactstrap";
@@ -49,7 +50,7 @@ const Supervisor = () => {
   let te = { id: -1, name: "" };
   //========--------------lấy danh sách kì thi------------============
   let [examinations, setExaminations] = useState([])
-  let [examinationSeleted, setExaminationSeleted] = useState({})
+  let [examinationSeleted, setExaminationSeleted] = useContext(StoreContext).examinationSeleted
   let [testSchedules, setTestSchedules] = useState([])
   let [testScheduleSeleted, setTestSchedulesSeleted] = useState({})
   let [examinationRooms, setexaminationRooms] = useState([])
@@ -157,7 +158,7 @@ const Supervisor = () => {
     console.log(count)
     if (count >= 2) {
       return (
-        <React.Fragment>
+        <Fragment>
           <td>
             {teacherInf[0].fullName}<br></br>
             MSCB - {teacherInf[0].identifierCode}
@@ -166,21 +167,22 @@ const Supervisor = () => {
             {teacherInf[1].fullName}<br></br>
             MSCB - {teacherInf[1].identifierCode}
           </td>
-        </React.Fragment>
+        </Fragment>
       )
     }
     else
       return (
-        <React.Fragment>
+        <Fragment>
           <td>chưa có giám thị</td>
           <td>chưa có giám thị</td>
-        </React.Fragment>
+        </Fragment>
       )
   }
   //=====================
   useEffect(() => {
     getAllExaminationsServices()
-
+    if (examinationSeleted.id !== undefined)
+    getAllScheduleTestByExaminationIdService(examinationSeleted.id)
   }, [])
 
   return (

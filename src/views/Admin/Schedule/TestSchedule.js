@@ -17,7 +17,8 @@ import { useLocation, Route, Switch, Link } from "react-router-dom";
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React, { useEffect } from "react";
+import { useEffect, useContext } from "react";
+import { StoreContext } from "Until/StoreProvider"
 import { useState } from 'react';
 // reactstrap components
 import { Card, Container, DropdownItem, Row } from "reactstrap";
@@ -41,6 +42,7 @@ import {
 import { useHistory } from "react-router-dom";
 import "./TestSchedule.css";
 import DropdownList from "components/Dropdown/DropdownList.js";
+import DropdownListInline from "components/Dropdown/DropdownListInline.js";
 import * as request from "Until/request";
 
 const TestShedule = () => {
@@ -87,7 +89,7 @@ const TestShedule = () => {
   const [DropdowItem, setDropdowItem] = useState(te)
   let [examinations, setExaminations] = useState([])
   let [testSchedules, setTestSchedules] = useState([])
-  let [examinationSeleted, setExaminationSeleted] = useState({})
+  let [examinationSeleted, setExaminationSeleted] = useContext(StoreContext).examinationSeleted
   const getAllTestScheduleServices = async () => {
     try {
       let res = await request.getAPI("Examination/GetAll")
@@ -113,6 +115,8 @@ const TestShedule = () => {
   }
   useEffect(() => {
     getAllTestScheduleServices()
+    if (examinationSeleted.id !== undefined)
+      GetAllTestScheduleByIdExaminationServices(examinationSeleted.id)
   }, [])
   const onExaminationSelected = (exam) => {
     setExaminationSeleted(exam)
@@ -129,10 +133,14 @@ const TestShedule = () => {
             <Card className="shadow border-0">
               <div>
                 <CardBody>
-                  <DropdownList
-                    item={examinations}
-                    onItemSelected={onExaminationSelected}
-                  >{examinationSeleted.name || "chọn kì thi"}</DropdownList>
+                <div>
+                    Chọn kì thi: &ensp;
+                    <DropdownListInline
+                      item={examinations}
+                      onItemSelected={onExaminationSelected}
+                    >{examinationSeleted.name || "chọn kì thi"}
+                    </DropdownListInline>
+                  </div>
                   <CardHeader className="bg-white border-0">
                     <Row className="align-items-center">
 
@@ -182,7 +190,7 @@ const TestShedule = () => {
                             return (
                               <tr key={index}>
                                 <td className="font-weight-bold border-top-1  border-success">{testSchedule.schedu.name}</td>
-                                <td  className=" border-success">{testSchedule.room}</td>
+                                <td className=" border-success">{testSchedule.room}</td>
                                 <td className="border-success">{new Date(testSchedule.schedu.starTime).toLocaleTimeString()}</td>
                                 <td className="border-success">{new Date(testSchedule.schedu.endTime).toLocaleTimeString()}</td>
                                 <td className="text-right border-success">

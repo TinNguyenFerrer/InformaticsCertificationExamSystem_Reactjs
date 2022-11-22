@@ -18,7 +18,8 @@ import { useLocation, Route, Switch } from "react-router-dom";
 
 */
 import React from "react";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { StoreContext } from "Until/StoreProvider"
 // reactstrap components
 import { Card, Container, DropdownItem, Row } from "reactstrap";
 import { Redirect } from "react-router-dom";
@@ -42,7 +43,7 @@ import {
 } from "reactstrap";
 import { useHistory } from "react-router-dom";
 // import "./Student.css"
-import DropdownList from "components/Dropdown/DropdownList.js";
+import DropdownListInline from "components/Dropdown/DropdownListInline.js";
 import UpoadFileStudent from "components/UploadFile/UploadFileStudent";
 import * as request from "Until/request";
 
@@ -57,7 +58,7 @@ const Student = () => {
     }]
     let [students, setStudents] = useState(studentInformInit)
     let [examinations, setExaminations] = useState([])
-    let [examinationSeleted, setExaminationSeleted] = useState({})
+    let [examinationSeleted, setExaminationSeleted] = useContext(StoreContext).examinationSeleted
     let [freelanceStudent, setFreelanceStudent] = useState(false)
 
     const [data, setdata] = useState({
@@ -125,7 +126,7 @@ const Student = () => {
             console.log(e)
         }
     };
-    
+
     //================================================================
     const getAllExaminationsServices = async () => {
         try {
@@ -186,6 +187,8 @@ const Student = () => {
     useEffect(() => {
         getAllStudentServices()
         getAllExaminationsServices()
+        if (examinationSeleted.id !== undefined)
+            getAllStudentByIdExaminationServices(examinationSeleted.id)
     }, [])
 
     return (
@@ -198,18 +201,16 @@ const Student = () => {
                         <Card className="shadow border-0">
                             <div>
                                 <CardBody>
-                                    <Row>
-                                        <Col className="text-left" xs="1">Kì thi:</Col>
-                                        <Col className="text-left" xs="5">
-                                            <DropdownList
-                                                item={examinations}
-                                                onItemSelected={onExaminationSelected}
-                                            >{examinationSeleted.name || "chọn kì thi"}
-                                            </DropdownList>
-                                        </Col>
-                                    </Row>
+                                    <div>
+                                        Chọn kì thi: &ensp;
+                                        <DropdownListInline
+                                            item={examinations}
+                                            onItemSelected={onExaminationSelected}
+                                        >{examinationSeleted.name || "chọn kì thi"}
+                                        </DropdownListInline>
+                                    </div>
                                     <Col className="text-right" xs="12">
-                                        <ExportAccountCSVButton className="btn btn-info" idExam = {examinationSeleted.id} dataExport={data}>
+                                        <ExportAccountCSVButton className="btn btn-info" idExam={examinationSeleted.id} dataExport={data}>
                                             <span className="svg-icon svg-icon-2">
                                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                     <rect opacity="1" x="12.75" y="4.25" width="12" height="2" rx="1" transform="rotate(90 12.75 4.25)" fill="currentColor"></rect>
@@ -222,7 +223,7 @@ const Student = () => {
                                         <Button
                                             color="primary"
                                             onClick={() => handleAutoCreatePass(examinationSeleted.id)}
-                                            // size="sm"
+                                        // size="sm"
                                         >
                                             Tạo tự động
                                         </Button>

@@ -18,7 +18,10 @@ import { useLocation, Route, Switch } from "react-router-dom";
 
 */
 import React from "react";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { StoreContext } from "Until/StoreProvider"
+import BootstrapTable from 'react-bootstrap-table-next';
+import paginationFactory from 'react-bootstrap-table2-paginator';
 // reactstrap components
 import { Card, Container, DropdownItem, Row } from "reactstrap";
 import { Redirect } from "react-router-dom";
@@ -42,6 +45,7 @@ import {
 import { useHistory } from "react-router-dom";
 import "./Student.css"
 import DropdownList from "components/Dropdown/DropdownList.js";
+import DropdownListInline from "components/Dropdown/DropdownListInline.js";
 import UpoadFileStudent from "components/UploadFile/UploadFileStudent";
 import * as request from "Until/request";
 
@@ -54,9 +58,105 @@ const Student = () => {
     identifierCode: "",
     password: "",
   }]
+  //init table info
+  const columns = [{
+    dataField: 'name',
+    text: 'Tên thí sinh',
+    sort: true
+  }, {
+    dataField: 'email',
+    text: 'địa chỉ',
+    sort: true
+  },
+  {
+    dataField: 'phoneNumber',
+    text: 'SDT',
+    sort: true
+  },
+  {
+    dataField: 'birthDay',
+    text: 'Ngày sinh',
+    sort: true
+  },
+  {
+    dataField: 'edit',
+    text: '',
+    formatter: (cell, row, rowIndex, formatExtraData) => {
+      console.log(row)
+      var r = 0
+      return (<div className="text-right">
+        <UncontrolledDropdown>
+          <DropdownToggle
+            className="btn-icon-only text-light"
+
+            role="button"
+            size="sm"
+            color=""
+            onClick={(e) => e.preventDefault()}
+          >
+            <i className="fas fa-ellipsis-v" />
+          </DropdownToggle>
+          <DropdownMenu className="dropdown-menu-arrow" right>
+            <DropdownItem
+
+              idteacher={row.id}
+              onClick={() => (handleRedirectToEdit(row.id))}
+            >
+              Sửa
+            </DropdownItem>
+
+            <DropdownItem
+
+              idteacher={row.id}
+              onClick={() => (handleDeleteStudent(row.id))}
+            >
+              Xóa
+            </DropdownItem>
+          </DropdownMenu>
+        </UncontrolledDropdown>
+      </div>
+      )
+    }
+  }];
+  const sizePerPageRenderer = ({
+    options,
+    currSizePerPage,
+    onSizePerPageChange
+  }) => {
+    return (
+      <div className="btn-group">
+        <button type="button" class="btn btn-outline-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {currSizePerPage}
+        </button>
+        <div className="dropdown-menu">
+          {
+            options.map(option => (
+              <div className="dropdown-item"
+                key={option.text}
+                onClick={() => onSizePerPageChange(option.page)}
+              >
+                {option.text}
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    )
+  }
+  const pagination = paginationFactory({
+    sizePerPageRenderer,
+    sizePerPage: 5,
+    lastPageText: '>>',
+    firstPageText: '<<',
+    nextPageText: '>',
+    prePageText: '<',
+    showTotal: true,
+    alwaysShowAllBtns: true,
+  });
+
   let [students, setStudents] = useState(studentInformInit)
   let [examinations, setExaminations] = useState([])
-  let [examinationSeleted, setExaminationSeleted] = useState({})
+  let [examinationSeleted, setExaminationSeleted] = useContext(StoreContext).examinationSeleted
   let [freelanceStudent, setFreelanceStudent] = useState(false)
   const getAllExaminationsServices = async () => {
     try {
@@ -130,7 +230,10 @@ const Student = () => {
   const handleRedirectToEdit = (id) => {
     history.push(history.location.pathname + "/edit?id=" + id)
   }
-
+  useEffect(() => {
+    if (examinationSeleted.id !== undefined)
+      getAllStudentByIdExaminationServices(examinationSeleted.id)
+  }, [])
   return (
     <>
       <HeaderEmpty />
@@ -141,13 +244,16 @@ const Student = () => {
             <Card className="shadow border-0">
               <div>
                 <CardBody>
-                  <DropdownList
-                    item={examinations}
-                    onItemSelected={onExaminationSelected}
-                  >{examinationSeleted.name || "chọn kì thi"}
-                  </DropdownList>
+                  <div>
+                    Chọn kì thi: &ensp;
+                    <DropdownListInline
+                      item={examinations}
+                      onItemSelected={onExaminationSelected}
+                    >{examinationSeleted.name || "chọn kì thi"}
+                    </DropdownListInline>
+                  </div>
                   <br></br>
-                  
+
                   <CardHeader className="bg-white border-0">
                     <Row className="align-items-center">
                       <Col xs="8">
@@ -165,7 +271,7 @@ const Student = () => {
                     </Row>
                   </CardHeader>
                   <div >
-                    <Table className="align-items-center table-flush" responsive>
+                    {/* <Table className="align-items-center table-flush" responsive>
                       <thead className="thead-light">
                         <tr>
                           <th scope="col">STT</th>
@@ -211,7 +317,20 @@ const Student = () => {
                             </td>
                           </tr>))}
                         </tbody>)}
-                    </Table>
+                    </Table> */}
+                    <BootstrapTable
+                      className=""
+                      bootstrap4={true}
+                      bordered={false}
+                      headerWrapperClasses="table-success"
+                      classes="align-items-center table-flush table "
+                      id="tb-layout-auto"
+                      keyField='id'
+                      data={students}
+                      columns={columns}
+                      pagination={pagination}
+                    //pagination={ paginationFactory() }
+                    />
                   </div>
                   <hr className="my-4" />
 

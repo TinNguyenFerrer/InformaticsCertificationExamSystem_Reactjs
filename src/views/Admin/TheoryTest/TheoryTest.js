@@ -17,7 +17,8 @@ import { useLocation, Route, Switch } from "react-router-dom";
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React, { useEffect } from "react";
+import { useEffect, useContext } from "react";
+import {StoreContext} from "Until/StoreProvider"
 import { useState } from 'react';
 // reactstrap components
 import { Card, Container, DropdownItem, Row } from "reactstrap";
@@ -43,13 +44,12 @@ import "./TheoryTest.css";
 import DropdownList from "components/Dropdown/DropdownList.js";
 import DropdownListInline from "components/Dropdown/DropdownListInline.js";
 import * as request from "Until/request";
-import { info } from "sass";
 const TheoryTest = () => {
 
   let te = { id: -1, name: "" };
   //========--------------lấy danh sách kì thi------------============
   let [examinations, setExaminations] = useState([])
-  let [examinationSeleted, setExaminationSeleted] = useState({})
+  let [examinationSeleted, setExaminationSeleted] = useContext(StoreContext).examinationSeleted
   let [testSchedules, setTestSchedules] = useState([])
   let [testScheduleSeleted, setTestSchedulesSeleted] = useState({})
   let [theoryTests, setTheoryTests] = useState([])
@@ -147,7 +147,8 @@ const TheoryTest = () => {
   }
   useEffect(() => {
     getAllExaminationsServices()
-
+    if (examinationSeleted.id !== undefined)
+    getAllScheduleTestByExaminationIdService(examinationSeleted.id)
   }, [])
 
   return (

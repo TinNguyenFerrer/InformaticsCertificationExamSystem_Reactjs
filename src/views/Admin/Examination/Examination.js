@@ -17,6 +17,8 @@ import { useLocation, Route, Switch } from "react-router-dom";
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
+import BootstrapTable from 'react-bootstrap-table-next';
+import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import * as request from "Until/request";
 import React from "react";
 import { useState, useEffect } from 'react';
@@ -43,6 +45,21 @@ import {
 import "./Examination.css";
 
 const Examination = () => {
+
+
+  const columns = [{
+    dataField: 'id',
+    text: 'Product ID',
+    sort: true
+  }, {
+    dataField: 'name',
+    text: 'Name',
+    sort: true
+  }, {
+    dataField: 'examCode',
+    text: 'examCode'
+  }];
+
   const examinationInformInit = [{
     id: null,
     name: "",
@@ -69,7 +86,7 @@ const Examination = () => {
         console.log(response)
         if (response.status == 200) {
           console.log("thành cong" + e)
-          getAllTeacherServices()
+          getAllExamServices()
 
         }
         else {
@@ -90,9 +107,8 @@ const Examination = () => {
   //=======-------- get list of examination---------=========
   
 
-  const getAllTeacherServices = async () => {
+  const getAllExamServices = async () => {
     try {
-
       let res = await request.getAPI("Examination/GetAll")
       console.log(res.status)
       if (res.status == 401) {
@@ -107,7 +123,7 @@ const Examination = () => {
     }
   }
   useEffect(() => {
-    getAllTeacherServices()
+    getAllExamServices()
   }, [])
   //console.log(examinations)
   return (
@@ -192,6 +208,8 @@ const Examination = () => {
                         ))}
                         </tbody>)}
                     </Table>
+
+                    <BootstrapTable bootstrap4={true} bordered={false} headerWrapperClasses = "table-success"classes = "align-items-center table-flush" keyField='id' data={ examinations } columns={ columns } />
                   </div>
                   <hr className="my-4" />
 

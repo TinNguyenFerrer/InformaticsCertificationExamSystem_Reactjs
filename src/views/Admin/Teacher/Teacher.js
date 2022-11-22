@@ -20,14 +20,15 @@ import { useLocation, Route, Switch, Link } from "react-router-dom";
 import React from "react";
 import * as request from "Until/request";
 import { useState, useEffect } from 'react';
-// reactstrap components
+import BootstrapTable from 'react-bootstrap-table-next';
+import paginationFactory from 'react-bootstrap-table2-paginator';
 import { Card, Container, DropdownItem, Row } from "reactstrap";
 import { Redirect } from "react-router-dom";
-// core components
 import HeaderEmpty from "components/Headers/HeaderEmpty";
 // reactstrap added
 import {
   Button,
+  Dropdown,
   CardHeader,
   CardBody,
   FormGroup,
@@ -45,7 +46,7 @@ import "./Teacher.css"
 import DropdownList from "components/Dropdown/DropdownList.js";
 
 const Teacher = () => {
-  
+
   const history = useHistory()
   const handleRedirectAddTeacher = () => {
     history.push("teacher/add")
@@ -64,7 +65,7 @@ const Teacher = () => {
   let [teachers, setTeachers] = useState([])
   //console.log("rerender")
   //console.log(teachers)
-  const getAllTeacherServices = () =>{
+  const getAllTeacherServices = () => {
     request.getAPI("Teacher/GetAll")
       .then((res) => {
 
@@ -75,10 +76,72 @@ const Teacher = () => {
         console.log(e)
       })
   }
+  const columns = [{
+    dataField: 'fullName',
+    text: 'Tên giáo viên',
+    sort: true
+  }, {
+    dataField: 'address',
+    text: 'địa chỉ',
+    sort: true
+  },
+  {
+    dataField: 'identifierCode',
+    text: 'mã giáo viên',
+    sort: true
+  }, {
+    dataField: 'phoneNumber',
+    text: 'SDT',
+    sort: true
+  }, {
+    dataField: 'email',
+    text: 'EmailT',
+    sort: true
+  }, {
+    dataField: 'edit',
+    text: '',
+    formatter: (cell, row, rowIndex, formatExtraData) => {
+      console.log(row)
+      var r = 0
+      return (<div className="text-right">
+        <UncontrolledDropdown>
+          <DropdownToggle
+            className="btn-icon-only text-light"
+
+            role="button"
+            size="sm"
+            color=""
+            onClick={(e) => e.preventDefault()}
+          >
+            <i className="fas fa-ellipsis-v" />
+          </DropdownToggle>
+          <DropdownMenu className="dropdown-menu-arrow" right>
+            <DropdownItem
+
+              idteacher={row.id}
+              onClick={() => (handleRedirectToEdit(row.id))}
+            >
+              Sửa
+            </DropdownItem>
+
+            <DropdownItem
+
+              idteacher={row.id}
+              onClick={() => (deleteTeacher(row.id))}
+            >
+              Xóa
+            </DropdownItem>
+          </DropdownMenu>
+        </UncontrolledDropdown>
+      </div>
+      )
+    }
+  }];
+
   useEffect(() => {
     getAllTeacherServices()
-  },[])
-  
+  }, [])
+
   const deleteTeacher = (e) => {
     //console.log(e)
     const deleteTecherAPI = async (e) => {
@@ -88,7 +151,7 @@ const Teacher = () => {
         if (response.status == 200) {
           console.log("thành cong")
           getAllTeacherServices()
-          
+
         }
         else {
           window.alert("xóa giáo viên thất bại")
@@ -101,9 +164,45 @@ const Teacher = () => {
     }
     deleteTecherAPI(e)
   }
+
+  const sizePerPageRenderer = ({
+    options,
+    currSizePerPage,
+    onSizePerPageChange
+  }) => {
+    return (
+      <div className="btn-group">
+        <button type="button" class="btn btn-outline-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {currSizePerPage}
+        </button>
+        <div className="dropdown-menu">
+          {
+            options.map(option => (
+              <div className="dropdown-item"
+                key={option.text}
+                onClick={() => onSizePerPageChange(option.page)}
+              >
+                {option.text}
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    )
+  }
+  const pagination = paginationFactory({
+    sizePerPageRenderer,
+    sizePerPage: 5,
+    lastPageText: '>>',
+    firstPageText: '<<',
+    nextPageText: '>',
+    prePageText: '<',
+    showTotal: true,
+    alwaysShowAllBtns: true,
+  });
   return (
     <>
-    
+
       <HeaderEmpty />
       {/* Page content */}
       <Container className="mt--8 Body_Content" fluid>
@@ -112,7 +211,6 @@ const Teacher = () => {
             <Card className="shadow border-0">
               <div>
                 <CardBody>
-
                   <CardHeader className="bg-white border-0">
                     <Row className="align-items-center">
                       <Col xs="8">
@@ -130,7 +228,7 @@ const Teacher = () => {
                     </Row>
                   </CardHeader>
                   <div >
-                    <Table className="align-items-center table-flush" responsive>
+                    {/* <Table className="align-items-center table-flush" responsive>
                       <thead className="thead-light">
                         <tr>
                           <th scope="col">STT</th>
@@ -166,13 +264,13 @@ const Teacher = () => {
                                   <i className="fas fa-ellipsis-v" />
                                 </DropdownToggle>
                                 <DropdownMenu className="dropdown-menu-arrow" right>
-                                    <DropdownItem
+                                  <DropdownItem
 
-                                      idteacher={teacher.id}
+                                    idteacher={teacher.id}
                                     onClick={() => (handleRedirectToEdit(teacher.id))}
-                                    >
-                                      Sửa
-                                    </DropdownItem>
+                                  >
+                                    Sửa
+                                  </DropdownItem>
 
                                   <DropdownItem
 
@@ -189,7 +287,18 @@ const Teacher = () => {
                         }
                         </tbody>)}
 
-                    </Table>
+                    </Table> */}
+                    <BootstrapTable
+                      bootstrap4={true}
+                      bordered={false}
+                      headerWrapperClasses="table-success"
+                      classes="align-items-center table-flush table-responsive"
+                      keyField='id'
+                      data={teachers}
+                      columns={columns}
+                      pagination={pagination}
+                    //pagination={ paginationFactory() }
+                    />
                     {(teachers.length == 0) && (<div className="d-flex justify-content-center">
                       <br></br>
                       <Spinner style={{

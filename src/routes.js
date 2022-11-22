@@ -32,6 +32,7 @@ import TheoryTest from "views/Admin/TheoryTest/TheoryTest";
 import Supervisor from "views/Admin/Supervisor/Supervisor";
 import StudentAccount from "views/Admin/StudentAccount/StudentAccount";
 import Scorecard from "views/Admin/Scorecard/Scorecard";
+import Score from "views/Admin/Score/Score";
 //===layout teacher
 import ScheduleTeacher from "views/Teacher/Schedule/ScheduleTeacher";
 import ProfileTeacher from "views/Teacher/Profile/ProfileTeacher";
@@ -235,6 +236,13 @@ var routesAdmin = [
     name: "Tạo phiếu chấm điểm",
     icon: "ni ni-key-25 text-info",
     component: Scorecard,
+    layout: "/admin"
+  },
+  {
+    path: "/enterscore",
+    name: "Nhập điểm",
+    icon: "ni ni-circle-08 text-pink",
+    component: Score,
     layout: "/admin"
   }
   // {

@@ -6,13 +6,15 @@ const StoreProvider = ({ children }) => {
   const teamMembersNames = ["John", "Mary", "Jason", "David"];
 
   const [nameTeacher, setNameTeacher] = useState("Tin");
+  let [examinationSeleted, setExaminationSeleted] = useState({})
   const [help, setHelp] = useState([]);
   const [pairing, setPairing] = useState(teamMembersNames);
 
   const store = {
     nameTeacher: [nameTeacher, setNameTeacher],
     help: [help, setHelp],
-    pairing: [pairing, setPairing]
+    pairing: [pairing, setPairing],
+    examinationSeleted:[examinationSeleted, setExaminationSeleted]
   };
   
 

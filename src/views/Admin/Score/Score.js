@@ -1,8 +1,11 @@
 import { useLocation, Route, Switch, Link } from "react-router-dom";
-import { saveAs } from 'file-saver';
-import { useEffect, useContext } from "react";
-import {StoreContext} from "Until/StoreProvider"
-import { useState } from 'react';
+//import 'bootstrap/dist/css/bootstrap.min.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faListOl, faFileImport } from '@fortawesome/free-solid-svg-icons'
+import BootstrapTable from 'react-bootstrap-table-next';
+import React, { useEffect } from "react";
+import { useState, useContext, useRef } from 'react';
+import { StoreContext } from "Until/StoreProvider"
 // reactstrap components
 import { Card, Container, DropdownItem, Row } from "reactstrap";
 import { Redirect } from "react-router-dom";
@@ -27,32 +30,25 @@ import { useHistory } from "react-router-dom";
 import DropdownList from "components/Dropdown/DropdownList.js";
 import * as request from "Until/request";
 
-const Scorecard = () => {
-  const examinationInformInit = [{
-    id: null,
-    name: "Chọn kì thi",
-    starTime: "",
-    endTime: "",
-    location: "",
-    minimumTheoreticalMark: 0,
-    minimumPracticeMark: 0,
-    gradingDeadline: ""
-  }]
-  let te = { id: -1, name: "" };
+const Score = () => {
 
-  const history = useHistory()
-  const handleAutoCreateScorecard = async (id) => {
+  const getStudentResultService = async (idExam) => {
     try {
-      if (id == null) {
-        window.alert("Xin chọn kì thi trước")
-        return;
-      }
-      const response = await request.putAPI(`/Examination/${id}/CreateScorecard`)
+      const response = await request.getAPI(`Examination/${idExam}/import-theoretical-mark`)
+      console.log(response.data)
+      return response.data
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  const handleImportTheoryMark = async (e) => {
+    try {
+      const response = await request.putAPI(`/Examination/${e}/CreateScorecard`)
       console.log(response)
-      if (response.status == 200) {
+      if (response.status === 200) {
         await getAllExamServices()
         examinations.map(exam => {
-          if (exam.id == id) {
+          if (exam.id == e) {
             exam.isCreateScorecard = true
             onExaminationSelected(exam)
           }
@@ -69,28 +65,36 @@ const Scorecard = () => {
     }
   };
 
-  const handleDownloadExam = async (e, TestScheduleId) => {
-
-    
-
-    e.target.className = "fas fa-spinner fa-pulse fa-lg"
-    const response = await request.postAPI(`TestShedule/${TestScheduleId}/DownloadSubmitFile`, {}, {responseType: 'blob',contentType: "multipart/form-data"})
-    console.log(response)
-    if (response.status === 200) {
-      const type = response.headers['content-type']
-      const fileName = response.headers["content-disposition"].split('filename=')[1].split(';')[0].replaceAll('"', '');
-      console.log(fileName)
-      const blob = new Blob([response.data], { type: 'application/zip', encoding: "UTF-8" })
-      saveAs(blob, fileName)
-      e.target.className = "fas fa-download fa-lg text-success"
-    }
-
-  }
-
-  const [DropdowItem, setDropdowItem] = useState(te)
+  const columns = [{
+    dataField: 'name',
+    text: 'Tên  thí sinh',
+    sort: true
+  }, {
+    dataField: 'identifierCode',
+    text: 'Mã sinh viên',
+    sort: true
+  }, {
+    dataField: 'practice',
+    text: 'Điểm thực hành',
+    sort: true
+  }, {
+    dataField: 'word',
+    text: 'Word',
+    sort: true
+  }, {
+    dataField: 'excel',
+    text: 'Excel',
+    sort: true
+  }, {
+    dataField: 'powerPoint',
+    text: 'PowerPoint',
+    sort: true
+  }];
   let [examinations, setExaminations] = useState([])
-  let [testSchedules, setTestSchedules] = useState([])
-  let [examinationSeleted, setExaminationSeleted] = useContext(StoreContext).examinationSeleted
+  let [examinationSeleted, setExaminationSeleted] = React.useContext(StoreContext).examinationSeleted
+  let [students, setStudents] = useState([])
+  let theoryMark = useRef(null);
+  let praticeMark = useRef(null);
   const getAllExamServices = async () => {
     try {
       let res = await request.getAPI("Examination/GetAll")
@@ -107,7 +111,7 @@ const Scorecard = () => {
     try {
       let res = await request.getAPI(`Examination/${id}/TestSchedules`)
       const data = res.data;
-      setTestSchedules([...data])
+
       console.log(data)
       //console.log(data)
     } catch (e) {
@@ -116,13 +120,13 @@ const Scorecard = () => {
   }
   useEffect(() => {
     getAllExamServices()
-    if (examinationSeleted.id !== undefined)
-    GetAllTestScheduleByIdExaminationServices(examinationSeleted.id)
   }, [])
-  const onExaminationSelected = (exam) => {
+  const onExaminationSelected = async (exam) => {
     setExaminationSeleted(exam)
-    console.log(exam)
-    GetAllTestScheduleByIdExaminationServices(exam.id)
+    const studentRespon = await getStudentResultService(exam.id)
+    setStudents(studentRespon)
+    //console.log(exam)
+    //GetAllTestScheduleByIdExaminationServices(exam.id)
   };
   return (
     <>
@@ -141,23 +145,49 @@ const Scorecard = () => {
                   <CardHeader className="bg-white border-0">
                     <Row className="align-items-center">
 
-                      <Col xs="8">
+                      <Col xs="3">
                         <h3 className="mb-0">File chấm thi</h3>
                       </Col>
-                      <Col className="text-right" xs="4">
+                      <Col className="text-right" xs="9">
+                        <input
+                          //onChange={handleFileUpload}
+                          type="file"
+                          style={{ display: "none" }}
+                          accept=".csv, .xlsx"
+                          ref={theoryMark}
+                        />
                         <Button
+                          style={{ fontSize: '12px' }}
                           color="primary"
-                          onClick={() => handleAutoCreateScorecard(examinationSeleted.id)}
-                          size="sm"
+                          type="file"
+                          onClick={()=>{theoryMark.current.click()}}
+                          size=""
                         >
-                          Tạo tự động
+                          <FontAwesomeIcon icon={faListOl} />
+                          &nbsp; Điểm trắc nghiệm
                         </Button>
-
+                        {/* ------------------------------------------------------ */}
+                        <input
+                          //onChange={handleFileUpload}
+                          type="file"
+                          accept=".xlsx"
+                          style={{ display: "none" }}
+                          ref={praticeMark}
+                        />
+                        <Button
+                          style={{ fontSize: '12px' }}
+                          color="primary"
+                          onClick={()=>{praticeMark.current.click()}}
+                          size=""
+                        >
+                          <FontAwesomeIcon icon={faFileImport} />
+                          &nbsp; Điểm thực hành
+                        </Button>
                       </Col>
                     </Row>
                   </CardHeader>
                   <div >
-                    <Table className="align-items-center table-flush " responsive>
+                    {/* <Table className="align-items-center table-flush " responsive>
                       <thead className="">
                         <tr className="table-success">
                           <th scope="col">Ca thi</th>
@@ -181,7 +211,16 @@ const Scorecard = () => {
                         })//if fase----------------
                         }
                         </tbody>)}
-                    </Table>
+                    </Table> */}
+                    <BootstrapTable
+                      bootstrap4={true}
+                      bordered={false}
+                      headerWrapperClasses="table-success"
+                      classes="align-items-center table-flush table-responsive"
+                      keyField='id'
+                      data={students}
+                      columns={columns}
+                    />
                   </div>
                   <hr className="my-4" />
 
@@ -197,4 +236,4 @@ const Scorecard = () => {
   );
 };
 
-export default Scorecard;
+export default Score;

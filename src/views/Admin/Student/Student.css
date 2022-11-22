@@ -1,3 +1,6 @@
 .student-input-freelanceStudent{
     padding: 20px;
 }
+#tb-layout-auto{
+    table-layout: auto;
+}
