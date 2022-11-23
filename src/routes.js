@@ -33,6 +33,7 @@ import Supervisor from "views/Admin/Supervisor/Supervisor";
 import StudentAccount from "views/Admin/StudentAccount/StudentAccount";
 import Scorecard from "views/Admin/Scorecard/Scorecard";
 import Score from "views/Admin/Score/Score";
+import scoresummary from "views/Admin/ScoreSummary/ScoreSummary";
 //===layout teacher
 import ScheduleTeacher from "views/Teacher/Schedule/ScheduleTeacher";
 import ProfileTeacher from "views/Teacher/Profile/ProfileTeacher";
@@ -243,6 +244,12 @@ var routesAdmin = [
     name: "Nhập điểm",
     icon: "ni ni-circle-08 text-pink",
     component: Score,
+    layout: "/admin"
+  },{
+    path: "/scoresummary",
+    name: "Tổng kết điểm",
+    icon: "ni ni-pin-3 text-orange",
+    component: scoresummary,
     layout: "/admin"
   }
   // {

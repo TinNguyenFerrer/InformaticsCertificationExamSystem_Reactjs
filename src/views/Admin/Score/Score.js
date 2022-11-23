@@ -118,32 +118,53 @@ const Score = () => {
       console.log(e)
     }
   }
-  const handleFileUploadTheoryMark = async(e) => {
-    try{
-    console.log(e.target.files[0])
-    if (examinationSeleted.id==undefined) {
-      window.alert("Chọn kì thi")
-      return
-    }
-    const formData = new FormData();
-    formData.append("file", e.target.files[0]);
-    const response = await request.putAPI(`Examination/${examinationSeleted.id}/import-theoretical-mark`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
+  const handleFileUploadTheoryMark = async (e) => {
+    try {
+      console.log(e.target.files[0])
+      if (examinationSeleted.id == undefined) {
+        window.alert("Chọn kì thi")
+        return
       }
-    });
-    console.log(response);
-    if(response.status===200){
-      window.alert("thành công")
-      const studentResponse = await getStudentResultService(examinationSeleted.id)
-      setStudents(studentResponse)
+      const formData = new FormData();
+      formData.append("file", e.target.files[0]);
+      const response = await request.putAPI(`FinalResult/import-theoretical-mark`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        }
+      });
+      console.log(response);
+      if (response.status === 200) {
+        window.alert("thành công")
+        const studentResponse = await getStudentResultService(examinationSeleted.id)
+        setStudents(studentResponse)
+      }
+    } catch (e) {
+      console.error(e)
     }
-  }catch(e){
-    console.error(e)
   }
-  }
-  const handleFileUploadPraticeMark = (e) => {
-    console.log(e.target.files[0])
+  const handleFileUploadPraticeMark = async (e) => {
+    try {
+      console.log(e.target.files[0])
+      if (examinationSeleted.id == undefined) {
+        window.alert("Chọn kì thi")
+        return
+      }
+      const formData = new FormData();
+      formData.append("file", e.target.files[0]);
+      const response = await request.putAPI(`FinalResult/import-practice-mark`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        }
+      });
+      console.log(response);
+      if (response.status === 200) {
+        window.alert("thành công")
+        const studentResponse = await getStudentResultService(examinationSeleted.id)
+        setStudents(studentResponse)
+      }
+    } catch (e) {
+      console.error(e)
+    }
   }
   useEffect(() => {
     getAllExamServices()
@@ -180,7 +201,7 @@ const Score = () => {
                           onChange={handleFileUploadTheoryMark}
                           type="file"
                           style={{ display: "none" }}
-                          accept=".csv, .xlsx"
+                          accept=".csv"
                           ref={theoryMark}
                         />
                         <Button
