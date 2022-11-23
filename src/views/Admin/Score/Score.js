@@ -34,7 +34,7 @@ const Score = () => {
 
   const getStudentResultService = async (idExam) => {
     try {
-      const response = await request.getAPI(`Examination/${idExam}/import-theoretical-mark`)
+      const response = await request.getAPI(`Examination/${idExam}/get-marks`)
       console.log(response.data)
       return response.data
     } catch (e) {
@@ -74,8 +74,8 @@ const Score = () => {
     text: 'Mã sinh viên',
     sort: true
   }, {
-    dataField: 'practice',
-    text: 'Điểm thực hành',
+    dataField: 'theory',
+    text: 'Điểm lý thuyết',
     sort: true
   }, {
     dataField: 'word',
@@ -118,6 +118,33 @@ const Score = () => {
       console.log(e)
     }
   }
+  const handleFileUploadTheoryMark = async(e) => {
+    try{
+    console.log(e.target.files[0])
+    if (examinationSeleted.id==undefined) {
+      window.alert("Chọn kì thi")
+      return
+    }
+    const formData = new FormData();
+    formData.append("file", e.target.files[0]);
+    const response = await request.putAPI(`Examination/${examinationSeleted.id}/import-theoretical-mark`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      }
+    });
+    console.log(response);
+    if(response.status===200){
+      window.alert("thành công")
+      const studentResponse = await getStudentResultService(examinationSeleted.id)
+      setStudents(studentResponse)
+    }
+  }catch(e){
+    console.error(e)
+  }
+  }
+  const handleFileUploadPraticeMark = (e) => {
+    console.log(e.target.files[0])
+  }
   useEffect(() => {
     getAllExamServices()
   }, [])
@@ -150,7 +177,7 @@ const Score = () => {
                       </Col>
                       <Col className="text-right" xs="9">
                         <input
-                          //onChange={handleFileUpload}
+                          onChange={handleFileUploadTheoryMark}
                           type="file"
                           style={{ display: "none" }}
                           accept=".csv, .xlsx"
@@ -160,7 +187,7 @@ const Score = () => {
                           style={{ fontSize: '12px' }}
                           color="primary"
                           type="file"
-                          onClick={()=>{theoryMark.current.click()}}
+                          onClick={() => { theoryMark.current.click() }}
                           size=""
                         >
                           <FontAwesomeIcon icon={faListOl} />
@@ -168,7 +195,7 @@ const Score = () => {
                         </Button>
                         {/* ------------------------------------------------------ */}
                         <input
-                          //onChange={handleFileUpload}
+                          onChange={handleFileUploadPraticeMark}
                           type="file"
                           accept=".xlsx"
                           style={{ display: "none" }}
@@ -177,7 +204,7 @@ const Score = () => {
                         <Button
                           style={{ fontSize: '12px' }}
                           color="primary"
-                          onClick={()=>{praticeMark.current.click()}}
+                          onClick={() => { praticeMark.current.click() }}
                           size=""
                         >
                           <FontAwesomeIcon icon={faFileImport} />
@@ -216,7 +243,8 @@ const Score = () => {
                       bootstrap4={true}
                       bordered={false}
                       headerWrapperClasses="table-success"
-                      classes="align-items-center table-flush table-responsive"
+                      classes="align-items-center table-flush"
+                      id="tb-layout-auto"
                       keyField='id'
                       data={students}
                       columns={columns}

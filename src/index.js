@@ -42,7 +42,7 @@ root.render(
         <Route path="/teacher" render={(props) => <Teacher {...props} />} />
         <Route path="/teacher1" render={(props) => <Teacher1 {...props} />} />
         <Route path="/auth" render={(props) => <AuthLayout {...props} />} />
-        <Redirect from="/" to="/admin/index" />
+        <Redirect from="/" to="/admin/examination" />
       </Switch>
     </StoreProvider>
   </BrowserRouter>

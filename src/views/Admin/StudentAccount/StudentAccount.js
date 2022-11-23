@@ -59,9 +59,7 @@ const Student = () => {
     let [students, setStudents] = useState(studentInformInit)
     let [examinations, setExaminations] = useState([])
     let [examinationSeleted, setExaminationSeleted] = useContext(StoreContext).examinationSeleted
-    let [freelanceStudent, setFreelanceStudent] = useState(false)
-
-    const [data, setdata] = useState({
+    let [data, setdata] = useState({
         listOfUsers: [],
         loading: false
     });
@@ -184,11 +182,15 @@ const Student = () => {
             console.log(e)
         }
     }
+    const dataExport= (Listdata)=>{
+        return Listdata
+    }
     useEffect(() => {
         getAllStudentServices()
         getAllExaminationsServices()
         if (examinationSeleted.id !== undefined)
             getAllStudentByIdExaminationServices(examinationSeleted.id)
+            getUsers(examinationSeleted.id)
     }, [])
 
     return (

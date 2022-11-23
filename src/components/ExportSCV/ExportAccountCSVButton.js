@@ -54,7 +54,7 @@ const ExportAccountCSVButton = ({ children, prop, idExam,dataExport, className }
         { label: "course1", key: "examCode" },
         { label: "group1", key: "testScheduleName" }
     ];
-    const csvData = () => {
+    const csvData = (Listdata) => {
         // const accounts = [];
         // data.listOfUsers.map((user) => {
         //     var { name, ...rest } = user;
@@ -67,14 +67,14 @@ const ExportAccountCSVButton = ({ children, prop, idExam,dataExport, className }
         // })
         // console.log(accounts)
         //accounts.userName = accounts.userName.toLowerCase()
-        console.log(dataExport)
-        return dataExport.listOfUsers
+        console.log(Listdata)
+        return Listdata.listOfUsers
 
     }
     return <CSVLink
         separator={","}
         headers={headers}
-        data={csvData()}
+        data={csvData(dataExport)}
         //asyncOnClick={true}
         //onClick={getUsers}
         className={className}
