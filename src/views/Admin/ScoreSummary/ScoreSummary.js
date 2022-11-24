@@ -35,14 +35,16 @@ import DropdownList from "components/Dropdown/DropdownList.js";
 import * as request from "Until/request";
 //  react chart
 import Chart from "chart.js";
-import { Line, Bar } from "react-chartjs-2";
+import { Line, Bar, Pie } from "react-chartjs-2";
 import {
     chartOptions,
     parseOptions,
     chartExample1,
-    chartExample2
+    chartExample2,
+    chartPie1
 } from "variables/charts.js";
 import { isIfStatement } from "typescript";
+import { isBuffer } from "util";
 
 const ScoreSummary = () => {
     let [examinations, setExaminations] = useState([])
@@ -75,35 +77,68 @@ const ScoreSummary = () => {
         dataField: 'finalMark',
         text: 'Điểm tổng',
         sort: true
+    }, {
+        dataField: 'resultStatus',
+        text: 'Kết quả',
+        sort: true
     }];
-    // option for chart
+    // ------option for chart Bar-------
     if (window.Chart) {
         parseOptions(Chart, chartOptions());
     }
-    let t =[0,0,0,0,0,0,0,0,0,0]
-    studentsResult.map(item =>{
+    let datasetBar = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    studentsResult.map(item => {
         console.log(item.finalMark)
         let temp = Math.floor(item.finalMark)
-        t[temp]++
+        datasetBar[temp]++
     })
     //setDatasetChart(t)
-    const dataChart = {
+    const dataChartBar = {
         labels: ["<=1", "<=2", "<=3", "<=4", "<=5", "<=6", "<=7", "<=8", "<=9", "<=10"],
-        yLabels:"hhhh",
+        yLabels: "hhhh",
         datasets: [
             {
                 label: "Sales",
-                data: t,
+                data: datasetBar,
                 maxBarThickness: 10
             }
         ]
     }
-
+    // ------option for chart Pie-------
+    let datasetPie = [0, 0]
+    studentsResult.forEach(item => {
+        if (item.resultStatus === `Đậu`) {
+            datasetPie[0]++;
+        } else {
+            datasetPie[1]++;
+        }
+    })
+    let dataChartPie = {
+        labels: ['Blue', 'Red'],
+        datasets: [
+            {
+                label: '# of Votes',
+                data: datasetPie,
+                backgroundColor: [
+                    'rgb(255, 99, 132)',
+                    'rgb(54, 162, 235)'
+                ],
+                borderWidth: 1
+            },
+        ]
+    }
+    // -----end option for chart Pie------
     const getStudentResultService = async (idExam) => {
         try {
             const response = await request.getAPI(`Examination/${idExam}/get-marks`)
             console.log(response.data)
-            return response.data
+            //  conver data
+            const studentRespon = response.data
+            studentRespon.map((item) => {
+                item.resultStatus ? item.resultStatus = `Đậu` : item.resultStatus = `Trượt`;
+            })
+            console.log(studentRespon)
+            return studentRespon
         } catch (e) {
             console.log(e)
         }
@@ -146,6 +181,11 @@ const ScoreSummary = () => {
             </div>
         )
     }
+    const rowClasses = (row, rowIndex) => {
+        console.log(row);
+        if (row.practice < examinationSeleted.minimumPracticeMark || row.theory < examinationSeleted.minimumTheoreticalMark) return `table-danger`
+        return '';
+    };
     const sizePerPageList = [{
         text: '5', value: 5
     }, {
@@ -181,6 +221,7 @@ const ScoreSummary = () => {
     const onExaminationSelected = async (exam) => {
         setExaminationSeleted(exam)
         const studentRespon = await getStudentResultService(exam.id)
+        console.log(studentRespon)
         setStudentsResult(studentRespon)
         //console.log(exam)
         //GetAllTestScheduleByIdExaminationServices(exam.id)
@@ -230,6 +271,7 @@ const ScoreSummary = () => {
                                             data={studentsResult}
                                             columns={columns}
                                             pagination={pagination}
+                                            rowClasses={rowClasses}
                                         />
                                     </div>
                                     <hr className="my-4" />
@@ -249,9 +291,17 @@ const ScoreSummary = () => {
                                                 {/* Chart */}
                                                 <div className="chart">
                                                     <Bar
-                                                        data={dataChart}
+                                                        data={dataChartBar}
                                                         options={chartExample2.options}
                                                     />
+                                                </div>
+                                            </CardBody>
+                                            <CardBody>
+                                                {/* Chart */}
+                                                <div className="chart">
+                                                    <Pie
+                                                        data={dataChartPie}
+                                                        options={chartPie1.options} />
                                                 </div>
                                             </CardBody>
                                         </Card>
