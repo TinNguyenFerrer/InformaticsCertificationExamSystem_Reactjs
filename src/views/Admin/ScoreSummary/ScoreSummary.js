@@ -114,10 +114,10 @@ const ScoreSummary = () => {
         }
     })
     let dataChartPie = {
-        labels: ['Blue', 'Red'],
+        labels: ['Rớt', 'Đậu'],
         datasets: [
             {
-                label: '# of Votes',
+                label: '',
                 data: datasetPie,
                 backgroundColor: [
                     'rgb(255, 99, 132)',
@@ -275,37 +275,66 @@ const ScoreSummary = () => {
                                         />
                                     </div>
                                     <hr className="my-4" />
-                                    <div>
-                                        <Card className="shadow">
-                                            <CardHeader className="bg-transparent">
-                                                <Row className="align-items-center">
-                                                    <div className="col">
-                                                        <h6 className="text-uppercase text-muted ls-1 mb-1">
-                                                            Phổ điểm
-                                                        </h6>
-                                                        <h2 className="mb-0">Điểm tổng kết</h2>
-                                                    </div>
-                                                </Row>
-                                            </CardHeader>
-                                            <CardBody>
-                                                {/* Chart */}
-                                                <div className="chart">
-                                                    <Bar
-                                                        data={dataChartBar}
-                                                        options={chartExample2.options}
-                                                    />
-                                                </div>
-                                            </CardBody>
-                                            <CardBody>
-                                                {/* Chart */}
-                                                <div className="chart">
-                                                    <Pie
-                                                        data={dataChartPie}
-                                                        options={chartPie1.options} />
-                                                </div>
-                                            </CardBody>
-                                        </Card>
-                                    </div>
+                                    {examinationSeleted.id === undefined ? "" : (
+                                        <div>
+                                            <Row>
+                                                <Col xl="8">
+                                                    <Card className="shadow">
+                                                        <CardHeader className="bg-transparent">
+                                                            <Row className="align-items-center">
+                                                                <div className="col">
+                                                                    <h6 className="text-uppercase text-muted ls-1 mb-1">
+                                                                        Phổ điểm
+                                                                    </h6>
+                                                                    <h2 className="mb-0">Điểm tổng kết</h2>
+                                                                </div>
+                                                            </Row>
+                                                        </CardHeader>
+                                                        <CardBody>
+                                                            {/* Chart */}
+                                                            <div className="chart">
+                                                                <Bar
+                                                                    data={dataChartBar}
+                                                                    options={chartExample2.options}
+                                                                />
+                                                            </div>
+                                                        </CardBody>
+
+                                                    </Card>
+                                                </Col>
+                                                <Col xl="4">
+                                                    <Card>
+                                                        <CardHeader className="bg-transparent">
+                                                            <Row className="align-items-center">
+                                                                <div className="col">
+                                                                    <h6 className="text-uppercase text-muted ls-1 mb-1">
+                                                                        Đậu/Rớt
+                                                                    </h6>
+                                                                    <h2 className="mb-0">Kết quả</h2>
+                                                                </div>
+                                                            </Row>
+                                                        </CardHeader>
+                                                        <CardBody>
+                                                            {/* Chart */}
+                                                            <div className="position-absolute">
+                                                                <div className="d-inline-block" style={{ backgroundColor: dataChartPie.datasets[0].backgroundColor[0], height: "13px", width: "65px" }}></div>
+                                                                <div className="d-inline-block" >&ensp;{dataChartPie.labels[0]}</div>
+                                                                <br></br>
+                                                                <div className="d-inline-block" style={{ backgroundColor: dataChartPie.datasets[0].backgroundColor[1], height: "13px", width: "65px" }}></div>
+                                                                <div className="d-inline-block" >&ensp;{dataChartPie.labels[1]}</div>
+                                                            </div>
+                                                            <div className="chart">
+                                                                <Pie
+                                                                    data={dataChartPie}
+                                                                //options={chartPie1.options}
+                                                                />
+                                                            </div>
+                                                        </CardBody>
+                                                    </Card>
+                                                </Col>
+                                            </Row>
+                                        </div>
+                                    )}
                                 </CardBody>
                             </div>
 

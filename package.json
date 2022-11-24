@@ -55,7 +55,7 @@
     "react-app-rewired": "^2.2.1",
     "react-bootstrap-table-next": "^4.0.3",
     "react-bootstrap-table2-paginator": "^2.1.2",
-    "react-chartjs-2": "2.11.1",
+    "react-chartjs-2": "^2.11.1",
     "react-copy-to-clipboard": "5.1.0",
     "react-csv": "^2.2.2",
     "react-csv-reader": "^3.5.2",

@@ -410,24 +410,22 @@ let chartExample2 = {
     ]
   }
 };
-let chartPie1= {
+let chartPie1 = {
   options: {
-    plugins: {
-      outlabels: {
-        backgroundColor: null,
-        color: [
-          '#3498db',
-          '#2ecc71'
-        ],
-        stretch: 30,
-        font: {
-          resizable: true,
-          minSize: 15,
-          maxSize: 20,
-        },
-        zoomOutPercentage: 100,
-        textAlign: 'start',
+    outlabels: {
+      backgroundColor: null,
+      color: [
+        '#3498db',
+        '#2ecc71'
+      ],
+      stretch: 30,
+      font: {
+        resizable: true,
+        minSize: 15,
+        maxSize: 20,
       },
+      zoomOutPercentage: 70,
+      textAlign: 'start',
     },
   },
 }
@@ -436,6 +434,6 @@ module.exports = {
   chartOptions, // used inside src/views/Index.js
   parseOptions, // used inside src/views/Index.js
   chartExample1, // used inside src/views/Index.js
-  chartExample2 ,// used inside src/views/Index.js
+  chartExample2,// used inside src/views/Index.js
   chartPie1, // used inside src/views/Index.js
 };
