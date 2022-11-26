@@ -71,7 +71,7 @@ var routes = [
   {
     path: "/tables",
     name: "Tables",
-    icon: "ni ni-bullet-list-67 text-red",
+    icon: "ni ni-bullet-list-67 text-green",
     component: Tables,
     layout: "/admin"
   },
@@ -178,7 +178,7 @@ var routesAdmin = [
   {
     path: "/examination",
     name: "Kì thi",
-    icon: "ni ni-book-bookmark text-primary",
+    icon: "ni ni-book-bookmark text-purple",
     component: Examination,
     layout: "/admin"
   },
@@ -213,7 +213,7 @@ var routesAdmin = [
   {
     path: "/testschedules",
     name: "Ca thi",
-    icon: "ni ni-calendar-grid-58 text-orange",
+    icon: "ni ni-calendar-grid-58 text-brown",
     component: TestSchedule,
     layout: "/admin"
   },
@@ -235,7 +235,7 @@ var routesAdmin = [
   {
     path: "/scorecard",
     name: "Tạo phiếu chấm điểm",
-    icon: "ni ni-key-25 text-info",
+    icon: "ni ni-key-25 text-green",
     component: Scorecard,
     layout: "/admin"
   },

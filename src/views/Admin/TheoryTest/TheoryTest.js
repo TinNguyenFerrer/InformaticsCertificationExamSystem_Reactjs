@@ -183,10 +183,10 @@ const TheoryTest = () => {
                   <CardHeader className="bg-white border-0">
                     <Row className="align-items-center">
 
-                      <Col xs="8">
+                      <Col sm="7">
                         <h3 className="mb-0">Danh sách các đề thi</h3>
                       </Col>
-                      <Col className="text-right" xs="4">
+                      <Col className="text-right" sm="5">
                         <Button
                           color="primary"
                           onClick={handleRedirectAddTheoryTest}
@@ -198,7 +198,7 @@ const TheoryTest = () => {
                       </Col>
                     </Row>
                   </CardHeader>
-                  <div >
+                  <div className="table-responsive">
                     <Table className="align-items-center table-flush" responsive>
                       <thead className="thead-light">
                         <tr>

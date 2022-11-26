@@ -142,7 +142,7 @@ const AddRoom = () => {
                         </Col>
                       </Row>
                       <Row>
-                        <Col lg="3">
+                        <Col lg="6">
                           <FormGroup>
                             <label
                               className="form-control-label"

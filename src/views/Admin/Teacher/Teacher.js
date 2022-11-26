@@ -213,21 +213,21 @@ const Teacher = () => {
                 <CardBody>
                   <CardHeader className="bg-white border-0">
                     <Row className="align-items-center">
-                      <Col xs="8">
+                      <Col sm="7">
                         <h3 className="mb-0">Danh sách giáo viên</h3>
                       </Col>
-                      <Col className="text-right" xs="4">
+                      <Col className="text-right" sm="5">
                         <Button
                           color="primary"
                           onClick={handleRedirectAddTeacher}
-                          size="sm"
+                          //size="sm"
                         >
                           Tạo mới
                         </Button>
                       </Col>
                     </Row>
                   </CardHeader>
-                  <div >
+                  <div className="table-responsive">
                     {/* <Table className="align-items-center table-flush" responsive>
                       <thead className="thead-light">
                         <tr>
@@ -292,7 +292,9 @@ const Teacher = () => {
                       bootstrap4={true}
                       bordered={false}
                       headerWrapperClasses="table-success"
+                      // classes="align-items-center table-flush table-responsive"
                       classes="align-items-center table-flush table-responsive"
+                      id="tb-layout-auto"
                       keyField='id'
                       data={teachers}
                       columns={columns}

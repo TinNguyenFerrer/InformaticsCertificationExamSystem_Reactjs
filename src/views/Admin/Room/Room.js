@@ -20,6 +20,11 @@ import { useLocation, Route, Switch, Link } from "react-router-dom";
 import React from "react";
 import * as request from "Until/request";
 import { useState, useEffect } from 'react';
+// react alert hook
+import { useAlert } from 'react-bootstrap-hooks-alert'
+// data table
+import BootstrapTable from 'react-bootstrap-table-next';
+import { sizePerPageRenderer, pagination } from "variables/dataTableOption.js"
 // reactstrap components
 import { Card, Container, DropdownItem, Row } from "reactstrap";
 import { Redirect } from "react-router-dom";
@@ -43,9 +48,10 @@ import {
 import { useHistory } from "react-router-dom";
 import "./Room.css"
 import DropdownList from "components/Dropdown/DropdownList.js";
+import { info } from "sass";
 
 const Room = () => {
-  
+  const { warning, info, primary, danger, success } = useAlert()
   const history = useHistory()
   const handleRedirectAddTeacher = () => {
     history.push("room/add")
@@ -61,11 +67,11 @@ const Room = () => {
   }]
   let [rooms, setRooms] = useState([])
   let [loading, setLoading] = useState(true)
-  const getAllRoomServices = async () =>{
+  const getAllRoomServices = async () => {
     try {
       let res = await request.getAPI("ExaminationRoom/GetAll")
       const data = res.data;
-      if(res.status === 200) setLoading(false)
+      if (res.status === 200) setLoading(false)
       setRooms([...data])
       console.log(data)
     } catch (e) {
@@ -74,8 +80,8 @@ const Room = () => {
   }
   useEffect(() => {
     getAllRoomServices()
-  },[])
-  
+  }, [])
+
   const deleteRoom = (e) => {
     //console.log(e)
     const deleteTecherAPI = async (e) => {
@@ -85,14 +91,15 @@ const Room = () => {
         if (response.status == 200) {
           console.log("thành cong")
           getAllRoomServices()
-          
+
         }
         else {
           window.alert("xóa phòng thất bại")
           console.log("thất bại")
         }
       } catch (e) {
-        window.alert("Xóa phòng thất bại")
+        if(e.response.data.code === 405)
+        warning(`Xóa phòng thất bại (đã thuộc kì thi:${e.response.data.examination[0].name}-${e.response.data.examination[0].examCode})`)
         console.log(e)
       }
     }
@@ -100,33 +107,111 @@ const Room = () => {
   }
   //==========================khóa và mở khóa phòng==================
   const unLockRoom = async (id) => {
-      try {
-        const response = await request.getAPI("ExaminationRoom/UnLockExaminationRoom?id=" + id)
-        if (response.status === 200) {
-          getAllRoomServices()
-        }else{
-          window.alert("Mở khóa thất bại")
-        }
-      }catch(e){
-        console.log(e);
+    try {
+      const response = await request.getAPI("ExaminationRoom/UnLockExaminationRoom?id=" + id)
+      if (response.status === 200) {
+        getAllRoomServices()
+      } else {
+        window.alert("Mở khóa thất bại")
       }
+    } catch (e) {
+      console.log(e);
+    }
   }
   const lockRoom = async (id) => {
     try {
       const response = await request.getAPI("ExaminationRoom/LockExaminationRoom?id=" + id)
       if (response.status === 200) {
         getAllRoomServices()
-      }else{
+      } else {
         window.alert("Khóa phòng thất bại")
       }
-    }catch(e){
+    } catch (e) {
       console.log(e);
     }
-}
+  }
+  //   init table info
+  const columns = [{
+    dataField: 'name',
+    text: 'Tên Phòng',
+    sort: true
+  }, {
+    dataField: 'location',
+    text: 'Địa chỉ',
+    sort: true
+  },
+  {
+    dataField: 'capacity',
+    text: 'Sức chứa',
+    sort: true
+  },
+  {
+    dataField: 'locked',
+    text: 'Khóa',
+    sort: true,
+    formatter: (cell, row, rowIndex, formatExtraData) => {
+      if (cell) return <i className="fas fa-lock"></i>
+      return ""
+    }
+  },
+  {
+    dataField: 'edit',
+    text: '',
+    formatter: (cell, row, rowIndex, formatExtraData) => {
+      console.log(row)
+      var r = 0
+      return (<div className="text-right">
+        <UncontrolledDropdown>
+          <DropdownToggle
+            className="btn-icon-only text-light"
+
+            role="button"
+            size="sm"
+            color=""
+            onClick={(e) => e.preventDefault()}
+          >
+            <i className="fas fa-ellipsis-v" />
+          </DropdownToggle>
+          <DropdownMenu className="dropdown-menu-arrow" right>
+            <DropdownItem
+              idteacher={row.id}
+              onClick={() => (handleRedirectToEdit(row.id))}
+            >
+              Sửa
+            </DropdownItem>
+            <DropdownItem
+              idteacher={row.id}
+              onClick={() => (deleteRoom(row.id))}
+            >
+              Xóa
+            </DropdownItem>
+            {row.locked ?
+              (
+                <DropdownItem
+                  idteacher={row.id}
+                  onClick={() => (unLockRoom(row.id))}
+                >
+                  Mở khóa
+                </DropdownItem>
+              ) : (
+                <DropdownItem
+                  idteacher={row.id}
+                  onClick={() => (lockRoom(row.id))}
+                >
+                  Khóa
+                </DropdownItem>
+              )
+            }
+          </DropdownMenu>
+        </UncontrolledDropdown>
+      </div>
+      )
+    }
+  }];
 
   return (
     <>
-    
+
       <HeaderEmpty />
       {/* Page content */}
       <Container className="mt--8 Body_Content" fluid>
@@ -152,8 +237,8 @@ const Room = () => {
                       </Col>
                     </Row>
                   </CardHeader>
-                  <div >
-                    <Table className="align-items-center table-flush" responsive>
+                  <div className="table-responsive">
+                    {/* <Table className="align-items-center table-flush" responsive>
                       <thead className="thead-light">
                         <tr>
                           <th scope="col">STT</th>
@@ -173,7 +258,7 @@ const Room = () => {
                             <td>{room.name}</td>
                             <td>{room.location}</td>
                             <td>{room.capacity}</td>
-                            <td>{room.locked?(<i className="fas fa-lock"></i>):""}</td>
+                            <td>{room.locked ? (<i className="fas fa-lock"></i>) : ""}</td>
                             <td className="text-right">
                               <UncontrolledDropdown>
                                 <DropdownToggle
@@ -187,35 +272,35 @@ const Room = () => {
                                   <i className="fas fa-ellipsis-v" />
                                 </DropdownToggle>
                                 <DropdownMenu className="dropdown-menu-arrow" right>
-                                    <DropdownItem
-                                      idteacher={room.id}
+                                  <DropdownItem
+                                    idteacher={room.id}
                                     onClick={() => (handleRedirectToEdit(room.id))}
-                                    >
-                                      Sửa
-                                    </DropdownItem>
+                                  >
+                                    Sửa
+                                  </DropdownItem>
                                   <DropdownItem
                                     idteacher={room.id}
                                     onClick={() => (deleteRoom(room.id))}
                                   >
                                     Xóa
                                   </DropdownItem>
-                                  {room.locked?
-                                  (
-                                    <DropdownItem
-                                    idteacher={room.id}
-                                    onClick={() => (unLockRoom(room.id))}
-                                  >
-                                    Mở khóa
-                                  </DropdownItem>
-                                  ):(
-                                    <DropdownItem
-                                    idteacher={room.id}
-                                    onClick={() => (lockRoom(room.id))}
-                                  >
-                                    Khóa
-                                  </DropdownItem>
-                                  )
-                                }
+                                  {room.locked ?
+                                    (
+                                      <DropdownItem
+                                        idteacher={room.id}
+                                        onClick={() => (unLockRoom(room.id))}
+                                      >
+                                        Mở khóa
+                                      </DropdownItem>
+                                    ) : (
+                                      <DropdownItem
+                                        idteacher={room.id}
+                                        onClick={() => (lockRoom(room.id))}
+                                      >
+                                        Khóa
+                                      </DropdownItem>
+                                    )
+                                  }
                                 </DropdownMenu>
                               </UncontrolledDropdown>
                             </td>
@@ -224,7 +309,19 @@ const Room = () => {
                         }
                         </tbody>)}
 
-                    </Table>
+                    </Table> */}
+                    <BootstrapTable
+                      bootstrap4={true}
+                      bordered={false}
+                      headerWrapperClasses="table-success"
+                      classes="align-items-center table-flush table-responsive"
+                      id="tb-layout-auto"
+                      // classes="align-items-center table-flush" 
+                      keyField='id' 
+                      data={rooms}
+                      columns={columns}
+                      pagination={pagination}
+                    />
                     {(loading) && (<div className="d-flex justify-content-center">
                       <br></br>
                       <Spinner style={{

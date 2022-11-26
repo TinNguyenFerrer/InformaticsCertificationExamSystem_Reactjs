@@ -86,15 +86,21 @@ const ScoreSummary = () => {
     if (window.Chart) {
         parseOptions(Chart, chartOptions());
     }
-    let datasetBar = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    let datasetBar = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     studentsResult.map(item => {
         console.log(item.finalMark)
-        let temp = Math.floor(item.finalMark)
+        let temp
+        // if(Number.isInteger(item.finalMark))
+        // {
+        //     temp = item.finalMark - 1;
+        // }else{
+        temp = Math.floor(item.finalMark)
+        
         datasetBar[temp]++
     })
     //setDatasetChart(t)
     const dataChartBar = {
-        labels: ["<=1", "<=2", "<=3", "<=4", "<=5", "<=6", "<=7", "<=8", "<=9", "<=10"],
+        labels: [">=0", ">=1", ">=2", ">=3", ">=4", ">=5", ">=6", ">=7", ">=8", ">=9", "10"],
         yLabels: "hhhh",
         datasets: [
             {
@@ -260,12 +266,12 @@ const ScoreSummary = () => {
                                             </Col>
                                         </Row>
                                     </CardHeader>
-                                    <div >
+                                    <div className="table-responsive">
                                         <BootstrapTable
                                             bootstrap4={true}
                                             bordered={false}
                                             headerWrapperClasses="table-success"
-                                            classes="align-items-center table-flush"
+                                            classes="align-items-center table-flush table-responsive"
                                             id="tb-layout-auto"
                                             keyField='id'
                                             data={studentsResult}
@@ -316,14 +322,15 @@ const ScoreSummary = () => {
                                                         </CardHeader>
                                                         <CardBody>
                                                             {/* Chart */}
-                                                            <div className="position-absolute">
+                                                            
+                                                            <div className="chart">
+                                                            <div className="">
                                                                 <div className="d-inline-block" style={{ backgroundColor: dataChartPie.datasets[0].backgroundColor[0], height: "13px", width: "65px" }}></div>
                                                                 <div className="d-inline-block" >&ensp;{dataChartPie.labels[0]}</div>
                                                                 <br></br>
                                                                 <div className="d-inline-block" style={{ backgroundColor: dataChartPie.datasets[0].backgroundColor[1], height: "13px", width: "65px" }}></div>
                                                                 <div className="d-inline-block" >&ensp;{dataChartPie.labels[1]}</div>
                                                             </div>
-                                                            <div className="chart">
                                                                 <Pie
                                                                     data={dataChartPie}
                                                                 //options={chartPie1.options}

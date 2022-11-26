@@ -17,12 +17,14 @@ import { useLocation, Route, Switch } from "react-router-dom";
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import BootstrapTable from 'react-bootstrap-table-next';
-import { sizePerPageRenderer, pagination } from "variables/dataTableOption.js"
+
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import * as request from "Until/request";
 import React from "react";
 import { useState, useEffect } from 'react';
+// data table 
+import BootstrapTable from 'react-bootstrap-table-next';
+import {pagination } from "variables/dataTableOption.js"
 // reactstrap components
 import { Card, Container, DropdownItem, Row } from "reactstrap";
 import { Redirect } from "react-router-dom";
@@ -198,7 +200,7 @@ const Examination = () => {
                       </Col>
                     </Row>
                   </CardHeader>
-                  <div >
+                  <div className="table-responsive">
                     {/* <Table className="align-items-center table-flush" responsive>
                       <thead className="thead-light">
                         <tr>
@@ -257,8 +259,11 @@ const Examination = () => {
                     bootstrap4={true} 
                     bordered={false} 
                     headerWrapperClasses="table-success" 
-                    classes="align-items-center table-flush" 
-                    keyField='id' data={examinations} 
+                    classes="align-items-center table-flush table-responsive"
+                    id="tb-layout-auto"
+                    // classes="align-items-center table-flush" 
+                    keyField='id' 
+                    data={examinations} 
                     columns={columns}
                     pagination={pagination}
                      />

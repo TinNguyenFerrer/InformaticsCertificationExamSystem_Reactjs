@@ -270,7 +270,7 @@ const Student = () => {
                       </Col>
                     </Row>
                   </CardHeader>
-                  <div >
+                  <div className="table-responsive">
                     {/* <Table className="align-items-center table-flush" responsive>
                       <thead className="thead-light">
                         <tr>
@@ -323,7 +323,8 @@ const Student = () => {
                       bootstrap4={true}
                       bordered={false}
                       headerWrapperClasses="table-success"
-                      classes="align-items-center table-flush table "
+                      // classes="align-items-center table-flush table "
+                      classes="align-items-center table-flush table-responsive"
                       id="tb-layout-auto"
                       keyField='id'
                       data={students}
