@@ -18,13 +18,15 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import { AlertProvider, AlertOutlet } from 'react-bootstrap-hooks-alert'
 
+import "./assets/css/global.css"
 import "assets/plugins/nucleo/css/nucleo.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import "assets/scss/argon-dashboard-react.scss";
 import 'bootstrap/dist/js/bootstrap.bundle.min';
-
+import 'react-bootstrap-hooks-alert/dist/Alert.css'
 
 import AdminLayout from "layouts/Admin.js";
 import AuthLayout from "layouts/Auth.js";
@@ -37,13 +39,16 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
     <StoreProvider>
-      <Switch>
-        <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
-        <Route path="/teacher" render={(props) => <Teacher {...props} />} />
-        <Route path="/teacher1" render={(props) => <Teacher1 {...props} />} />
-        <Route path="/auth" render={(props) => <AuthLayout {...props} />} />
-        <Redirect from="/" to="/admin/examination" />
-      </Switch>
+      <AlertProvider timeouts={{ warning: 1700, success: 70000, primary: 1700, danger: 1700 }}>
+      <AlertOutlet className="headerEmpty-alertHooks alert-outlet" />
+        <Switch>
+          <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
+          <Route path="/teacher" render={(props) => <Teacher {...props} />} />
+          <Route path="/teacher1" render={(props) => <Teacher1 {...props} />} />
+          <Route path="/auth" render={(props) => <AuthLayout {...props} />} />
+          <Redirect from="/" to="/admin/examination" />
+        </Switch>
+      </AlertProvider>
     </StoreProvider>
   </BrowserRouter>
 );

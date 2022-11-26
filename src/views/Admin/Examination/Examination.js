@@ -18,6 +18,7 @@ import { useLocation, Route, Switch } from "react-router-dom";
 
 */
 import BootstrapTable from 'react-bootstrap-table-next';
+import { sizePerPageRenderer, pagination } from "variables/dataTableOption.js"
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import * as request from "Until/request";
 import React from "react";
@@ -45,21 +46,6 @@ import {
 import "./Examination.css";
 
 const Examination = () => {
-
-
-  const columns = [{
-    dataField: 'id',
-    text: 'Product ID',
-    sort: true
-  }, {
-    dataField: 'name',
-    text: 'Name',
-    sort: true
-  }, {
-    dataField: 'examCode',
-    text: 'examCode'
-  }];
-
   const examinationInformInit = [{
     id: null,
     name: "",
@@ -78,34 +64,34 @@ const Examination = () => {
   const handleRedirectToEdit = (id) => {
     history.push(history.location.pathname + "/edit?id=" + id)
   }
+
   const deleteExamination = (e) => {
     //console.log(e)
-    const deleteExaminationService = async (e) => {
-      try {
-        const response = await request.deleteAPI("Examination/" + e)
-        console.log(response)
-        if (response.status == 200) {
-          console.log("thành cong" + e)
-          getAllExamServices()
-
-        }
-        else {
-          window.alert("xóa giáo viên thất bại")
-          console.log("thất bại")
-        }
-      } catch (e) {
-        window.alert("Xóa giáo viên thất bại")
-        console.log(e)
-      }
-    }
     deleteExaminationService(e)
   }
 
   //console.log("rerender")
-  
+
   //console.log(teachers)
   //=======-------- get list of examination---------=========
-  
+  const deleteExaminationService = async (e) => {
+    try {
+      const response = await request.deleteAPI("Examination/" + e)
+      console.log(response)
+      if (response.status == 200) {
+        console.log("thành cong" + e)
+        getAllExamServices()
+
+      }
+      else {
+        window.alert("xóa giáo viên thất bại")
+        console.log("thất bại")
+      }
+    } catch (e) {
+      window.alert("Xóa giáo viên thất bại")
+      console.log(e)
+    }
+  }
 
   const getAllExamServices = async () => {
     try {
@@ -115,6 +101,7 @@ const Examination = () => {
         console.log("login")
       }
       const data = res.data;
+      //data.starTime = new Date(data.starTime).toLocaleDateString() +"oo"
       setExaminations([...data])
       console.log(examinations)
       //console.log(data)
@@ -122,14 +109,71 @@ const Examination = () => {
       console.log(e)
     }
   }
+  //   option for data table
+  //init table info
+  const columns = [{
+    dataField: 'name',
+    text: 'Tên kì thi',
+    sort: true
+  }, {
+    dataField: 'examCode',
+    text: 'Mã kì thi',
+    sort: true
+  },
+  {
+    dataField: 'location',
+    text: 'Địa điểm thi',
+    sort: true
+  },
+  {
+    dataField: 'starTime',
+    text: 'Ngày thi',
+    sort: true,
+    formatter: (cell, row, rowIndex, formatExtraData) => {
+      return new Date(cell).toLocaleDateString()
+    }
+  },
+  {
+    dataField: 'edit',
+    text: '',
+    formatter: (cell, row, rowIndex, formatExtraData) => {
+      console.log(row)
+      var r = 0
+      return (<div className="text-right">
+        <UncontrolledDropdown>
+          <DropdownToggle
+            className="btn-icon-only text-light"
+            href="#pablo"
+            role="button"
+            size="sm"
+            color=""
+            onClick={(e) => e.preventDefault()}
+          >
+            <i className="fas fa-ellipsis-v" />
+          </DropdownToggle>
+          <DropdownMenu className="dropdown-menu-arrow" right>
+            <DropdownItem
+              onClick={() => (handleRedirectToEdit(row.id))}
+            >
+              Sửa
+            </DropdownItem>
+            <DropdownItem
+              onClick={() => (deleteExamination(row.id))}
+            >
+              Xóa
+            </DropdownItem>
+          </DropdownMenu>
+        </UncontrolledDropdown>
+      </div>
+      )
+    }
+  }];
   useEffect(() => {
     getAllExamServices()
   }, [])
   //console.log(examinations)
   return (
     <>
-
-
       <HeaderEmpty />
       {/* Page content */}
       <Container className="mt--8 Body_Content" fluid>
@@ -155,7 +199,7 @@ const Examination = () => {
                     </Row>
                   </CardHeader>
                   <div >
-                    <Table className="align-items-center table-flush" responsive>
+                    {/* <Table className="align-items-center table-flush" responsive>
                       <thead className="thead-light">
                         <tr>
                           <th scope="col">Tên Kì Thi</th>
@@ -207,9 +251,17 @@ const Examination = () => {
                           </tr>
                         ))}
                         </tbody>)}
-                    </Table>
+                    </Table> */}
 
-                    <BootstrapTable bootstrap4={true} bordered={false} headerWrapperClasses = "table-success"classes = "align-items-center table-flush" keyField='id' data={ examinations } columns={ columns } />
+                    <BootstrapTable 
+                    bootstrap4={true} 
+                    bordered={false} 
+                    headerWrapperClasses="table-success" 
+                    classes="align-items-center table-flush" 
+                    keyField='id' data={examinations} 
+                    columns={columns}
+                    pagination={pagination}
+                     />
                   </div>
                   <hr className="my-4" />
 

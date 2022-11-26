@@ -1,5 +1,4 @@
 import { useLocation, Route, Switch } from "react-router-dom";
-
 /*!
 
 =========================================================
@@ -39,6 +38,10 @@ import {
   DropdownToggle,
   DropdownMenu
 } from "reactstrap";
+//  react hook alerts
+import { useAlert } from 'react-bootstrap-hooks-alert'
+import 'react-bootstrap-hooks-alert/dist/Alert.css'
+
 import { useHistory } from "react-router-dom";
 import "./Supervisor.css";
 import DropdownList from "components/Dropdown/DropdownList.js";
@@ -47,8 +50,8 @@ import * as request from "Until/request";
 import { info } from "sass";
 const Supervisor = () => {
 
+  const { warning, info, primary, danger, success } = useAlert()
   let te = { id: -1, name: "" };
-  //========--------------lấy danh sách kì thi------------============
   let [examinations, setExaminations] = useState([])
   let [examinationSeleted, setExaminationSeleted] = useContext(StoreContext).examinationSeleted
   let [testSchedules, setTestSchedules] = useState([])
@@ -57,11 +60,16 @@ const Supervisor = () => {
   const getAllExaminationsServices = async () => {
     try {
       let res = await request.getAPI("Examination/GetAll")
+      if(res.status==200){
       const data = res.data;
       setExaminations([...data])
       //console.log(examinations)
       console.log(data)
+      success("Lấy danh sách kid thi thành công")
+
+      }
     } catch (e) {
+      danger("Lấy danh sách kì thi thất bại")
       console.log(e)
     }
   }
@@ -138,6 +146,9 @@ const Supervisor = () => {
     } catch (e) {
       if (e.response.status == 400 && e.response.data == "not enough teachers") {
         window.alert("số lượng giáo viên không đủ để chia phòng")
+      }
+      if (e.response.status == 400 && e.response.data == "Too more student") {
+        window.alert("Số lượng phòng không đủ để chia")
       }
       console.log(e)
     }

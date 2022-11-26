@@ -10,36 +10,45 @@ const ExportAccountCSVButton = ({ children, prop, idExam,dataExport, className }
         listOfUsers: [],
         loading: false
     });
-    const [datas, setdatas] = useState(data);
+    //const [datas, setdatas] = useState(data);
     const getUsers = async (event, done) => {
-        if (!data.loading) {
+        if (!dataExport.loading) {
             try {
+                //event.preventDefault();
                 console.log(done)
-                setdata(pre => ({ ...pre, loading: true }));
-                const response = await request.getAPI(`Examination/${idExam}/student-accounts-for-export`)
-                console.log(response)
-                const accounts = [];
-                response.data.map((user) => {
-                    var { name, ...rest } = user;
-                    console.log(typeof name)
-                    accounts.push({
-                        ...rest,
-                        firstname: name.lastIndexOf(" ") != -1 ? name.slice(name.lastIndexOf(" ") + 1) : name,
-                        lastname: name.lastIndexOf(" ") != -1 ? name.slice(0, name.lastIndexOf(" ")) : name
-                    })
-                })
-                setdata({
-                    listOfUsers: accounts,
-                    loading: false
-                });
-                console.log(data)
-                done(true)
+                console.log(dataExport)
+                //setdata(pre => ({ ...pre, loading: true }));
+                if(dataExport.listOfUsers.length === 0){
+                    window.alert("Không có dữ liệu xuất file")
+                    done(false)
+                }else{
+                    done(true)
+                }
+                // const response = await request.getAPI(`Examination/${idExam}/student-accounts-for-export`)
+                // console.log(response)
+                // const accounts = [];
+                // response.data.map((user) => {
+                //     var { name, ...rest } = user;
+                //     console.log(typeof name)
+                //     accounts.push({
+                //         ...rest,
+                //         firstname: name.lastIndexOf(" ") != -1 ? name.slice(name.lastIndexOf(" ") + 1) : name,
+                //         lastname: name.lastIndexOf(" ") != -1 ? name.slice(0, name.lastIndexOf(" ")) : name
+                //     })
+                // })
+                // setdata({
+                //     listOfUsers: accounts,
+                //     loading: false
+                // });
+                // console.log(data)
+                
             } catch (e) {
                 console.log(e)
                 setdata(pre => ({
                     ...pre,
                     loading: false
                 }));
+                done(false)
             };
         }
     }
@@ -72,11 +81,12 @@ const ExportAccountCSVButton = ({ children, prop, idExam,dataExport, className }
 
     }
     return <CSVLink
+    //active
         separator={","}
         headers={headers}
         data={csvData(dataExport)}
-        //asyncOnClick={true}
-        //onClick={getUsers}
+        asyncOnClick={true}
+        onClick={getUsers}
         className={className}
     >
         {children}

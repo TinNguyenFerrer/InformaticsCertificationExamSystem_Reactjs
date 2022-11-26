@@ -12,6 +12,7 @@ import Login from "views/Admin/Login/Login.js";
 import Icons from "views/examples/Icons.js";
 
 import "./Admin.css"
+
 /*!
 
 =========================================================
@@ -151,7 +152,6 @@ const Admin = (props) => {
           {...props}
           brandText={getBrandText(props.location.pathname)}
         />
-
         <Switch>
           {getRoutes(routesAdmin)}
           <RouteChil />

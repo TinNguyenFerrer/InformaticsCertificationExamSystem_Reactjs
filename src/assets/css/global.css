@@ -1,0 +1,9 @@
+.headerEmpty-alertHooks{
+    /* //position: absolute; */
+    top: 68px;
+    right: 0px;
+    left: auto;
+    position: fixed;
+    z-index: 1000;
+    width: 10%;
+}

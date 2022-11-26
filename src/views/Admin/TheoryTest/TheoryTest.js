@@ -190,7 +190,7 @@ const TheoryTest = () => {
                         <Button
                           color="primary"
                           onClick={handleRedirectAddTheoryTest}
-                          size="sm"
+                          //size="sm"
                         >
                           Tạo mới
                         </Button>

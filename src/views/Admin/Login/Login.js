@@ -35,7 +35,6 @@ import { useHistory } from "react-router-dom";
 import * as request from "Until/request";
 const Login = () => {
   const history = useHistory()
-
   const loginServices = async (fromLogin={}) => {
     try {
       let res = await request.postAPI("Login/CreateTokenTeacher",fromLogin)
@@ -49,6 +48,7 @@ const Login = () => {
         history.push("/teacher/studentmanage")
       }
     } catch (e) {
+      window.alert("Đăng nhập thất bại")
       console.log(e)
     }
   }

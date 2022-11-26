@@ -182,15 +182,16 @@ const Student = () => {
             console.log(e)
         }
     }
-    const dataExport= (Listdata)=>{
+    const dataExport = (Listdata) => {
         return Listdata
     }
     useEffect(() => {
         getAllStudentServices()
         getAllExaminationsServices()
-        if (examinationSeleted.id !== undefined)
+        if (examinationSeleted.id != undefined) {
             getAllStudentByIdExaminationServices(examinationSeleted.id)
             getUsers(examinationSeleted.id)
+        }
     }, [])
 
     return (

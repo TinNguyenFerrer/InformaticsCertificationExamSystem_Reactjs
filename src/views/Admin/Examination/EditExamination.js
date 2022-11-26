@@ -18,6 +18,7 @@ import DateTimeRange from "components/Datepiker/DateTimeRange";
 */
 import React from "react";
 import { useState, useEffect } from "react";
+import { useAlert } from 'react-bootstrap-hooks-alert'
 import { useHistory } from "react-router-dom";
 // reactstrap components
 import { Card, Container, Row } from "reactstrap";
@@ -42,15 +43,16 @@ import "./AddExamination.css";
 
 const EditExamination = () => {
   const history = useHistory()
+  const { warning, info, primary, danger, success } = useAlert()
   const examinationInformInit = [{
     id: null,
     name: "",
     starTime: "",
-    endTime: "",
+    //endTime: "",
     location: "",
     minimumTheoreticalMark: 0,
-    minimumPracticeMark: 0,
-    gradingDeadline: ""
+    minimumPracticeMark: 0
+    //gradingDeadline: ""
   }]
   const toDate = new Date()
   const [examinationInfor, setExaminationInfor] = useState(examinationInformInit);
@@ -68,26 +70,47 @@ const EditExamination = () => {
     const id = queryParams.get('id');
     GetExaminatiionInforService(id)
   }, [])
-  const editTeacherServices = async (teacher) => {
+  const editTeacherServices = async (exam) => {
     try {
-      let res = await request.putAPI("Examination",teacher)
+      let res = await request.putAPI("Examination",exam)
       console.log(res)
       if(res.status === 200){
         history.push('/admin/examination')
-        //window.alert("Sửa giáo viên thành công kiểm tra lại dữ liệu")
+        success("Sửa kì thi thành công")
       }else{
-        window.alert("Sửa thông tin kì thi thất bại kiểm tra lại dữ liệu")
+        danger("Sửa thông tin kì thi thất bại kiểm tra lại dữ liệu")
       }
     } catch (e) {
       console.log(e)
+      danger("Có lỗi trong quá trình sửa")
     }
   }
   const handelSubmitExaminationInfo = () => {
     try{
     let examinationSubmit= examinationInfor
     examinationSubmit.starTime = new Date(examinationInfor.starTime).toISOString()
-    examinationSubmit.endTime = new Date(examinationInfor.endTime).toISOString()
-    examinationSubmit.gradingDeadline = new Date(examinationInfor.gradingDeadline).toISOString()
+    // examinationSubmit.endTime = new Date(examinationInfor.endTime).toISOString()
+    // examinationSubmit.gradingDeadline = new Date(examinationInfor.gradingDeadline).toISOString()
+    if(examinationSubmit.starTime==undefined ||examinationSubmit.starTime==""){
+      warning("Chưa nhập thời gian thi")
+      return
+    }
+    if(examinationSubmit.location==undefined ||examinationSubmit.location==""){
+      warning("Chưa nhập địa điểm thi")
+      return
+    }
+    if(examinationSubmit.name==undefined || examinationSubmit.name == '' ){
+      warning("Chưa nhập tên kì thi")
+      return
+    }
+    if(examinationSubmit.minimumTheoreticalMark==undefined){
+      warning("Chưa nhập điểm đậu lý thuyết")
+      return
+    }
+    if(examinationSubmit.minimumPracticeMark==undefined){
+      warning("Chưa nhập điểm đậu thực hành")
+      return
+    }
     console.log(examinationSubmit)
     editTeacherServices(examinationSubmit)
     }catch(e){
@@ -177,9 +200,9 @@ const EditExamination = () => {
                             <Input
                               className="form-control-alternative addExamination_input_userinfor"
                               id="input-mark"
-                              placeholder="5"
+                              //placeholder="5"
                               type="number"
-                              value={examinationInfor.minimumTheoreticalMark}
+                              value={examinationInfor.minimumTheoreticalMark||""}
                               onChange={e => {
                                 setExaminationInfor(pre => {
                                   let newExaminationInfor = { ...pre }
@@ -203,7 +226,7 @@ const EditExamination = () => {
                               className="form-control-alternative addExamination_input_userinfor"
                               id="input-mark"
                               type="number"
-                              value={examinationInfor.minimumPracticeMark}
+                              value={examinationInfor.minimumPracticeMark||""}
                               onChange={e => {
                                 setExaminationInfor(pre => {
                                   let newExaminationInfor = { ...pre }
@@ -257,7 +280,7 @@ const EditExamination = () => {
                             />
                           </FormGroup>
                         </Col>
-                        <Col lg="4">
+                        {/* <Col lg="4">
                           <FormGroup>
                             <label
                               className="form-control-label"
@@ -284,10 +307,10 @@ const EditExamination = () => {
                               }}
                             />
                           </FormGroup>
-                        </Col>
+                        </Col> */}
                         
                       </Row>
-                      <Row>
+                      {/* <Row>
                       <Col lg="4">
                           <FormGroup>
                             <label
@@ -316,7 +339,7 @@ const EditExamination = () => {
                             />
                           </FormGroup>
                         </Col>
-                      </Row>
+                      </Row> */}
                     </div>
                     <div className="d-flex flex-row-reverse">
                       <Button

@@ -1,4 +1,5 @@
 import DateTimeRange from "components/Datepiker/DateTimeRange";
+import { useAlert } from 'react-bootstrap-hooks-alert'
 /*!
 
 =========================================================
@@ -41,28 +42,30 @@ import "./AddExamination.css";
 
 
 const AddExamination = () => {
+  const { warning, info, primary, danger, success } = useAlert()
   const history = useHistory()
   const examinationInformInit = [{
     id: null,
     name: "",
     starTime: "",
-    endTime: "",
+    // endTime: "",
     location: "",
-    minimumTheoreticalMark: 0,
-    minimumPracticeMark: 0,
-    gradingDeadline: ""
+    minimumTheoreticalMark:5 ,
+    minimumPracticeMark: 5
+    // gradingDeadline: ""
   }]
   const toDate = new Date()
   const [examinationInfor, setExaminationInfor] = useState(examinationInformInit);
   // console.log(address)
   // console.log(teacherInfor)
-  const addTeacherServices = async (teacher) => {
+  const addExamServices = async (teacher) => {
     try {
       let res = await request.postAPI("Examination",teacher)
       if(res.status === 200){
+        success("Thêm kì thi thành công")
         history.push('/admin/examination')
       }else{
-        window.alert("Thêm giáo viên thất bại kiểm tra lại dữ liệu")
+        danger("Thêm giáo viên thất bại kiểm tra lại dữ liệu")
       }
     } catch (e) {
       console.log(e)
@@ -72,12 +75,32 @@ const AddExamination = () => {
     try{
     let examinationSubmit= examinationInfor
     examinationSubmit.starTime = new Date(examinationInfor.starTime).toISOString()
-    examinationSubmit.endTime = new Date(examinationInfor.endTime).toISOString()
-    examinationSubmit.gradingDeadline = new Date(examinationInfor.gradingDeadline).toISOString()
+    if(examinationSubmit.starTime==undefined ||examinationSubmit.starTime==""){
+      warning("Chưa nhập thời gian thi")
+      return
+    }
+    if(examinationSubmit.location==undefined ||examinationSubmit.location==""){
+      warning("Chưa nhập địa điểm thi")
+      return
+    }
+    if(examinationSubmit.name==undefined || examinationSubmit.name == '' ){
+      warning("Chưa nhập tên kì thi")
+      return
+    }
+    if(examinationSubmit.minimumTheoreticalMark==undefined){
+      warning("Chưa nhập điểm đậu lý thuyết")
+      return
+    }
+    if(examinationSubmit.minimumPracticeMark==undefined){
+      warning("Chưa nhập điểm đậu thực hành")
+      return
+    }
+    // examinationSubmit.endTime = new Date(examinationInfor.endTime).toISOString()
+    // examinationSubmit.gradingDeadline = new Date(examinationInfor.gradingDeadline).toISOString()
     console.log(examinationSubmit)
-    addTeacherServices(examinationSubmit)
+    addExamServices(examinationSubmit)
     }catch(e){
-      window.alert("Thêm giáo viên thất bại kiểm tra lại dữ liệu")
+      danger("Thêm giáo viên thất bại kiểm tra lại dữ liệu")
     }
     // let t= addressSubmit.split(",")
     // console.log(addressSubmit.split(",",3))
@@ -110,7 +133,7 @@ const AddExamination = () => {
                             </label>
                             <Input
                               className="form-control-alternative addExamination_input_userinfor"
-                              value={examinationInfor.Name||""}
+                              value={examinationInfor.name||""}
                               id="input-username"
                               placeholder="Thi chứng chỉ UD công nghệ thông tin"
                               type="text"
@@ -118,7 +141,7 @@ const AddExamination = () => {
                                 setExaminationInfor(pre => {
                                   let newExaminationInfor = { ...pre }
                                   console.log(typeof( e.target.value))
-                                  newExaminationInfor.Name = e.target.value
+                                  newExaminationInfor.name = e.target.value
                                   return newExaminationInfor
                                 })
                               }}
@@ -162,9 +185,9 @@ const AddExamination = () => {
                             </label>
                             <Input
                               className="form-control-alternative addExamination_input_userinfor"
-                              defaultValue="5"
+                              //defaultValue="5"
                               id="input-mark"
-                              placeholder="5"
+                              //placeholder="5"
                               type="number"
                               value={examinationInfor.minimumTheoreticalMark}
                               onChange={e => {
@@ -190,6 +213,7 @@ const AddExamination = () => {
                               className="form-control-alternative addExamination_input_userinfor"
                               id="input-mark"
                               type="number"
+                              //placeholder="5"
                               value={examinationInfor.minimumPracticeMark}
                               onChange={e => {
                                 setExaminationInfor(pre => {
@@ -244,7 +268,7 @@ const AddExamination = () => {
                             />
                           </FormGroup>
                         </Col>
-                        <Col lg="4">
+                        {/* <Col lg="4">
                           <FormGroup>
                             <label
                               className="form-control-label"
@@ -271,10 +295,10 @@ const AddExamination = () => {
                               }}
                             />
                           </FormGroup>
-                        </Col>
+                        </Col> */}
                         
                       </Row>
-                      <Row>
+                      {/* <Row>
                       <Col lg="4">
                           <FormGroup>
                             <label
@@ -303,7 +327,7 @@ const AddExamination = () => {
                             />
                           </FormGroup>
                         </Col>
-                      </Row>
+                      </Row> */}
                     </div>
                     <div className="d-flex flex-row-reverse">
                       <Button
