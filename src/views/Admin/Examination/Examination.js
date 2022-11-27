@@ -186,14 +186,14 @@ const Examination = () => {
                 <CardBody>
                   <CardHeader className="bg-white border-0">
                     <Row className="align-items-center">
-                      <Col xs="8">
+                      <Col sm="7">
                         <h3 className="mb-0">Danh sách các kì thi</h3>
                       </Col>
-                      <Col className="text-right" xs="4">
+                      <Col className="text-right" sm="5">
                         <Button
                           color="primary"
                           onClick={handleRedirectAddExam}
-                          size="sm"
+                          //size="sm"
                         >
                           Tạo mới
                         </Button>

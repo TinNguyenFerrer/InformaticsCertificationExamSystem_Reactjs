@@ -108,7 +108,7 @@ const Room = () => {
   //==========================khóa và mở khóa phòng==================
   const unLockRoom = async (id) => {
     try {
-      const response = await request.getAPI("ExaminationRoom/UnLockExaminationRoom?id=" + id)
+      const response = await request.putAPI("ExaminationRoom/UnLockExaminationRoom?id=" + id)
       if (response.status === 200) {
         getAllRoomServices()
       } else {
@@ -120,7 +120,7 @@ const Room = () => {
   }
   const lockRoom = async (id) => {
     try {
-      const response = await request.getAPI("ExaminationRoom/LockExaminationRoom?id=" + id)
+      const response = await request.putAPI("ExaminationRoom/LockExaminationRoom?id=" + id)
       if (response.status === 200) {
         getAllRoomServices()
       } else {
@@ -220,17 +220,16 @@ const Room = () => {
             <Card className="shadow border-0">
               <div>
                 <CardBody>
-
                   <CardHeader className="bg-white border-0">
                     <Row className="align-items-center">
-                      <Col xs="8">
+                      <Col sm="7">
                         <h3 className="mb-0">Danh sách giáo viên</h3>
                       </Col>
-                      <Col className="text-right" xs="4">
+                      <Col className="text-right" sm="5">
                         <Button
                           color="primary"
                           onClick={handleRedirectAddTeacher}
-                          size="sm"
+                          //size="sm"
                         >
                           Tạo mới
                         </Button>

@@ -22,9 +22,12 @@ import { useState, useEffect } from 'react';
 // reactstrap components
 import { Card, Container, DropdownItem, Row } from "reactstrap";
 import { Redirect } from "react-router-dom";
+// data table 
+import BootstrapTable from 'react-bootstrap-table-next';
+import { pagination } from "variables/dataTableOption.js"
 // core components
 import HeaderEmpty from "components/Headers/HeaderEmpty";
-// reactstrap added
+// reactstrap
 import {
     Button,
     CardHeader,
@@ -59,10 +62,63 @@ const DetailSchedule = () => {
     }]
     let [students, setStudents] = useState(studentInformInit)
     let [modal, setModal] = useState(false);
-    let [idStudentModal,SetIdStudentModal ] = useState()
+    let [idStudentModal, SetIdStudentModal] = useState()
     let [examinations, setExaminations] = useState([])
     let [examinationSeleted, setExaminationSeleted] = useState({})
     let [freelanceStudent, setFreelanceStudent] = useState(false)
+    //   option for data table
+    //init table info
+    const columns = [{
+        dataField: 'id',
+        text: 'STT',
+        sort: true,
+        formatter: (cell, row, rowIndex, formatExtraData) => {
+            return rowIndex
+        }
+    }, {
+        dataField: 'name',
+        text: 'Tên thí sinh',
+        sort: true
+    },{
+        dataField: 'hashCode',
+        text: 'Mã thí sinh',
+        sort: true
+    },{
+        dataField: 'email',
+        text: 'Email',
+        sort: true
+    },{
+        dataField: 'birthDay',
+        text: 'Ngày sinh',
+        sort: true,
+        formatter: (cell, row, rowIndex, formatExtraData) => {
+            return new Date(cell).toLocaleDateString()
+        }
+    },{
+        dataField: '',
+        text: '',
+        formatter: (cell, row, rowIndex, formatExtraData) => {
+            console.log(row)
+            var r = 0
+            return (<div className="text-right">
+                <UncontrolledDropdown>
+                    <DropdownToggle
+                        className="btn-icon-only"
+                        role="button"
+                        size="sm"
+                        color=""
+                        onClick={() => {
+                            SetIdStudentModal(row.id)
+                            setModal(!modal)
+                        }}
+                    >
+                        <i className="fas fa-retweet"></i>
+                    </DropdownToggle>
+                </UncontrolledDropdown>
+            </div>
+            )
+        }
+    }];
     const getAllExaminationsServices = async () => {
         try {
             let res = await request.getAPI("Examination/GetAll")
@@ -137,7 +193,7 @@ const DetailSchedule = () => {
             {/* Page content */}
 
             <div>
-                <ModalSwapSchedule onExecute={getAllStudentByTestScheduleAndRoomService} displayUseState = {[modal, setModal]} idStudent={idStudentModal} />
+                <ModalSwapSchedule onExecute={getAllStudentByTestScheduleAndRoomService} displayUseState={[modal, setModal]} idStudent={idStudentModal} />
             </div>
 
             <Container className="mt--8 Body_Content" fluid>
@@ -146,18 +202,29 @@ const DetailSchedule = () => {
                         <Card className="shadow border-0">
                             <div>
                                 <CardBody>
-
                                     <CardHeader className="bg-white border-0">
                                         <Row className="align-items-center">
                                             <Col xs="8">
                                                 <h3 className="mb-0">Danh sách thí sinh</h3>
                                             </Col>
-                                            <Col className="text-right" xs="4">
-                                            </Col>
+                                            {/* <Col className="text-right" xs="4">
+                                            </Col> */}
                                         </Row>
                                     </CardHeader>
-                                    <div >
-                                        <Table className="align-items-center table-flush" responsive>
+                                    <div className="table-responsive">
+                                        <BootstrapTable
+                                            bootstrap4={true}
+                                            bordered={false}
+                                            headerWrapperClasses="table-success"
+                                            classes="align-items-center table-flush table-responsive"
+                                            id="tb-layout-auto"
+                                            // classes="align-items-center table-flush" 
+                                            keyField='id'
+                                            data={students}
+                                            columns={columns}
+                                            pagination={pagination}
+                                        />
+                                        {/* <Table className="align-items-center table-flush" responsive>
                                             <thead className="thead-light">
                                                 <tr>
                                                     <th scope="col">STT</th>
@@ -195,14 +262,11 @@ const DetailSchedule = () => {
                                                         </td>
                                                     </tr>))}
                                                 </tbody>)}
-                                        </Table>
+                                        </Table> */}
                                     </div>
                                     <hr className="my-4" />
-
                                 </CardBody>
                             </div>
-
-
                         </Card>
                     </div>
                 </Row>

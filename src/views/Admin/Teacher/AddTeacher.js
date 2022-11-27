@@ -97,12 +97,12 @@ const AddTeacher = () => {
             <Card className="shadow border-0">
               <div>
                 <CardBody>
-                  <h6 className="heading-small text-muted mb-4">
+                  {/* <h6 className="heading-small text-muted mb-4">
                     Thêm từ một danh sách giáo viên
                   </h6>
                   <UpoadFileStudent >
                     Tải danh sách
-                  </UpoadFileStudent>
+                  </UpoadFileStudent> */}
                   <br></br>
                   <Form>
                     <h6 className="heading-small text-muted mb-4">

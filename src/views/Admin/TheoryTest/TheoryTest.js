@@ -200,7 +200,7 @@ const TheoryTest = () => {
                   </CardHeader>
                   <div className="table-responsive">
                     <Table className="align-items-center table-flush" responsive>
-                      <thead className="thead-light">
+                      <thead className="table-success">
                         <tr>
                           <th scope="col">STT</th>
                           <th scope="col">Tên đề</th>

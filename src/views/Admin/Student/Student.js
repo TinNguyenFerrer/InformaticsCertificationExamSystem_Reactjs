@@ -20,6 +20,7 @@ import { useLocation, Route, Switch } from "react-router-dom";
 import React from "react";
 import { useState, useEffect, useContext } from 'react';
 import { StoreContext } from "Until/StoreProvider"
+// data table 
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 // reactstrap components
@@ -263,7 +264,7 @@ const Student = () => {
                         <Button
                           color="primary"
                           onClick={handleRedirectAddStudent}
-                          size="sm"
+                          size=""
                         >
                           Tạo mới
                         </Button>

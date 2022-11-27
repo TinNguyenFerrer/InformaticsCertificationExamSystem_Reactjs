@@ -75,7 +75,7 @@ const AddStudent = () => {
                     </h2>
                     <div>
                         <Col lg="12">
-                          <div className="student-input-freelanceStudent">
+                          {/* <div className="student-input-freelanceStudent">
                             <Input
                               type="checkbox"
                               checked={freelanceStudent}
@@ -84,7 +84,7 @@ const AddStudent = () => {
                               }}
                             />
                             <Label check>Sinh viên tự do</Label>
-                          </div>
+                          </div> */}
                           <UpoadFileStudent >
                             Tải từ file
                           </UpoadFileStudent>

@@ -24,7 +24,7 @@ import {
 } from "reactstrap";
 import { useHistory } from "react-router-dom";
 //import "./TestSchedule.css";
-import DropdownList from "components/Dropdown/DropdownList.js";
+import DropdownListInline from "components/Dropdown/DropdownListInline.js";
 import * as request from "Until/request";
 
 const Scorecard = () => {
@@ -134,10 +134,10 @@ const Scorecard = () => {
             <Card className="shadow border-0">
               <div>
                 <CardBody>
-                  <DropdownList
+                  <DropdownListInline
                     item={examinations}
                     onItemSelected={onExaminationSelected}
-                  >{examinationSeleted.name || "chọn kì thi"}</DropdownList>
+                  >{examinationSeleted.name || "chọn kì thi"}</DropdownListInline>
                   <CardHeader className="bg-white border-0">
                     <Row className="align-items-center">
 

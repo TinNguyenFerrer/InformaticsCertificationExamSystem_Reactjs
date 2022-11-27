@@ -76,6 +76,31 @@ const Teacher = () => {
         console.log(e)
       })
   }
+  const unLockTeacher = async(id) => {
+    try {
+      const response = await request.putAPI(`Teacher/${id}/UnLock`)
+      if (response.status === 200) {
+        getAllTeacherServices()
+      } else {
+        window.alert("Mở khóa giáo viên thất bại")
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+  const lockTeacher =async(id)=>{
+    try {
+      const response = await request.putAPI(`Teacher/${id}/Lock`)
+      if (response.status === 200) {
+        getAllTeacherServices()
+      } else {
+        window.alert("Khóa giáo viên thất bại")
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+  //  Data table option
   const columns = [{
     dataField: 'fullName',
     text: 'Tên giáo viên',
@@ -98,6 +123,14 @@ const Teacher = () => {
     text: 'EmailT',
     sort: true
   }, {
+    dataField: 'locked',
+    text: 'Khóa',
+    sort: true,
+    formatter: (cell, row, rowIndex, formatExtraData) => {
+      if (cell) return <i className="fas fa-lock"></i>
+      return ""
+    }
+  },{
     dataField: 'edit',
     text: '',
     formatter: (cell, row, rowIndex, formatExtraData) => {
@@ -131,6 +164,23 @@ const Teacher = () => {
             >
               Xóa
             </DropdownItem>
+            {row.locked ?
+              (
+                <DropdownItem
+                  idteacher={row.id}
+                  onClick={() => (unLockTeacher(row.id))}
+                >
+                  Mở khóa
+                </DropdownItem>
+              ) : (
+                <DropdownItem
+                  idteacher={row.id}
+                  onClick={() => (lockTeacher(row.id))}
+                >
+                  Khóa
+                </DropdownItem>
+              )
+            }
           </DropdownMenu>
         </UncontrolledDropdown>
       </div>

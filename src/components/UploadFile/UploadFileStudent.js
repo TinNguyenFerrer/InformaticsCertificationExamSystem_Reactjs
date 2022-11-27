@@ -2,7 +2,11 @@ import "./UploadFileStudent.css"
 import React, { useState } from 'react'
 import { useHistory } from "react-router-dom";
 import * as request from "Until/request";
+//  read csv
 import CSVReader from 'react-csv-reader'
+// data table 
+import BootstrapTable from 'react-bootstrap-table-next';
+import {pagination } from "variables/dataTableOption.js"
 import {
     Button,
     Table,
@@ -27,6 +31,40 @@ const UpoadFileStudent = ({ children, prop, url }) => {
     const [selectedFile, setSelectedFile] = useState();
     const [isSelected, setIsSelected] = useState(false);
     let [students, setStudents] = useState([])
+    //init table info
+    const columns = [{
+        dataField: '',
+        text: 'STT',
+        sort: true,
+        formatter: (cell, row, rowIndex, formatExtraData) => {
+            return rowIndex
+        }
+    }, {
+        dataField: '0',
+        text: 'Mã thí sinh',
+        sort: true
+    }, {
+        dataField: '1',
+        text: 'Họ tên',
+        sort: true
+    },
+    {
+        dataField: '2',
+        text: 'Ngày sinh',
+        sort: true
+    },{
+        dataField: '3',
+        text: 'Nơi sinh',
+        sort: true
+    },{
+        dataField: '4',
+        text: 'Email',
+        sort: true
+    },{
+        dataField: '5',
+        text: 'SĐT',
+        sort: true
+    }]
 
     const changeHandler = (event) => {
         setSelectedFile(event.target.files[0]);
@@ -61,7 +99,7 @@ const UpoadFileStudent = ({ children, prop, url }) => {
                 }
             });
             console.log(res)
-            if(res.status ===200){
+            if (res.status === 200) {
                 window.alert("Thêm thành công")
                 history.push("/admin/student")
             }
@@ -98,38 +136,48 @@ const UpoadFileStudent = ({ children, prop, url }) => {
                 <Button color="success" size="lg" onClick={handleSubmission}>Gửi file</Button>
             </div>
             <br></br>
-
-            <Table className="align-items-center table-flush" responsive>
-                <thead className="thead-light">
-                    <tr>
-                        <th scope="col">STT</th>
-                        <th scope="col">Mã Học viên</th>
-                        <th scope="col">Họ Tên </th>
-                        <th scope="col">Ngày sinh</th>
-                        <th scope="col">Quên quán</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">SĐT</th>
-                        <th scope="col"></th>
-                    </tr>
-                </thead>
-                {(students.lenght != 0) &&
-                    (<tbody>{students.map((student, index) =>
-                    (
-                        <tr key={index}>
-                            <td>{index}</td>
-                            <td>{student[0]}</td>
-                            <td>{student[1]}</td>
-                            <td>{student[2]}</td>
-                            <td>{student[3]}</td>
-                            <td>{student[4]}</td>
-                            <td>{student[5]}</td>
-                            <td>{student[6]}</td>
-
-                        </tr>))}
-                    </tbody>)}
-            </Table>
-
-
+            <div className="table-responsive">
+                <BootstrapTable
+                    bootstrap4={true}
+                    bordered={false}
+                    headerWrapperClasses="table-success"
+                    classes="align-items-center table-flush table-responsive"
+                    id="tb-layout-auto"
+                    // classes="align-items-center table-flush" 
+                    keyField='id'
+                    data={students}
+                    columns={columns}
+                    pagination={pagination}
+                />
+                {/* <Table className="align-items-center table-flush" responsive>
+                    <thead className="thead-light">
+                        <tr>
+                            <th scope="col">STT</th>
+                            <th scope="col">Mã Học viên</th>
+                            <th scope="col">Họ Tên </th>
+                            <th scope="col">Ngày sinh</th>
+                            <th scope="col">Quên quán</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">SĐT</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    {(students.lenght != 0) &&
+                        (<tbody>{students.map((student, index) =>
+                        (
+                            <tr key={index}>
+                                <td>{index}</td>
+                                <td>{student[0]}</td>
+                                <td>{student[1]}</td>
+                                <td>{student[2]}</td>
+                                <td>{student[3]}</td>
+                                <td>{student[4]}</td>
+                                <td>{student[5]}</td>
+                                <td>{student[6]}</td>
+                            </tr>))}
+                        </tbody>)}
+                </Table> */}
+            </div>
         </div>
     )
 }

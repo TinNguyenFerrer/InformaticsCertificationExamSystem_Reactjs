@@ -39,6 +39,7 @@ const Score = () => {
       return response.data
     } catch (e) {
       console.log(e)
+      return []
     }
   }
   const handleImportTheoryMark = async (e) => {
@@ -168,6 +169,14 @@ const Score = () => {
   }
   useEffect(() => {
     getAllExamServices()
+    if (examinationSeleted.id !== undefined) {
+      (async () => {
+        const studentRespon = await getStudentResultService(examinationSeleted.id)
+        setStudents(studentRespon)
+      }
+      )()
+    }
+
   }, [])
   const onExaminationSelected = async (exam) => {
     setExaminationSeleted(exam)

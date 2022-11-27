@@ -4,14 +4,18 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 const sizePerPageRenderer = ({ options, currSizePerPage, onSizePerPageChange }) => {
     return (
         <div className="btn-group">
-            <button type="button" class="btn btn-outline-info btn-sm dropdown-toggle" data-toggle="dropdown"
+            <button type="button" className="btn btn-outline-info btn-sm dropdown-toggle" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
                 {currSizePerPage}
             </button>
             <div className="dropdown-menu">
                 {
-                    options.map(option => (
-                        <div className="dropdown-item" key={option.text} onClick={() => onSizePerPageChange(option.page)}
+                    options.map((option) => (
+                        <div 
+                        //key={index} 
+                        className="dropdown-item" 
+                        key={option.text} 
+                        onClick={() => onSizePerPageChange(option.page)}
                         >
                             {option.text}
                         </div>
