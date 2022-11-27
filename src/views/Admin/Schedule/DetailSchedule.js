@@ -130,29 +130,6 @@ const DetailSchedule = () => {
             console.log(e)
         }
     }
-    const getAllStudentByIdExaminationServices = async (id) => {
-        try {
-            let res = await request.getAPI("Student/GetAllByIdExamination?id=" + id)
-            const data = res.data;
-            setStudents([...data])
-            console.log(data)
-            //console.log(data)
-        } catch (e) {
-            console.log(e)
-        }
-    }
-    const onExaminationSelected = (exam) => {
-        setExaminationSeleted(exam)
-        console.log(exam)
-        getAllStudentByIdExaminationServices(exam.id)
-    };
-    const handleRedirectAddStudent = () => {
-        if (examinationSeleted.id == null) {
-            window.alert("Bạn phải chọn kì thi trước")
-        } else {
-            history.push("student/add?idexamination=" + examinationSeleted.id)
-        }
-    };
     //lấy danh sách dự thi theo ca và phòng
     const getAllStudentByTestScheduleAndRoomService = async () => {
         try {
@@ -169,7 +146,7 @@ const DetailSchedule = () => {
             console.log(res)
             const data = res.data;
             setStudents([...data])
-            console.log(data)
+            console.log([...data][0].id)
         } catch (e) {
             console.log(e)
         }
@@ -219,7 +196,7 @@ const DetailSchedule = () => {
                                             classes="align-items-center table-flush table-responsive"
                                             id="tb-layout-auto"
                                             // classes="align-items-center table-flush" 
-                                            keyField='id'
+                                            keyField="birthDay"
                                             data={students}
                                             columns={columns}
                                             pagination={pagination}

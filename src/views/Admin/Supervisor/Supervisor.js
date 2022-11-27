@@ -16,12 +16,14 @@ import { useLocation, Route, Switch } from "react-router-dom";
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import { useEffect,useContext,Fragment } from "react";
-import {StoreContext} from "Until/StoreProvider"
+import { useEffect, useContext, Fragment } from "react";
+import { StoreContext } from "Until/StoreProvider"
 import { useState } from 'react';
 // reactstrap components
 import { Card, Container, DropdownItem, Row } from "reactstrap";
-import { Redirect } from "react-router-dom";
+// data table 
+import BootstrapTable from 'react-bootstrap-table-next';
+import { pagination } from "variables/dataTableOption.js"
 // core components
 import HeaderEmpty from "components/Headers/HeaderEmpty";
 // reactstrap added
@@ -57,15 +59,71 @@ const Supervisor = () => {
   let [testSchedules, setTestSchedules] = useState([])
   let [testScheduleSeleted, setTestSchedulesSeleted] = useState({})
   let [examinationRooms, setexaminationRooms] = useState([])
+  //   option for data table
+  //init table info
+  const columns = [{
+    dataField: '',
+    text: 'STT',
+    sort: true,
+    formatter: (cell, row, rowIndex, formatExtraData) => {
+      return rowIndex
+    }
+  }, {
+    dataField: 'examinationRoom.name',
+    text: 'Tên phòng',
+    sort: true
+  }, {
+    dataField: 'examinationRoom.capacity',
+    text: 'Sức chứa',
+    sort: true
+  },
+  {
+    dataField: 'examinationRoom.location',
+    text: 'Vị trí',
+    sort: true
+  },
+  {
+    dataField: 'teachers[0]',
+    text: 'Giám thị 1',
+    sort: true,
+    formatter: (cell, row, rowIndex, formatExtraData) => {
+      if (cell !== undefined) {
+        return (
+          <Fragment>
+            {cell.fullName}<br></br>
+            MSCB - {cell.identifierCode}
+          </Fragment>
+        )
+      }
+      else
+        return "chưa có giám thị"
+    }
+  }, {
+    dataField: 'teachers[1]',
+    text: 'Giám thị 2',
+    sort: true,
+    formatter: (cell, row, rowIndex, formatExtraData) => {
+      if (cell !== undefined) {
+        return (
+          <Fragment>
+            {cell.fullName}<br></br>
+            MSCB - {cell.identifierCode}
+          </Fragment>
+        )
+      }
+      else
+        return "chưa có giám thị"
+    }
+  }]
   const getAllExaminationsServices = async () => {
     try {
       let res = await request.getAPI("Examination/GetAll")
-      if(res.status==200){
-      const data = res.data;
-      setExaminations([...data])
-      //console.log(examinations)
-      console.log(data)
-      success("Lấy danh sách kid thi thành công")
+      if (res.status == 200) {
+        const data = res.data;
+        setExaminations([...data])
+        //console.log(examinations)
+        console.log(data)
+        //success("Lấy danh sách kid thi thành công")
 
       }
     } catch (e) {
@@ -89,6 +147,7 @@ const Supervisor = () => {
       setTestSchedules([...data])
       console.log(data)
     } catch (e) {
+      danger("Lấy danh sách ca thi thất bại")
       console.log(e)
     }
   }
@@ -102,12 +161,13 @@ const Supervisor = () => {
 
   const getRoomByIdScheduleTest = async (id) => {
     try {
-      if(id==null)setexaminationRooms([])
+      if (id == null) setexaminationRooms([])
       let res = await request.getAPI("ExaminationRoom/GetAllByIdTestSchedule?idTestSchedule=" + id)
       const data = res.data;
       setexaminationRooms([...data])
       console.log(data)
     } catch (e) {
+      danger("Lấy danh sách phòng thi thất bại")
       console.log(e)
     }
   }
@@ -123,32 +183,32 @@ const Supervisor = () => {
           testSchedules.map(async (sche) => {
             let res = await request.postAPI("Supervisor/AutoCreateSupervisor?IdTestSchedule=" + sche.id)
             console.log(res)
-            if(res.status===200){
-              window.alert("Tạo tự động thành ông")
-            }else{
-              window.alert("tạo tự đông thất bại")
+            if (res.status === 200) {
+              success("Tạo tự động thành ông")
+            } else {
+              danger("tạo tự đông thất bại")
             }
             return;
           })
         } else {
-          Window.alert("Xin chọn kì thi trước")
+          warning("Xin chọn kì thi trước")
         }
       } else {
         let res = await request.postAPI("Supervisor/AutoCreateSupervisor?IdTestSchedule=" + testScheduleSeleted.id)
         console.log(res)
-        if(res.status===200){
+        if (res.status === 200) {
           getRoomByIdScheduleTest(testScheduleSeleted.id)
-          window.alert("Tạo tự động thành ông")
-        }else{
-          window.alert("tạo tự đông thất bại")
+          success("Tạo tự động thành ông")
+        } else {
+          danger("tạo tự đông thất bại")
         }
       }
     } catch (e) {
       if (e.response.status == 400 && e.response.data == "not enough teachers") {
-        window.alert("số lượng giáo viên không đủ để chia phòng")
+        warning("số lượng giáo viên không đủ để chia phòng")
       }
       if (e.response.status == 400 && e.response.data == "Too more student") {
-        window.alert("Số lượng phòng không đủ để chia")
+        warning("Số lượng phòng không đủ để chia")
       }
       console.log(e)
     }
@@ -193,7 +253,7 @@ const Supervisor = () => {
   useEffect(() => {
     getAllExaminationsServices()
     if (examinationSeleted.id !== undefined)
-    getAllScheduleTestByExaminationIdService(examinationSeleted.id)
+      getAllScheduleTestByExaminationIdService(examinationSeleted.id)
   }, [])
 
   return (
@@ -243,7 +303,19 @@ const Supervisor = () => {
                       </Col>
                     </Row>
                   </CardHeader>
-                  <div >
+                  <div className="table-responsive">
+                    <BootstrapTable
+                      bootstrap4={true}
+                      bordered={false}
+                      headerWrapperClasses="table-success"
+                      classes="align-items-center table-flush table-responsive"
+                      id="tb-layout-auto"
+                      // classes="align-items-center table-flush" 
+                      keyField='examinationRoom.id'
+                      data={examinationRooms}
+                      columns={columns}
+                      pagination={pagination}
+                    />
                     <Table className="align-items-center table-flush" responsive>
                       <thead className="thead-light">
                         <tr>

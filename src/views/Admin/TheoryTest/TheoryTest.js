@@ -23,6 +23,8 @@ import { useState } from 'react';
 // reactstrap components
 import { Card, Container, DropdownItem, Row } from "reactstrap";
 import { Redirect } from "react-router-dom";
+//  react hook alerts
+import { useAlert } from 'react-bootstrap-hooks-alert'
 // core components
 import HeaderEmpty from "components/Headers/HeaderEmpty";
 // reactstrap added
@@ -53,6 +55,7 @@ const TheoryTest = () => {
   let [testSchedules, setTestSchedules] = useState([])
   let [testScheduleSeleted, setTestSchedulesSeleted] = useState({})
   let [theoryTests, setTheoryTests] = useState([])
+  const { warning, info, primary, danger, success } = useAlert()
   const getAllExaminationsServices = async () => {
     try {
       let res = await request.getAPI("Examination/GetAll")
@@ -61,6 +64,7 @@ const TheoryTest = () => {
       //console.log(examinations)
       console.log(data)
     } catch (e) {
+      danger("Lấy danh sách kì thi thất bại")
       console.log(e)
     }
   }
@@ -79,6 +83,7 @@ const TheoryTest = () => {
       console.log(data)
     } catch (e) {
       console.log(e)
+      danger("Lấy danh sách ca thi thất bại")
     }
   }
   // khi một ca thi được chọn trong dropdown
@@ -96,6 +101,7 @@ const TheoryTest = () => {
       console.log(res)
       console.log(data)
     } catch (e) {
+      danger("Lấy danh sách đề thi thất bại")
       console.log(e)
     }
   }
@@ -121,6 +127,7 @@ const TheoryTest = () => {
       link1.click()
       link1.remove();
     } catch (e) {
+      danger("Tải đề thi thất bại")
       console.log(e)
     }
   }
@@ -129,9 +136,10 @@ const TheoryTest = () => {
     try {
       let res = await request.deleteAPI("TheoryTest/" + id)
       console.log(res);
-      if (res.statusCode === 200) window.alert("xóa thành công")
+      if (res.status === 200) success("xóa thành công")
       getAllTheoryByExaminationIdAndScheduleTestService(testScheduleSeleted.id)
     } catch (e) {
+      danger("Xóa đề thi thât bại")
       console.log(e)
     }
   }

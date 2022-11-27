@@ -1,13 +1,14 @@
 import DateTimeRange from "components/Datepiker/DateTimeRange";
 import { useHistory } from "react-router-dom";
-
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import { useState } from "react";
 // reactstrap components
 import { Card, Container, Row } from "reactstrap";
-
 // core components
 import HeaderEmpty from "components/Headers/HeaderEmpty";
+import {StoreContext} from "Until/StoreProvider"
+//  react hook alerts
+import { useAlert } from 'react-bootstrap-hooks-alert'
 // reactstrap added
 import {
   Button,
@@ -28,15 +29,13 @@ import * as request from "Until/request";
 import DropdownList from "components/Dropdown/DropdownList.js";
 import DropdownListInline from "components/Dropdown/DropdownListInline.js";
 const AddTheoryTest = () => {
-  const [theoryInfor, setTheoryInfor] = useState({});
   const history = useHistory()
-
-
-  //--------------=========-------lấy danh sách kì thi -----------===============---------
+  const [theoryInfor, setTheoryInfor] = useState({});
   let [examinations, setExaminations] = useState([])
-  let [examinationSeleted, setExaminationSeleted] = useState({})
+  let [examinationSeleted, setExaminationSeleted] = useContext(StoreContext).examinationSeleted
   let [testSchedules, setTestSchedules] = useState([])
   let [testScheduleSeleted, setTestSchedulesSeleted] = useState({})
+  const { warning, info, primary, danger, success } = useAlert()
   // khi một kì thi được chọn trong dropdown
   const onExaminationSelected = (exam) => {
     setExaminationSeleted(exam)
@@ -51,6 +50,7 @@ const AddTheoryTest = () => {
       setTestSchedules([...data])
       console.log(data)
     } catch (e) {
+      danger("Có lỗi trong quá trình lấy ca thi")
       console.log(e)
     }
   }
@@ -59,7 +59,7 @@ const AddTheoryTest = () => {
     setTestSchedulesSeleted(schedu)
     console.log(schedu)
   };
-  // -------------=========-----sử lý upload file -----======-----------
+  // --===========sử lý upload file =============--
   const [selectedFile, setSelectedFile] = useState();
   const [selectedFileExcel, setSelectedFileExcel] = useState();
   const changeHandler = (e) => {
@@ -74,15 +74,15 @@ const AddTheoryTest = () => {
       const formData = new FormData();
 
       if (selectedFile.type != "application/pdf") {
-        window.alert("File không phải định dạng PDF")
+        warning("File không phải định dạng PDF")
         return;
       }
       if (selectedFileExcel.type != "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
-        window.alert("File không phải định dạng Excel")
+        warning("File không phải định dạng Excel")
         return;
       }
       if (!theoryInfor.Name) {
-        window.alert("Nhập tên đề thi")
+        warning("Nhập tên đề thi")
         return;
       }
       formData.append("file", selectedFile);
@@ -96,12 +96,12 @@ const AddTheoryTest = () => {
         }
       });
       console.log(response);
-      window.alert("thành công");
+      success("Thêm đề thi thành công");
       history.push("/admin/theoryTests")
 
     } catch (error) {
       console.log(error);
-      window.alert("Có lỗi trong quá trình UploadFile")
+      danger("Có lỗi trong quá trình UploadFile")
     }
   }
   //lấy danh sách kì thi
@@ -113,11 +113,14 @@ const AddTheoryTest = () => {
       //console.log(examinations)
       console.log(data)
     } catch (e) {
+      danger("Có lỗi trong quá trình lấy danh sách kì thi")
       console.log(e)
     }
   }
   useEffect(() => {
     getAllExaminationsServices()
+    if (examinationSeleted.id !== undefined)
+    getAllScheduleTestByExaminationIdService(examinationSeleted.id)
   }, [])
   return (
     <>
@@ -135,6 +138,24 @@ const AddTheoryTest = () => {
                       Thông tin đề thi
                     </h6>
                     <div className="pl-lg-4">
+                      <div>
+                        Chọn kì thi: &ensp;
+                        <DropdownListInline
+                          item={examinations}
+                          onItemSelected={onExaminationSelected}
+                        >{examinationSeleted.name || "chọn kì thi"}
+                        </DropdownListInline>
+                      </div>
+                      <br></br>
+                      <div>
+                        Chọn ca thi: &ensp;
+                        <DropdownListInline
+                          item={testSchedules}
+                          onItemSelected={onScheduleTestSelected}
+                        >{testScheduleSeleted.name || "chọn ca thi"}
+                        </DropdownListInline>
+                      </div>
+                      <br></br>
                       <Row>
                         <Col lg="6">
                           <FormGroup>
@@ -159,10 +180,10 @@ const AddTheoryTest = () => {
                             />
                           </FormGroup>
                         </Col>
-                        
+
                       </Row>
                       <Row>
-                      <Col lg="6">
+                        <Col lg="6">
                           <FormGroup>
                             <label
                               className="form-control-label"
@@ -193,23 +214,7 @@ const AddTheoryTest = () => {
                           </FormGroup>
                         </Col>
                       </Row>
-                      <div>
-                        Chọn kì thi: &ensp;
-                        <DropdownListInline
-                          item={examinations}
-                          onItemSelected={onExaminationSelected}
-                        >{examinationSeleted.name || "chọn kì thi"}
-                        </DropdownListInline>
-                      </div>
-                      <br></br>
-                      <div>
-                        Chọn ca thi: &ensp;
-                        <DropdownListInline
-                          item={testSchedules}
-                          onItemSelected={onScheduleTestSelected}
-                        >{testScheduleSeleted.name || "chọn ca thi"}
-                        </DropdownListInline>
-                      </div>
+
                     </div>
                     <div className="d-flex flex-row-reverse">
                       <Button

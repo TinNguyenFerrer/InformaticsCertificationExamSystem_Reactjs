@@ -9,6 +9,8 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 import React, { useEffect } from "react";
 import { useState, useContext, useRef } from 'react';
 import { StoreContext } from "Until/StoreProvider"
+// export csv
+import { CSVLink } from "react-csv";
 // reactstrap components
 import { Card, Container, DropdownItem, Row } from "reactstrap";
 import { Redirect } from "react-router-dom";
@@ -50,6 +52,27 @@ const ScoreSummary = () => {
     let [examinations, setExaminations] = useState([])
     let [examinationSeleted, setExaminationSeleted] = React.useContext(StoreContext).examinationSeleted
     let [studentsResult, setStudentsResult] = useState([])
+    // export csv
+    const headers = [
+        { label: "Mã kì thi", key: "examcode" },
+        { label: "Tên", key: "name" },
+        { label: "Mã Thí sinh", key: "identifierCode" },
+        // { label: "name", key: "name" },
+        { label: "Điểm lý thuyết", key: "theory" },
+        { label: "Điểm thực hành", key: "practice" },
+        { label: "Điểm tổng", key: "finalMark" },
+        { label: "Kết quả", key: "resultStatus" }
+        //{ label: "group1", key: "testScheduleName" }{
+    ];
+    const transformDataExportCSV = (data) =>{
+        const dataCSV = data.map(t=>{
+            t.examcode = examinationSeleted.examCode
+            return t
+        })
+        //dataCSV.idExam = examinationSeleted.id
+        console.log(dataCSV)
+        return dataCSV
+    } 
     //  dataset for chart
     let [datasetChart, setDatasetChart] = useState([])
     let [dataExport, setDataExport] = useState({
@@ -95,7 +118,7 @@ const ScoreSummary = () => {
         //     temp = item.finalMark - 1;
         // }else{
         temp = Math.floor(item.finalMark)
-        
+
         datasetBar[temp]++
     })
     //setDatasetChart(t)
@@ -253,7 +276,10 @@ const ScoreSummary = () => {
                                                 <h3 className="mb-0">Kết quả thi</h3>
                                             </Col>
                                             <Col className="text-right" xs="9">
-                                                <ExportAccountCSVButton className="btn btn-info" idExam={examinationSeleted.id} dataExport={dataExport}>
+                                                <CSVLink className="btn btn-info"
+                                                    headers={headers}
+                                                    data={transformDataExportCSV(studentsResult)}
+                                                    filename="Student_Result.csv">
                                                     <span className="svg-icon svg-icon-2">
                                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                             <rect opacity="1" x="12.75" y="4.25" width="12" height="2" rx="1" transform="rotate(90 12.75 4.25)" fill="currentColor"></rect>
@@ -262,7 +288,7 @@ const ScoreSummary = () => {
                                                         </svg>
                                                     </span>
                                                     Export
-                                                </ExportAccountCSVButton>
+                                                </CSVLink>
                                             </Col>
                                         </Row>
                                     </CardHeader>
@@ -322,15 +348,15 @@ const ScoreSummary = () => {
                                                         </CardHeader>
                                                         <CardBody>
                                                             {/* Chart */}
-                                                            
+
                                                             <div className="chart">
-                                                            <div className="">
-                                                                <div className="d-inline-block" style={{ backgroundColor: dataChartPie.datasets[0].backgroundColor[0], height: "13px", width: "65px" }}></div>
-                                                                <div className="d-inline-block" >&ensp;{dataChartPie.labels[0]}</div>
-                                                                <br></br>
-                                                                <div className="d-inline-block" style={{ backgroundColor: dataChartPie.datasets[0].backgroundColor[1], height: "13px", width: "65px" }}></div>
-                                                                <div className="d-inline-block" >&ensp;{dataChartPie.labels[1]}</div>
-                                                            </div>
+                                                                <div className="">
+                                                                    <div className="d-inline-block" style={{ backgroundColor: dataChartPie.datasets[0].backgroundColor[0], height: "13px", width: "65px" }}></div>
+                                                                    <div className="d-inline-block" >&ensp;{dataChartPie.labels[0]}</div>
+                                                                    <br></br>
+                                                                    <div className="d-inline-block" style={{ backgroundColor: dataChartPie.datasets[0].backgroundColor[1], height: "13px", width: "65px" }}></div>
+                                                                    <div className="d-inline-block" >&ensp;{dataChartPie.labels[1]}</div>
+                                                                </div>
                                                                 <Pie
                                                                     data={dataChartPie}
                                                                 //options={chartPie1.options}
