@@ -4,7 +4,7 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 const sizePerPageRenderer = ({ options, currSizePerPage, onSizePerPageChange }) => {
     return (
         <div className="btn-group">
-            <button type="button" className="btn btn-outline-info btn-sm dropdown-toggle" data-toggle="dropdown"
+            <button type="button" className="btn btn-info btn-sm dropdown-toggle px-3" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
                 {currSizePerPage}
             </button>
@@ -25,11 +25,26 @@ const sizePerPageRenderer = ({ options, currSizePerPage, onSizePerPageChange }) 
         </div>
     )
 }
+const customTotal = (from, to, size) => (
+    <span className="react-bootstrap-table-pagination-total">
+      &nbsp;&nbsp; { from }&nbsp; <i class="fas fa-long-arrow-alt-right"></i> &nbsp;{ to } (Tổng {size})
+    </span>
+  );
 const pagination = paginationFactory({
+    //custom: true,
     sizePerPageRenderer,
+    paginationTotalRenderer:customTotal,
+    sizePerPage: 5,
+    lastPageText: '>>',
+    firstPageText: '<<', nextPageText: '>', prePageText: '<', showTotal: true, alwaysShowAllBtns: true,
+});
+const paginationCustom = paginationFactory({
+    custom: true,
+    sizePerPageRenderer,
+    paginationTotalRenderer:customTotal,
     sizePerPage: 5,
     lastPageText: '>>',
     firstPageText: '<<', nextPageText: '>', prePageText: '<', showTotal: true, alwaysShowAllBtns: true,
 });
 
-export {sizePerPageRenderer, pagination}
+export {sizePerPageRenderer, pagination, paginationCustom}

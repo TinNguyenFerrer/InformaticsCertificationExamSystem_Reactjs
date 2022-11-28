@@ -22,6 +22,7 @@ import { useState, useEffect, useContext } from 'react';
 import { StoreContext } from "Until/StoreProvider"
 // data table 
 import BootstrapTable from 'react-bootstrap-table-next';
+import { pagination } from "variables/dataTableOption.js"
 import paginationFactory from 'react-bootstrap-table2-paginator';
 // reactstrap components
 import { Card, Container, DropdownItem, Row } from "reactstrap";
@@ -144,16 +145,16 @@ const Student = () => {
       </div>
     )
   }
-  const pagination = paginationFactory({
-    sizePerPageRenderer,
-    sizePerPage: 5,
-    lastPageText: '>>',
-    firstPageText: '<<',
-    nextPageText: '>',
-    prePageText: '<',
-    showTotal: true,
-    alwaysShowAllBtns: true,
-  });
+  // const pagination = paginationFactory({
+  //   sizePerPageRenderer,
+  //   sizePerPage: 5,
+  //   lastPageText: '>>',
+  //   firstPageText: '<<',
+  //   nextPageText: '>',
+  //   prePageText: '<',
+  //   showTotal: true,
+  //   alwaysShowAllBtns: true,
+  // });
 
   let [students, setStudents] = useState(studentInformInit)
   let [examinations, setExaminations] = useState([])

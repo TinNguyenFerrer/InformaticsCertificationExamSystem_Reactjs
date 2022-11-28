@@ -23,6 +23,7 @@ import { AlertProvider, AlertOutlet } from 'react-bootstrap-hooks-alert'
 import "assets/plugins/nucleo/css/nucleo.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
+import 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit.min.css';
 import "assets/scss/argon-dashboard-react.scss";
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import 'react-bootstrap-hooks-alert/dist/Alert.css'

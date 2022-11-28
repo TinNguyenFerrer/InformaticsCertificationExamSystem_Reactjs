@@ -24,7 +24,9 @@ import { useState, useEffect } from 'react';
 import { useAlert } from 'react-bootstrap-hooks-alert'
 // data table
 import BootstrapTable from 'react-bootstrap-table-next';
-import { sizePerPageRenderer, pagination } from "variables/dataTableOption.js"
+import { paginationCustom } from "variables/dataTableOption.js"
+import { PaginationProvider, PaginationListStandalone, SizePerPageDropdownStandalone } from 'react-bootstrap-table2-paginator';
+import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 // reactstrap components
 import { Card, Container, DropdownItem, Row } from "reactstrap";
 import { Redirect } from "react-router-dom";
@@ -98,8 +100,8 @@ const Room = () => {
           console.log("thất bại")
         }
       } catch (e) {
-        if(e.response.data.code === 405)
-        warning(`Xóa phòng thất bại (đã thuộc kì thi:${e.response.data.examination[0].name}-${e.response.data.examination[0].examCode})`)
+        if (e.response.data.code === 405)
+          warning(`Xóa phòng thất bại (đã thuộc kì thi:${e.response.data.examination[0].name}-${e.response.data.examination[0].examCode})`)
         console.log(e)
       }
     }
@@ -130,6 +132,8 @@ const Room = () => {
       console.log(e);
     }
   }
+  //  option serch table
+  const { SearchBar } = Search;
   //   init table info
   const columns = [{
     dataField: 'name',
@@ -229,14 +233,14 @@ const Room = () => {
                         <Button
                           color="primary"
                           onClick={handleRedirectAddTeacher}
-                          //size="sm"
+                        //size="sm"
                         >
                           Tạo mới
                         </Button>
                       </Col>
                     </Row>
                   </CardHeader>
-                  <div className="table-responsive">
+                  <div>
                     {/* <Table className="align-items-center table-flush" responsive>
                       <thead className="thead-light">
                         <tr>
@@ -309,28 +313,82 @@ const Room = () => {
                         </tbody>)}
 
                     </Table> */}
-                    <BootstrapTable
-                      bootstrap4={true}
-                      bordered={false}
-                      headerWrapperClasses="table-success"
-                      classes="align-items-center table-flush table-responsive"
-                      id="tb-layout-auto"
-                      // classes="align-items-center table-flush" 
-                      keyField='id' 
-                      data={rooms}
-                      columns={columns}
-                      pagination={pagination}
-                    />
-                    {(loading) && (<div className="d-flex justify-content-center">
-                      <br></br>
-                      <Spinner style={{
-                        height: '3rem',
-                        width: '3rem'
-                      }} color="primary">
-                        Loading...
-                      </Spinner>
-                    </div>)}
                   </div>
+                  <PaginationProvider
+                    pagination={paginationCustom}
+                  >
+                    {
+                      ({
+                        paginationProps,
+                        paginationTableProps
+                      }) => (
+                        <div className="table-responsive">
+
+                          <ToolkitProvider
+                            bootstrap4={true}
+                            keyField="id"
+                            columns={columns}
+                            data={rooms}
+                            search
+                          >
+                            {
+                              toolkitprops => (
+                                <React.Fragment>
+                                  <Row >
+                                  <Col md="4" xs="7">
+                                      <SearchBar className=" d-inline-block shadow border border-info" placeholder=" Tìm kiếm ...." {...toolkitprops.searchProps} />
+                                    </Col>
+                                    <Col md="8" xs="12" className="d-flex justify-content-end">
+                                      <SizePerPageDropdownStandalone
+                                        {...paginationProps}
+                                      />
+                                    </Col>
+                                  </Row>
+                                  <BootstrapTable
+                                    //bootstrap4={true}
+                                    bordered={false}
+                                    headerWrapperClasses="table-success"
+                                    classes="align-items-center table-flush table-responsive"
+                                    id="tb-layout-auto"
+                                    {...toolkitprops.baseProps}
+                                    // columns={toolkitprops.baseProps.columns}
+                                    // classes="align-items-center table-flush" 
+                                    // keyField={toolkitprops.baseProps.keyField}
+                                    // data={toolkitprops.baseProps.data}
+                                    // columns={columns}
+                                    // pagination={pagination}
+                                    {...paginationTableProps}
+                                  //pagination={}
+                                  />
+                                </React.Fragment>
+                              )
+                            }
+                          </ToolkitProvider>
+                          {(loading) && (<div className="d-flex justify-content-center">
+                            <br></br>
+                            <Spinner style={{
+                              height: '3rem',
+                              width: '3rem'
+                            }} color="primary">
+                              Loading...
+                            </Spinner>
+                          </div>)}
+
+                          <Row>
+                            <Col lg="6">
+                              <SizePerPageDropdownStandalone
+                                {...paginationProps}
+                              />
+                            </Col>
+                            <Col lg="6" className="d-flex justify-content-end ">
+                              <PaginationListStandalone  {...paginationProps} />
+                            </Col>
+                          </Row>
+                        </div>
+                      )
+                    }
+
+                  </PaginationProvider>
                   <hr className="my-4" />
 
                 </CardBody>
