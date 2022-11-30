@@ -66,7 +66,7 @@ const Supervisor = () => {
     text: 'STT',
     sort: true,
     formatter: (cell, row, rowIndex, formatExtraData) => {
-      return rowIndex
+      return rowIndex+1
     }
   }, {
     dataField: 'examinationRoom.name',
@@ -316,7 +316,7 @@ const Supervisor = () => {
                       columns={columns}
                       pagination={pagination}
                     />
-                    <Table className="align-items-center table-flush" responsive>
+                    {/* <Table className="align-items-center table-flush" responsive>
                       <thead className="thead-light">
                         <tr>
                           <th scope="col">STT</th>
@@ -341,7 +341,7 @@ const Supervisor = () => {
                         ))//if fase----------------
                         }
                         </tbody>)}
-                    </Table>
+                    </Table> */}
                   </div>
                   <hr className="my-4" />
 

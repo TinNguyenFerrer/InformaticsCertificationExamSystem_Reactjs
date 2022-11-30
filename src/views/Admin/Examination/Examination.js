@@ -22,9 +22,11 @@ import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import * as request from "Until/request";
 import React from "react";
 import { useState, useEffect } from 'react';
-// data table 
+// data table
 import BootstrapTable from 'react-bootstrap-table-next';
-import {pagination } from "variables/dataTableOption.js"
+import { paginationCustom } from "variables/dataTableOption.js"
+import { PaginationProvider, PaginationListStandalone, SizePerPageDropdownStandalone, PaginationTotalStandalone } from 'react-bootstrap-table2-paginator';
+import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 // reactstrap components
 import { Card, Container, DropdownItem, Row } from "reactstrap";
 import { Redirect } from "react-router-dom";
@@ -111,6 +113,8 @@ const Examination = () => {
       console.log(e)
     }
   }
+  //  option serch table
+  const { SearchBar } = Search;
   //   option for data table
   //init table info
   const columns = [{
@@ -193,7 +197,7 @@ const Examination = () => {
                         <Button
                           color="primary"
                           onClick={handleRedirectAddExam}
-                          //size="sm"
+                        //size="sm"
                         >
                           Tạo mới
                         </Button>
@@ -254,8 +258,79 @@ const Examination = () => {
                         ))}
                         </tbody>)}
                     </Table> */}
+                    <PaginationProvider
+                      pagination={paginationCustom(examinations.length)}
+                    >
+                      {
+                        ({
+                          paginationProps,
+                          paginationTableProps
+                        }) => (
+                          <div className="table-responsive">
 
-                    <BootstrapTable 
+                            <ToolkitProvider
+                              bootstrap4={true}
+                              keyField="id"
+                              columns={columns}
+                              data={examinations}
+                              search
+                            >
+                              {
+                                toolkitprops => (
+                                  <React.Fragment>
+                                    <Row >
+                                      <Col md="4" xs="7">
+                                        <div className="d-inline-block">Tìm kiếm:&ensp;</div>
+                                        <div className="d-inline-block">
+                                          <SearchBar className=" d-inline-block shadow border border-info" placeholder=" Tìm kiếm ...." {...toolkitprops.searchProps} />
+                                        </div>
+                                      </Col>
+                                      <Col md="8" xs="12" className="d-flex justify-content-end">
+                                        {/* <SizePerPageDropdownStandalone
+                                        {...paginationProps}
+                                      /> */}
+                                      </Col>
+                                    </Row>
+                                    <BootstrapTable
+                                      //bootstrap4={true}
+                                      bordered={false}
+                                      headerWrapperClasses="table-success"
+                                      classes="align-items-center table-flush table-responsive"
+                                      id="tb-layout-auto"
+                                      {...toolkitprops.baseProps}
+                                      // columns={toolkitprops.baseProps.columns}
+                                      // classes="align-items-center table-flush" 
+                                      // keyField={toolkitprops.baseProps.keyField}
+                                      // data={toolkitprops.baseProps.data}
+                                      // columns={columns}
+                                      // pagination={pagination}
+                                      {...paginationTableProps}
+                                    //pagination={}
+                                    />
+                                  </React.Fragment>
+                                )
+                              }
+                            </ToolkitProvider>
+
+                            <Row>
+                              <Col lg="6">
+                                <SizePerPageDropdownStandalone
+                                  {...paginationProps}
+                                />
+                                <PaginationTotalStandalone
+                                  {...paginationProps}
+                                />
+                              </Col>
+                              <Col lg="6" className="d-flex justify-content-end ">
+                                <PaginationListStandalone  {...paginationProps} />
+                              </Col>
+                            </Row>
+                          </div>
+                        )
+                      }
+
+                    </PaginationProvider>
+                    {/* <BootstrapTable 
                     bootstrap4={true} 
                     bordered={false} 
                     headerWrapperClasses="table-success" 
@@ -266,7 +341,7 @@ const Examination = () => {
                     data={examinations} 
                     columns={columns}
                     pagination={pagination}
-                     />
+                     /> */}
                   </div>
                   <hr className="my-4" />
 

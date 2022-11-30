@@ -40,7 +40,7 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
     <StoreProvider>
-      <AlertProvider timeouts={{ warning: 2100, success: 1700, primary: 1700, danger: 2000 }}>
+      <AlertProvider timeouts={{ warning: 2200, success: 1700, primary: 1700, danger: 2500 }}>
         <AlertOutlet className="headerEmpty-alertHooks alert-outlet" />
         <Switch>
           <Route path="/admin" render={(props) => <AdminLayout {...props} />} />

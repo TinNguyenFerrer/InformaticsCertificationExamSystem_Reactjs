@@ -294,7 +294,7 @@ const Student = () => {
                                             classes="align-items-center table-flush table-responsive"
                                             id="tb-layout-auto"
                                             // classes="align-items-center table-flush" 
-                                            keyField='id' 
+                                            keyField='email' 
                                             data={students}
                                             columns={columns}
                                             pagination={pagination}

@@ -21,9 +21,11 @@ import React from "react";
 import { useState, useEffect, useContext } from 'react';
 import { StoreContext } from "Until/StoreProvider"
 // data table 
+// data table
 import BootstrapTable from 'react-bootstrap-table-next';
-import { pagination } from "variables/dataTableOption.js"
-import paginationFactory from 'react-bootstrap-table2-paginator';
+import { paginationCustom } from "variables/dataTableOption.js"
+import { PaginationProvider, PaginationListStandalone, SizePerPageDropdownStandalone, PaginationTotalStandalone } from 'react-bootstrap-table2-paginator';
+import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 // reactstrap components
 import { Card, Container, DropdownItem, Row } from "reactstrap";
 import { Redirect } from "react-router-dom";
@@ -60,8 +62,17 @@ const Student = () => {
     identifierCode: "",
     password: "",
   }]
+  //  option serch table
+  const { SearchBar } = Search;
   //init table info
   const columns = [{
+    dataField: 'id',
+    text: 'STT',
+    sort: true,
+    formatter: (cell, row, rowIndex, formatExtraData) => {
+      return rowIndex+1
+    }
+  },{
     dataField: 'name',
     text: 'Tên thí sinh',
     sort: true
@@ -78,7 +89,10 @@ const Student = () => {
   {
     dataField: 'birthDay',
     text: 'Ngày sinh',
-    sort: true
+    sort: true,
+    formatter: (cell, row, rowIndex, formatExtraData) => {
+      return new Date(cell).toLocaleDateString()
+    }
   },
   {
     dataField: 'edit',
@@ -320,7 +334,80 @@ const Student = () => {
                           </tr>))}
                         </tbody>)}
                     </Table> */}
-                    <BootstrapTable
+                    <PaginationProvider
+                    pagination={paginationCustom(students.length)}
+                  >
+                    {
+                      ({
+                        paginationProps,
+                        paginationTableProps
+                      }) => (
+                        <div className="table-responsive">
+
+                          <ToolkitProvider
+                            bootstrap4={true}
+                            keyField="email"
+                            columns={columns}
+                            data={students}
+                            search
+                          >
+                            {
+                              toolkitprops => (
+                                <React.Fragment>
+                                  <Row >
+                                    <Col md="4" xs="7">
+                                      <div className="d-inline-block">Tìm kiếm:&ensp;</div>
+                                      <div className="d-inline-block">
+                                        <SearchBar className=" d-inline-block shadow border border-info" placeholder=" Tìm kiếm ...." {...toolkitprops.searchProps} />
+                                      </div>
+                                    </Col>
+                                    <Col md="8" xs="12" className="d-flex justify-content-end">
+                                      {/* <SizePerPageDropdownStandalone
+                                        {...paginationProps}
+                                      /> */}
+                                    </Col>
+                                  </Row>
+                                  <BootstrapTable
+                                    //bootstrap4={true}
+                                    bordered={false}
+                                    headerWrapperClasses="table-success"
+                                    classes="align-items-center table-flush table-responsive"
+                                    id="tb-layout-auto"
+                                    {...toolkitprops.baseProps}
+                                    // columns={toolkitprops.baseProps.columns}
+                                    // classes="align-items-center table-flush" 
+                                    // keyField={toolkitprops.baseProps.keyField}
+                                    // data={toolkitprops.baseProps.data}
+                                    // columns={columns}
+                                    // pagination={pagination}
+                                    {...paginationTableProps}
+                                  //pagination={}
+                                  />
+                                </React.Fragment>
+                              )
+                            }
+                          </ToolkitProvider>
+                          
+
+                          <Row>
+                            <Col lg="6">
+                              <SizePerPageDropdownStandalone
+                                {...paginationProps}
+                              />
+                              <PaginationTotalStandalone
+                                {...paginationProps}
+                              />
+                            </Col>
+                            <Col lg="6" className="d-flex justify-content-end ">
+                              <PaginationListStandalone  {...paginationProps} />
+                            </Col>
+                          </Row>
+                        </div>
+                      )
+                    }
+
+                  </PaginationProvider>
+                    {/* <BootstrapTable
                       className=""
                       bootstrap4={true}
                       bordered={false}
@@ -328,12 +415,12 @@ const Student = () => {
                       // classes="align-items-center table-flush table "
                       classes="align-items-center table-flush table-responsive"
                       id="tb-layout-auto"
-                      keyField='id'
+                      keyField='email'
                       data={students}
                       columns={columns}
                       pagination={pagination}
                     //pagination={ paginationFactory() }
-                    />
+                    /> */}
                   </div>
                   <hr className="my-4" />
 

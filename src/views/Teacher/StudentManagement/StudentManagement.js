@@ -129,7 +129,7 @@ const StudentManagement = () => {
                       </div>
                       <Col className="col-auto">
                         <div className="icon icon-shape bg-yellow text-white rounded-circle shadow">
-                        <i class="fas fa-sitemap"></i>
+                        <i className="fas fa-sitemap"></i>
                         </div>
                       </Col>
                     </Row>

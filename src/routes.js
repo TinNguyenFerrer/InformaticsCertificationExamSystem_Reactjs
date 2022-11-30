@@ -234,21 +234,21 @@ var routesAdmin = [
   ,
   {
     path: "/scorecard",
-    name: "Tạo phiếu chấm điểm",
-    icon: "ni ni-key-25 text-green",
+    name: "Bài thi thực hành",
+    icon: "fas fa-desktop text-green",
     component: Scorecard,
     layout: "/admin"
   },
   {
     path: "/enterscore",
     name: "Nhập điểm",
-    icon: "ni ni-circle-08 text-pink",
+    icon: "far fa-keyboard text-pink",
     component: Score,
     layout: "/admin"
   },{
     path: "/scoresummary",
     name: "Tổng kết điểm",
-    icon: "ni ni-pin-3 text-orange",
+    icon: "fas fa-database text-orange",
     component: scoresummary,
     layout: "/admin"
   }

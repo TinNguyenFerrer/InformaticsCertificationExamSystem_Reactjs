@@ -25,7 +25,7 @@ import { useAlert } from 'react-bootstrap-hooks-alert'
 // data table
 import BootstrapTable from 'react-bootstrap-table-next';
 import { paginationCustom } from "variables/dataTableOption.js"
-import { PaginationProvider, PaginationListStandalone, SizePerPageDropdownStandalone } from 'react-bootstrap-table2-paginator';
+import { PaginationProvider, PaginationListStandalone, SizePerPageDropdownStandalone, PaginationTotalStandalone } from 'react-bootstrap-table2-paginator';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 // reactstrap components
 import { Card, Container, DropdownItem, Row } from "reactstrap";
@@ -315,7 +315,7 @@ const Room = () => {
                     </Table> */}
                   </div>
                   <PaginationProvider
-                    pagination={paginationCustom}
+                    pagination={paginationCustom(rooms.length)}
                   >
                     {
                       ({
@@ -335,13 +335,16 @@ const Room = () => {
                               toolkitprops => (
                                 <React.Fragment>
                                   <Row >
-                                  <Col md="4" xs="7">
-                                      <SearchBar className=" d-inline-block shadow border border-info" placeholder=" Tìm kiếm ...." {...toolkitprops.searchProps} />
+                                    <Col md="4" xs="7">
+                                      <div className="d-inline-block">Tìm kiếm:&ensp;</div>
+                                      <div className="d-inline-block">
+                                        <SearchBar className=" d-inline-block shadow border border-info" placeholder=" Tìm kiếm ...." {...toolkitprops.searchProps} />
+                                      </div>
                                     </Col>
                                     <Col md="8" xs="12" className="d-flex justify-content-end">
-                                      <SizePerPageDropdownStandalone
+                                      {/* <SizePerPageDropdownStandalone
                                         {...paginationProps}
-                                      />
+                                      /> */}
                                     </Col>
                                   </Row>
                                   <BootstrapTable
@@ -377,6 +380,9 @@ const Room = () => {
                           <Row>
                             <Col lg="6">
                               <SizePerPageDropdownStandalone
+                                {...paginationProps}
+                              />
+                              <PaginationTotalStandalone
                                 {...paginationProps}
                               />
                             </Col>

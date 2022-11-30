@@ -27,7 +27,7 @@ const sizePerPageRenderer = ({ options, currSizePerPage, onSizePerPageChange }) 
 }
 const customTotal = (from, to, size) => (
     <span className="react-bootstrap-table-pagination-total">
-      &nbsp;&nbsp; { from }&nbsp; <i class="fas fa-long-arrow-alt-right"></i> &nbsp;{ to } (Tổng {size})
+      &nbsp;&nbsp; { from }&nbsp; <i className="fas fa-long-arrow-alt-right"></i> &nbsp;{ to } (Tổng {size})
     </span>
   );
 const pagination = paginationFactory({
@@ -38,13 +38,14 @@ const pagination = paginationFactory({
     lastPageText: '>>',
     firstPageText: '<<', nextPageText: '>', prePageText: '<', showTotal: true, alwaysShowAllBtns: true,
 });
-const paginationCustom = paginationFactory({
+const paginationCustom = (totalSize) =>  (paginationFactory({
     custom: true,
+    totalSize,
     sizePerPageRenderer,
     paginationTotalRenderer:customTotal,
     sizePerPage: 5,
     lastPageText: '>>',
     firstPageText: '<<', nextPageText: '>', prePageText: '<', showTotal: true, alwaysShowAllBtns: true,
-});
+}));
 
 export {sizePerPageRenderer, pagination, paginationCustom}

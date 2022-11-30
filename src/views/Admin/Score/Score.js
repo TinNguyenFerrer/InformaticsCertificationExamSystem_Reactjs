@@ -2,7 +2,12 @@ import { useLocation, Route, Switch, Link } from "react-router-dom";
 //import 'bootstrap/dist/css/bootstrap.min.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faListOl, faFileImport } from '@fortawesome/free-solid-svg-icons'
+// data table
 import BootstrapTable from 'react-bootstrap-table-next';
+import { paginationCustom } from "variables/dataTableOption.js"
+import { PaginationProvider, PaginationListStandalone, SizePerPageDropdownStandalone, PaginationTotalStandalone } from 'react-bootstrap-table2-paginator';
+import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
+// react state
 import React, { useEffect } from "react";
 import { useState, useContext, useRef } from 'react';
 import { StoreContext } from "Until/StoreProvider"
@@ -65,7 +70,8 @@ const Score = () => {
       console.log(e)
     }
   };
-
+  //  options for data table
+  const { SearchBar } = Search;
   const columns = [{
     dataField: 'name',
     text: 'Tên  thí sinh',
@@ -269,7 +275,78 @@ const Score = () => {
                         }
                         </tbody>)}
                     </Table> */}
-                    <BootstrapTable
+                    <PaginationProvider
+                      pagination={paginationCustom(students.length)}
+                    >
+                      {
+                        ({
+                          paginationProps,
+                          paginationTableProps
+                        }) => (
+                          <div className="table-responsive">
+
+                            <ToolkitProvider
+                              bootstrap4={true}
+                              keyField="id"
+                              columns={columns}
+                              data={students}
+                              search
+                            >
+                              {
+                                toolkitprops => (
+                                  <React.Fragment>
+                                    <Row >
+                                      <Col md="4" xs="7">
+                                        <div className="d-inline-block">Tìm kiếm:&ensp;</div>
+                                        <div className="d-inline-block">
+                                          <SearchBar className=" d-inline-block shadow border border-info" placeholder=" Tìm kiếm ...." {...toolkitprops.searchProps} />
+                                        </div>
+                                      </Col>
+                                      <Col md="8" xs="12" className="d-flex justify-content-end">
+                                        {/* <SizePerPageDropdownStandalone
+                                        {...paginationProps}
+                                      /> */}
+                                      </Col>
+                                    </Row>
+                                    <BootstrapTable
+                                      //bootstrap4={true}
+                                      bordered={false}
+                                      headerWrapperClasses="table-success"
+                                      classes="align-items-center table-flush table-responsive"
+                                      id="tb-layout-auto"
+                                      {...toolkitprops.baseProps}
+                                      // columns={toolkitprops.baseProps.columns}
+                                      // classes="align-items-center table-flush" 
+                                      // keyField={toolkitprops.baseProps.keyField}
+                                      // data={toolkitprops.baseProps.data}
+                                      // columns={columns}
+                                      // pagination={pagination}
+                                      {...paginationTableProps}
+                                    //pagination={}
+                                    />
+                                  </React.Fragment>
+                                )
+                              }
+                            </ToolkitProvider>
+                            <Row>
+                              <Col lg="6">
+                                <SizePerPageDropdownStandalone
+                                  {...paginationProps}
+                                />
+                                <PaginationTotalStandalone
+                                  {...paginationProps}
+                                />
+                              </Col>
+                              <Col lg="6" className="d-flex justify-content-end ">
+                                <PaginationListStandalone  {...paginationProps} />
+                              </Col>
+                            </Row>
+                          </div>
+                        )
+                      }
+
+                    </PaginationProvider>
+                    {/* <BootstrapTable
                       bootstrap4={true}
                       bordered={false}
                       headerWrapperClasses="table-success"
@@ -278,7 +355,7 @@ const Score = () => {
                       keyField='id'
                       data={students}
                       columns={columns}
-                    />
+                    /> */}
                   </div>
                   <hr className="my-4" />
 

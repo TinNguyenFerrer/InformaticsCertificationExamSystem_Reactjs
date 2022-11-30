@@ -20,11 +20,14 @@ import { useLocation, Route, Switch, Link } from "react-router-dom";
 import React from "react";
 import * as request from "Until/request";
 import { useState, useEffect } from 'react';
-import BootstrapTable from 'react-bootstrap-table-next';
-import paginationFactory from 'react-bootstrap-table2-paginator';
 import { Card, Container, DropdownItem, Row } from "reactstrap";
 import { Redirect } from "react-router-dom";
 import HeaderEmpty from "components/Headers/HeaderEmpty";
+// data table
+import BootstrapTable from 'react-bootstrap-table-next';
+import { paginationCustom } from "variables/dataTableOption.js"
+import { PaginationProvider, PaginationListStandalone, SizePerPageDropdownStandalone, PaginationTotalStandalone } from 'react-bootstrap-table2-paginator';
+import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 // reactstrap added
 import {
   Button,
@@ -100,6 +103,8 @@ const Teacher = () => {
       console.log(e);
     }
   }
+  //  option serch table
+  const { SearchBar } = Search;
   //  Data table option
   const columns = [{
     dataField: 'fullName',
@@ -240,16 +245,16 @@ const Teacher = () => {
       </div>
     )
   }
-  const pagination = paginationFactory({
-    sizePerPageRenderer,
-    sizePerPage: 5,
-    lastPageText: '>>',
-    firstPageText: '<<',
-    nextPageText: '>',
-    prePageText: '<',
-    showTotal: true,
-    alwaysShowAllBtns: true,
-  });
+  // const pagination = paginationFactory({
+  //   sizePerPageRenderer,
+  //   sizePerPage: 5,
+  //   lastPageText: '>>',
+  //   firstPageText: '<<',
+  //   nextPageText: '>',
+  //   prePageText: '<',
+  //   showTotal: true,
+  //   alwaysShowAllBtns: true,
+  // });
   return (
     <>
 
@@ -338,7 +343,79 @@ const Teacher = () => {
                         </tbody>)}
 
                     </Table> */}
-                    <BootstrapTable
+                    <PaginationProvider
+                      pagination={paginationCustom(teachers.length)}
+                    >
+                      {
+                        ({
+                          paginationProps,
+                          paginationTableProps
+                        }) => (
+                          <div className="table-responsive">
+
+                            <ToolkitProvider
+                              bootstrap4={true}
+                              keyField="id"
+                              columns={columns}
+                              data={teachers}
+                              search
+                            >
+                              {
+                                toolkitprops => (
+                                  <React.Fragment>
+                                    <Row >
+                                      <Col md="4" xs="7">
+                                        <div className="d-inline-block">Tìm kiếm:&ensp;</div>
+                                        <div className="d-inline-block">
+                                          <SearchBar className=" d-inline-block shadow border border-info" placeholder=" Tìm kiếm ...." {...toolkitprops.searchProps} />
+                                        </div>
+                                      </Col>
+                                      <Col md="8" xs="12" className="d-flex justify-content-end">
+                                        {/* <SizePerPageDropdownStandalone
+                                        {...paginationProps}
+                                      /> */}
+                                      </Col>
+                                    </Row>
+                                    <BootstrapTable
+                                      //bootstrap4={true}
+                                      bordered={false}
+                                      headerWrapperClasses="table-success"
+                                      classes="align-items-center table-flush table-responsive"
+                                      id="tb-layout-auto"
+                                      {...toolkitprops.baseProps}
+                                      // columns={toolkitprops.baseProps.columns}
+                                      // classes="align-items-center table-flush" 
+                                      // keyField={toolkitprops.baseProps.keyField}
+                                      // data={toolkitprops.baseProps.data}
+                                      // columns={columns}
+                                      // pagination={pagination}
+                                      {...paginationTableProps}
+                                    //pagination={}
+                                    />
+                                  </React.Fragment>
+                                )
+                              }
+                            </ToolkitProvider>
+
+                            <Row>
+                              <Col lg="6">
+                                <SizePerPageDropdownStandalone
+                                  {...paginationProps}
+                                />
+                                <PaginationTotalStandalone
+                                  {...paginationProps}
+                                />
+                              </Col>
+                              <Col lg="6" className="d-flex justify-content-end ">
+                                <PaginationListStandalone  {...paginationProps} />
+                              </Col>
+                            </Row>
+                          </div>
+                        )
+                      }
+
+                    </PaginationProvider>
+                    {/* <BootstrapTable
                       bootstrap4={true}
                       bordered={false}
                       headerWrapperClasses="table-success"
@@ -350,7 +427,7 @@ const Teacher = () => {
                       columns={columns}
                       pagination={pagination}
                     //pagination={ paginationFactory() }
-                    />
+                    /> */}
                     {(teachers.length == 0) && (<div className="d-flex justify-content-center">
                       <br></br>
                       <Spinner style={{
