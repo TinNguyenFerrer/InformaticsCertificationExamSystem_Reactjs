@@ -20,6 +20,7 @@ import { StoreContext } from "../../Until/StoreProvider";
 
 import { Link } from "react-router-dom";
 import { useState, useEffect } from 'react';
+import { useHistory } from "react-router-dom";
 import * as request from "Until/request";
 // reactstrap components
 import {
@@ -43,6 +44,11 @@ const AdminNavbar = (props) => {
   
   const [nameTeacher, setNameTeacher] = React.useContext(StoreContext).nameTeacher;
   console.log(nameTeacher);
+  const history = useHistory()
+  const logOut = () =>{
+    localStorage.removeItem('tokenICE')
+    history.push("/auth/login")
+  }
   const [teacherInfor, setTeacherInfor] = useState();
   const getTeacherInforByToken = async () => {
     try {
@@ -50,6 +56,10 @@ const AdminNavbar = (props) => {
       setTeacherInfor(res.data)
       console.log(res.data)
     }catch(e){
+      // if(e.response.data === 'Token invalid'){
+      //   window.alert("Đăng nhập xảy ra lỗi")
+      //   history.push("/auth/login")
+      // }
       console.log(e)
     }
   }
@@ -83,13 +93,13 @@ const AdminNavbar = (props) => {
                   <span className="avatar avatar-sm rounded-circle">
                     <img
                       alt="..."
-                      src={require("../../assets/img/theme/avata.jpg")}
+                      src={require("../../assets/img/theme/TeacherLogoInfo.png")}
                     />
                   </span>
                   <Media className="ml-2 d-none d-lg-block">
                     <span className="mb-0 text-sm font-weight-bold">
-                      {/* {teacherInfor?teacherInfor.fullName:""} */}
-                      {nameTeacher}
+                      {teacherInfor?teacherInfor.fullName:""}
+                      {/* {nameTeacher} */}
                     </span>
                   </Media>
                 </Media>
@@ -98,7 +108,7 @@ const AdminNavbar = (props) => {
                 <DropdownItem className="noti-title" header tag="div">
                   <h6 className="text-overflow m-0">Welcome!</h6>
                 </DropdownItem>
-                <DropdownItem to="/admin/user-profile" tag={Link}>
+                {/* <DropdownItem to="/admin/user-profile" tag={Link}>
                   <i className="ni ni-single-02" />
                   <span>My profile</span>
                 </DropdownItem>
@@ -118,6 +128,15 @@ const AdminNavbar = (props) => {
                 <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
                   <i className="ni ni-user-run" />
                   <span>Logout</span>
+                </DropdownItem> */}
+                <DropdownItem to="/teacher/profile" tag={Link}>
+                  <i className="ni ni-support-16" />
+                  <span>Cá nhân</span>
+                </DropdownItem>
+                <DropdownItem divider />
+                <DropdownItem onClick={logOut}>
+                  <i className="ni ni-user-run" />
+                  <span>Đăng suất</span>
                 </DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>

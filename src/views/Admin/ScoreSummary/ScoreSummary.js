@@ -58,13 +58,16 @@ const ScoreSummary = () => {
     let [studentsResult, setStudentsResult] = useState([])
     // export csv
     const headers = [
-        { label: "Mã kì thi", key: "examcode" },
-        { label: "Tên", key: "name" },
-        { label: "Mã Thí sinh", key: "identifierCode" },
+        { label: "Số Báo Danh", key: "identifierCode" },
+        { label: "Mã Kì Thi", key: "examcode" },
+        { label: "Ngày Thi", key: "examTime" },
+        { label: "Họ Tên", key: "name" },
+        { label: "Ngày Sinh", key: "birthDay" },
+        { label: "Email", key: "name" },
         // { label: "name", key: "name" },
         { label: "Điểm lý thuyết", key: "theory" },
         { label: "Điểm thực hành", key: "practice" },
-        { label: "Điểm tổng", key: "finalMark" },
+        //{ label: "Điểm tổng", key: "finalMark" },
         { label: "Kết quả", key: "resultStatus" }
         //{ label: "group1", key: "testScheduleName" }{
     ];
@@ -130,7 +133,7 @@ const ScoreSummary = () => {
     //setDatasetChart(t)
     const dataChartBar = {
         labels: [">=0", ">=1", ">=2", ">=3", ">=4", ">=5", ">=6", ">=7", ">=8", ">=9", "10"],
-        yLabels: "hhhh",
+        yLabels: "Điểm",
         datasets: [
             {
                 label: "Sales",

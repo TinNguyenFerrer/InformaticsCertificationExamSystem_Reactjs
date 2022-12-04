@@ -114,6 +114,7 @@ const AddRoom = () => {
                               id="input-username"
                               placeholder="Phòng 202"
                               type="text"
+                              maxLength="255"
                               onChange={e => {
                                 setRoomInfor(pre => {
                                   let newRoomInfo = { ...pre }
@@ -138,6 +139,7 @@ const AddRoom = () => {
                               id="input-username"
                               placeholder="Đại học cần thơ"
                               type="text"
+                              maxLength="255"
                               onChange={e => {
                                 setRoomInfor(pre => {
                                   let newRoomInfo = { ...pre }

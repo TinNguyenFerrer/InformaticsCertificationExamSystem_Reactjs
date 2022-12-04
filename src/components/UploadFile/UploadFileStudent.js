@@ -54,14 +54,10 @@ const UpoadFileStudent = ({ children, prop, url }) => {
         sort: true
     },{
         dataField: '3',
-        text: 'Nơi sinh',
-        sort: true
-    },{
-        dataField: '4',
         text: 'Email',
         sort: true
     },{
-        dataField: '5',
+        dataField: '4',
         text: 'SĐT',
         sort: true
     }]
@@ -71,7 +67,7 @@ const UpoadFileStudent = ({ children, prop, url }) => {
         setIsSelected(true);
     };
     const onFileLoadedHandler = (data, fileInfo, originalFile) => {
-        const headerSCV = ['IdentifierCode', 'Name', 'BirthDay', 'BirthPlace', 'Email', 'PhoneNumber']
+        const headerSCV = ['IdentifierCode', 'Name', 'BirthDay', 'Email', 'PhoneNumber']
         if (JSON.stringify(data[0]) != JSON.stringify(headerSCV)) {
             window.alert("Không giống mẫu")
             return
@@ -106,7 +102,11 @@ const UpoadFileStudent = ({ children, prop, url }) => {
 
         } catch (e) {
             console.log(e)
+            if(e.response.data=="Duplicates Email"){
+                window.alert("Email trùng lặp")
+            }else{
             window.alert("Thêm thất bại")
+            }
         }
     };
 

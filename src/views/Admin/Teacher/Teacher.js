@@ -269,7 +269,7 @@ const Teacher = () => {
                   <CardHeader className="bg-white border-0">
                     <Row className="align-items-center">
                       <Col sm="7">
-                        <h3 className="mb-0">Danh sách giáo viên</h3>
+                        <h3 className="mb-0">Danh sách giám thị</h3>
                       </Col>
                       <Col className="text-right" sm="5">
                         <Button

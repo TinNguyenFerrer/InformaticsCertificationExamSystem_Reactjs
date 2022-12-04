@@ -40,11 +40,12 @@ const Login = () => {
       let res = await request.postAPI("Login/CreateTokenTeacher",fromLogin)
       const data = res.data;
       console.log(data)
+      //window.alert("d")
       localStorage.setItem('tokenICE', data.token)
-      if(data.permission=="admin"){
+      if(data.permission=="Admin"){
         history.push("/admin/examination")
       }
-      if(data.permission=="teacher"){
+      if(data.permission=="Teacher"){
         history.push("/teacher/studentmanage")
       }
     } catch (e) {

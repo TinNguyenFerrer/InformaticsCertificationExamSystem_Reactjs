@@ -18,7 +18,7 @@ function DropdownList({ direction,item,onItemSelected,children, ...args }) {
                 <DropdownToggle caret color="success" size='sm'>{children}</DropdownToggle>
                 <DropdownMenu {...args}>
                 {item.map(e => {
-                        return <DropdownItem id={e.id} key={e.id} onClick={()=>onItemSelected(e)}>{e.name}</DropdownItem>
+                        return <DropdownItem id={e.id} key={e.id} onClick={()=>onItemSelected(e)}>{e.name} - {e.examCode}</DropdownItem>
                     })}
                     
                 </DropdownMenu>

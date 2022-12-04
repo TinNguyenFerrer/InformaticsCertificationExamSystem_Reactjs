@@ -47,7 +47,7 @@ import DropdownList from "components/Dropdown/DropdownList.js";
 import UpoadFileStudent from "components/UploadFile/UploadFileStudent";
 import * as request from "Until/request";
 
-const ProfileTeacher = () => {
+const ProfileAdmin = () => {
   const addressInit = {
     province: "",
     district: "",
@@ -99,7 +99,7 @@ const ProfileTeacher = () => {
     try {
       const addressSubmit = `${address.province}, ${address.district}, ${address.ward}, ${address.Street}`
       const teacherInformSubmit = { ...teacherInfor, address: addressSubmit }
-      const response = await request.postAPI("Teacher/Update/", { ...teacherInformSubmit })
+      const response = await request.postAPI("Teacher/UpdateAdmin/", { ...teacherInformSubmit })
       console.log(response)
       if (response.status == 200) {
         // console.log("thành cong")
@@ -148,7 +148,7 @@ const ProfileTeacher = () => {
                       <img
                         alt="..."
                         className="rounded-circle"
-                        src={require("../../../assets/img/theme/TeacherLogoInfo.png")}
+                        src={require("../../../assets/img/theme/AdminLogo.png")}
                       />
                     </a>
                   </div>
@@ -200,7 +200,7 @@ const ProfileTeacher = () => {
                   <hr className="my-4" />
                   <div>
                     <i className="ni education_hat mr-2" />
-                    Giám thị
+                    Quản trị viên
                   </div>
                   
                   
@@ -484,4 +484,4 @@ const ProfileTeacher = () => {
 };
 
 
-export default ProfileTeacher;
+export default ProfileAdmin;

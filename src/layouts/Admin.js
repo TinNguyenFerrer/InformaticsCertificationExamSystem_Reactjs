@@ -38,7 +38,7 @@ import { Container } from "reactstrap";
 import AdminNavbar from "components/Navbars/AdminNavbar.js";
 import AdminFooter from "components/Footers/AdminFooter.js";
 import SidebarAdmin from "components/Sidebar/SidebarAdmin";
-
+import ProfileAdmin from "views/Admin/Profile/ProfileAdmin";
 import { routesAdmin } from "routes.js";
 
 const RouteChil = () => {
@@ -48,6 +48,11 @@ const RouteChil = () => {
         exact
         path={"/admin/examination/add"}
         component={AddExamination}
+      />
+      <Route
+        exact
+        path={"/admin/profile"}
+        component={ProfileAdmin}
       />
       <Route
         exact
@@ -94,7 +99,7 @@ const RouteChil = () => {
         path={"/admin/Theory/add"}
         component={AddTheoryTest}
       />
-      
+
     </>
   )
 }

@@ -18,75 +18,8 @@
 
 // reactstrap components
 import { Card, CardBody, CardTitle, Container, Row, Col } from "reactstrap";
-import * as request from "Until/request";
-import React from "react";
-import { useState, useEffect } from 'react';
-const Header = () => {
-  //=============================================================
-  // lấy kỳ thi
-  let [examinations, setExaminations] = useState([])
-  const getAllExamServices = async () => {
-    try {
-      let res = await request.getAPI("Examination/GetAll")
-      console.log(res.status)
-      if (res.status == 401) {
-        console.log("login")
-      }
-      const data = res.data;
-      //data.starTime = new Date(data.starTime).toLocaleDateString() +"oo"
-      setExaminations([...data])
-      console.log(examinations)
-      //console.log(data)
-    } catch (e) {
-      console.log(e)
-    }
-  }
-//=============================================================
-  //  lấy phòng thi
-  let [rooms, setRooms] = useState([])
-  const getAllRoomServices = async () => {
-    try {
-      let res = await request.getAPI("ExaminationRoom/GetAll")
-      const data = res.data;
-      setRooms([...data])
-      console.log(data)
-    } catch (e) {
-      console.log(e)
-    }
-  }
-//=============================================================
-  //  lấy giám thị
-  let [teachers, setTeachers] = useState([])
-  const getAllTeacherServices = () => {
-    request.getAPI("Teacher/GetAll")
-      .then((res) => {
 
-        const t = res.data
-        setTeachers(t);
-        console.log(t)
-      }).catch((e) => {
-        console.log(e)
-      })
-  }
-  //============================================================
-  //lấy thí sinh
-  let [students, setStudents] = useState([])
-  const getAllStudentServices = async () => {
-    try {
-      let res = await request.getAPI("Student/GetAll")
-      const data = res.data;
-      setStudents([...data])
-      console.log(data)
-    } catch (e) {
-      console.log(e)
-    }
-  }
-  useEffect(() => {
-    getAllExamServices()
-    getAllRoomServices()
-    getAllTeacherServices()
-    getAllStudentServices()
-  }, [])
+const Header = () => {
   return (
     <>
       <div className="header bg-gradient-info pb-8 pt-5 pt-md-8">
@@ -103,23 +36,23 @@ const Header = () => {
                           tag="h5"
                           className="text-uppercase text-muted mb-0"
                         >
-                          Kỳ thi
+                          Traffic
                         </CardTitle>
                         <span className="h2 font-weight-bold mb-0">
-                          {examinations.length}
+                          350,897
                         </span>
                       </div>
                       <Col className="col-auto">
                         <div className="icon icon-shape bg-danger text-white rounded-circle shadow">
-                          <i className="ni ni-book-bookmark" />
+                          <i className="fas fa-chart-bar" />
                         </div>
                       </Col>
                     </Row>
                     <p className="mt-3 mb-0 text-muted text-sm">
-                      {/* <span className="text-success mr-2">
+                      <span className="text-success mr-2">
                         <i className="fa fa-arrow-up" /> 3.48%
-                      </span>{" "} */}
-                      <span className="text-nowrap">Tổng kỳ thi đã tổ chức</span>
+                      </span>{" "}
+                      <span className="text-nowrap">Since last month</span>
                     </p>
                   </CardBody>
                 </Card>
@@ -133,21 +66,21 @@ const Header = () => {
                           tag="h5"
                           className="text-uppercase text-muted mb-0"
                         >
-                          Phòng thi
+                          New users
                         </CardTitle>
-                        <span className="h2 font-weight-bold mb-0">{rooms.length}</span>
+                        <span className="h2 font-weight-bold mb-0">2,356</span>
                       </div>
                       <Col className="col-auto">
                         <div className="icon icon-shape bg-warning text-white rounded-circle shadow">
-                          <i className="ni ni-building" />
+                          <i className="fas fa-chart-pie" />
                         </div>
                       </Col>
                     </Row>
                     <p className="mt-3 mb-0 text-muted text-sm">
-                      {/* <span className="text-danger mr-2">
+                      <span className="text-danger mr-2">
                         <i className="fas fa-arrow-down" /> 3.48%
-                      </span>{" "} */}
-                      <span className="text-nowrap">Tổng số phòng thi hiện có </span>
+                      </span>{" "}
+                      <span className="text-nowrap">Since last week</span>
                     </p>
                   </CardBody>
                 </Card>
@@ -161,21 +94,21 @@ const Header = () => {
                           tag="h5"
                           className="text-uppercase text-muted mb-0"
                         >
-                          Giám thị
+                          Sales
                         </CardTitle>
-                        <span className="h2 font-weight-bold mb-0">{teachers.length}</span>
+                        <span className="h2 font-weight-bold mb-0">924</span>
                       </div>
                       <Col className="col-auto">
                         <div className="icon icon-shape bg-yellow text-white rounded-circle shadow">
-                          <i className="ni ni-single-02" />
+                          <i className="fas fa-users" />
                         </div>
                       </Col>
                     </Row>
                     <p className="mt-3 mb-0 text-muted text-sm">
-                      {/* <span className="text-warning mr-2">
+                      <span className="text-warning mr-2">
                         <i className="fas fa-arrow-down" /> 1.10%
-                      </span>{" "} */}
-                      <span className="text-nowrap">Tổng số giám thị</span>
+                      </span>{" "}
+                      <span className="text-nowrap">Since yesterday</span>
                     </p>
                   </CardBody>
                 </Card>
@@ -189,21 +122,21 @@ const Header = () => {
                           tag="h5"
                           className="text-uppercase text-muted mb-0"
                         >
-                          Thí sinh
+                          Performance
                         </CardTitle>
-                        <span className="h2 font-weight-bold mb-0">{students.length}</span>
+                        <span className="h2 font-weight-bold mb-0">49,65%</span>
                       </div>
                       <Col className="col-auto">
                         <div className="icon icon-shape bg-info text-white rounded-circle shadow">
-                          <i className="ni ni-hat-3" />
+                          <i className="fas fa-percent" />
                         </div>
                       </Col>
                     </Row>
                     <p className="mt-3 mb-0 text-muted text-sm">
-                      {/* <span className="text-success mr-2">
-                        <i className="fas fa-arrow-up" /> 70
-                      </span>{" "} */}
-                      <span className="text-nowrap">Tổng thí sinh</span>
+                      <span className="text-success mr-2">
+                        <i className="fas fa-arrow-up" /> 12%
+                      </span>{" "}
+                      <span className="text-nowrap">Since last month</span>
                     </p>
                   </CardBody>
                 </Card>

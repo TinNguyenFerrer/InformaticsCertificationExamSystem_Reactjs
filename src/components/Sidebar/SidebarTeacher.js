@@ -55,7 +55,7 @@ import {
 
 var ps;
 
-const Sidebar = (props) => {
+const SidebarTeacher = (props) => {
   const [collapseOpen, setCollapseOpen] = useState();
   const history = useHistory()
   // verifies if routeName is the one active (in browser input)
@@ -177,7 +177,7 @@ const Sidebar = (props) => {
                 <span className="avatar avatar-sm rounded-circle">
                   <img
                     alt="..."
-                    src={require("../../assets/img/theme/AdminLogo.png")}
+                    src={require("../../assets/img/theme/TeacherLogoInfo.png")}
                   />
                 </span>
               </Media>
@@ -198,7 +198,7 @@ const Sidebar = (props) => {
                 <i className="ni ni-calendar-grid-58" />
                 <span>Activity</span>
               </DropdownItem> */}
-              <DropdownItem to="/admin/profile" tag={Link}>
+              <DropdownItem to="/teacher/profile" tag={Link}>
                   <i className="ni ni-support-16" />
                   <span>Cá nhân</span>
                 </DropdownItem>
@@ -287,11 +287,11 @@ const Sidebar = (props) => {
   );
 };
 
-Sidebar.defaultProps = {
+SidebarTeacher.defaultProps = {
   routes: [{}]
 };
 
-Sidebar.propTypes = {
+SidebarTeacher.propTypes = {
   // links that will be displayed inside the component
   routes: PropTypes.arrayOf(PropTypes.object),
   logo: PropTypes.shape({
@@ -308,4 +308,4 @@ Sidebar.propTypes = {
   })
 };
 
-export default Sidebar;
+export default SidebarTeacher;

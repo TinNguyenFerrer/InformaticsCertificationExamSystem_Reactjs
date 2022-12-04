@@ -125,7 +125,7 @@ const EditTeacher = () => {
                 <CardBody>
                   <Form>
                     <h6 className="heading-small text-muted mb-4">
-                      Thông tin cá nhân cán bộ
+                      Thông tin cá nhân giám thị
                     </h6>
                     <div className="pl-lg-4">
                       <Row>

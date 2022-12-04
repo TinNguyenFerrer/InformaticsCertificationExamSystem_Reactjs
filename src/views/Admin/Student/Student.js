@@ -56,6 +56,7 @@ import * as request from "Until/request";
 const Student = () => {
   const history = useHistory()
   const studentInformInit = [{
+    id: 0,
     name: "",
     email: "",
     phoneNumber: "",
@@ -70,15 +71,15 @@ const Student = () => {
     text: 'STT',
     sort: true,
     formatter: (cell, row, rowIndex, formatExtraData) => {
-      return rowIndex+1
+      return rowIndex + 1
     }
-  },{
+  }, {
     dataField: 'name',
     text: 'Tên thí sinh',
     sort: true
   }, {
     dataField: 'email',
-    text: 'địa chỉ',
+    text: 'Địa chỉ email',
     sort: true
   },
   {
@@ -104,7 +105,6 @@ const Student = () => {
         <UncontrolledDropdown>
           <DropdownToggle
             className="btn-icon-only text-light"
-
             role="button"
             size="sm"
             color=""
@@ -189,6 +189,7 @@ const Student = () => {
     try {
       let res = await request.getAPI("Student/GetAllByIdExamination?id=" + id)
       const data = res.data;
+      //data.id = data.id.toString()
       setStudents([...data])
       console.log(data)
       //console.log(data)
@@ -212,20 +213,27 @@ const Student = () => {
     try {
       let res = await request.getAPI("Student/GetAll")
       const data = res.data;
+      for (var i = 0; i < data.length; i++) {
+        data[i].indexx = i
+      }
       setStudents([...data])
       console.log(data)
     } catch (e) {
       console.log(e)
     }
   }
+  console.log(students)
   const deleteStudentService = async (e) => {
     try {
       const response = await request.deleteAPI("Student/" + e)
       console.log(response)
       if (response.status == 200) {
         console.log("thành cong" + e)
-        getAllStudentServices()
-
+        if (examinationSeleted.id !== undefined) {
+          getAllStudentByIdExaminationServices(examinationSeleted.id)
+        } else {
+          getAllStudentServices()
+        }
       }
       else {
         window.alert("xóa giáo viên thất bại")
@@ -240,15 +248,18 @@ const Student = () => {
     deleteStudentService(e)
   }
   useEffect(() => {
-    getAllStudentServices()
+    if (examinationSeleted.id !== undefined) {
+      getAllStudentByIdExaminationServices(examinationSeleted.id)
+    } else {
+      getAllStudentServices()
+    }
     getAllExaminationsServices()
   }, [])
   const handleRedirectToEdit = (id) => {
     history.push(history.location.pathname + "/edit?id=" + id)
   }
   useEffect(() => {
-    if (examinationSeleted.id !== undefined)
-      getAllStudentByIdExaminationServices(examinationSeleted.id)
+
   }, [])
   return (
     <>
@@ -335,78 +346,78 @@ const Student = () => {
                         </tbody>)}
                     </Table> */}
                     <PaginationProvider
-                    pagination={paginationCustom(students.length)}
-                  >
-                    {
-                      ({
-                        paginationProps,
-                        paginationTableProps
-                      }) => (
-                        <div className="table-responsive">
+                      pagination={paginationCustom(students.length)}
+                    >
+                      {
+                        ({
+                          paginationProps,
+                          paginationTableProps
+                        }) => (
+                          <div className="table-responsive">
 
-                          <ToolkitProvider
-                            bootstrap4={true}
-                            keyField="email"
-                            columns={columns}
-                            data={students}
-                            search
-                          >
-                            {
-                              toolkitprops => (
-                                <React.Fragment>
-                                  <Row >
-                                    <Col md="4" xs="7">
-                                      <div className="d-inline-block">Tìm kiếm:&ensp;</div>
-                                      <div className="d-inline-block">
-                                        <SearchBar className=" d-inline-block shadow border border-info" placeholder=" Tìm kiếm ...." {...toolkitprops.searchProps} />
-                                      </div>
-                                    </Col>
-                                    <Col md="8" xs="12" className="d-flex justify-content-end">
-                                      {/* <SizePerPageDropdownStandalone
+                            <ToolkitProvider
+                              bootstrap4={true}
+                              keyField="id"
+                              columns={columns}
+                              data={students}
+                              search
+                            >
+                              {
+                                toolkitprops => (
+                                  <React.Fragment>
+                                    <Row >
+                                      <Col md="4" xs="7">
+                                        <div className="d-inline-block">Tìm kiếm:&ensp;</div>
+                                        <div className="d-inline-block">
+                                          <SearchBar className=" d-inline-block shadow border border-info" placeholder=" Tìm kiếm ...." {...toolkitprops.searchProps} />
+                                        </div>
+                                      </Col>
+                                      <Col md="8" xs="12" className="d-flex justify-content-end">
+                                        {/* <SizePerPageDropdownStandalone
                                         {...paginationProps}
                                       /> */}
-                                    </Col>
-                                  </Row>
-                                  <BootstrapTable
-                                    //bootstrap4={true}
-                                    bordered={false}
-                                    headerWrapperClasses="table-success"
-                                    classes="align-items-center table-flush table-responsive"
-                                    id="tb-layout-auto"
-                                    {...toolkitprops.baseProps}
-                                    // columns={toolkitprops.baseProps.columns}
-                                    // classes="align-items-center table-flush" 
-                                    // keyField={toolkitprops.baseProps.keyField}
-                                    // data={toolkitprops.baseProps.data}
-                                    // columns={columns}
-                                    // pagination={pagination}
-                                    {...paginationTableProps}
-                                  //pagination={}
-                                  />
-                                </React.Fragment>
-                              )
-                            }
-                          </ToolkitProvider>
-                          
+                                      </Col>
+                                    </Row>
+                                    <BootstrapTable
+                                      //bootstrap4={true}
+                                      bordered={false}
+                                      headerWrapperClasses="table-success"
+                                      classes="align-items-center table-flush table-responsive"
+                                      id="tb-layout-auto"
+                                      {...toolkitprops.baseProps}
+                                      // columns={toolkitprops.baseProps.columns}
+                                      // classes="align-items-center table-flush" 
+                                      // keyField={toolkitprops.baseProps.keyField}
+                                      // data={toolkitprops.baseProps.data}
+                                      // columns={columns}
+                                      // pagination={pagination}
+                                      {...paginationTableProps}
+                                    //pagination={}
+                                    />
+                                  </React.Fragment>
+                                )
+                              }
+                            </ToolkitProvider>
 
-                          <Row>
-                            <Col lg="6">
-                              <SizePerPageDropdownStandalone
-                                {...paginationProps}
-                              />
-                              <PaginationTotalStandalone
-                                {...paginationProps}
-                              />
-                            </Col>
-                            <Col lg="6" className="d-flex justify-content-end ">
-                              <PaginationListStandalone  {...paginationProps} />
-                            </Col>
-                          </Row>
-                        </div>
-                      )
-                    }
 
-                  </PaginationProvider>
+                            <Row>
+                              <Col lg="6">
+                                <SizePerPageDropdownStandalone
+                                  {...paginationProps}
+                                />
+                                <PaginationTotalStandalone
+                                  {...paginationProps}
+                                />
+                              </Col>
+                              <Col lg="6" className="d-flex justify-content-end ">
+                                <PaginationListStandalone  {...paginationProps} />
+                              </Col>
+                            </Row>
+                          </div>
+                        )
+                      }
+
+                    </PaginationProvider>
                     {/* <BootstrapTable
                       className=""
                       bootstrap4={true}

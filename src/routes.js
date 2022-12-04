@@ -23,6 +23,7 @@ import Login from "views/Admin/Login/Login.js";
 import Tables from "views/examples/Tables.js";
 import Icons from "views/examples/Icons.js";
 
+
 import Examination from "views/Admin/Examination/Examination.js";
 import Room from "views/Admin/Room/Room.js";
 import TestSchedule from "views/Admin/Schedule/TestSchedule";
@@ -176,8 +177,15 @@ var routesTeacher = [
 
 var routesAdmin = [
   {
+    path: "/index",
+    name: "Trang chủ",
+    icon: "fas fa-house-user text-red",
+    component: Index,
+    layout: "/admin"
+  },
+  {
     path: "/examination",
-    name: "Kì thi",
+    name: "Kỳ thi",
     icon: "ni ni-book-bookmark text-purple",
     component: Examination,
     layout: "/admin"
@@ -188,6 +196,12 @@ var routesAdmin = [
     icon: "ni ni-building text-blue",
     component: Room,
     layout: "/admin"
+  },{
+    path: "/teacher",
+    name: "Giám thị",
+    icon: "ni ni-single-02 text-yellow",
+    component: Teacher,
+    layout: "/admin"
   },
   {
     path: "/student",
@@ -197,24 +211,16 @@ var routesAdmin = [
     layout: "/admin"
   },
   {
-    path: "/studentAccount",
-    name: "Tạo tài khoản thí sinh ",
-    icon: "ni ni-key-25 text-orange",
-    component: StudentAccount,
-    layout: "/admin"
-  },
-  {
-    path: "/teacher",
-    name: "Cán bộ",
-    icon: "ni ni-single-02 text-yellow",
-    component: Teacher,
-    layout: "/admin"
-  },
-  {
     path: "/testschedules",
     name: "Ca thi",
     icon: "ni ni-calendar-grid-58 text-brown",
     component: TestSchedule,
+    layout: "/admin"
+  },{
+    path: "/studentAccount",
+    name: "Tạo tài khoản thí sinh ",
+    icon: "ni ni-key-25 text-orange",
+    component: StudentAccount,
     layout: "/admin"
   },
   {

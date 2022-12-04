@@ -6,7 +6,7 @@ import { Container } from "reactstrap";
 import TeacherNavbar from "components/Navbars/TeacherNavbar";
 import AdminFooter from "components/Footers/AdminFooter.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
-import SidebarAdmin from "components/Sidebar/SidebarAdmin";
+import SidebarTeacher from "components/Sidebar/SidebarTeacher";
 import {routesTeacher as routes} from "routes.js";
 import DetailStudent  from "views/Teacher/StudentManagement/DetailStudent";
 import {default as DetailStudentFileSubmit} from "views/Teacher/SubmitFileManage/DetailStudent";
@@ -71,7 +71,7 @@ const Teacher = (props) => {
 
   return (
     <>
-      <SidebarAdmin
+      <SidebarTeacher
         {...props}
         routes={routes}
         logo={{

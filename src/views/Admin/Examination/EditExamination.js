@@ -151,6 +151,7 @@ const EditExamination = () => {
                               id="input-username"
                               placeholder="Thi chứng chỉ UD công nghệ thông tin"
                               type="text"
+                              maxLength="255"
                               onChange={e => {
                                 setExaminationInfor(pre => {
                                   let newExaminationInfor = { ...pre }
@@ -176,6 +177,7 @@ const EditExamination = () => {
                               id="input-username"
                               placeholder="Đại học cần thơ"
                               type="text"
+                              maxLength="500"
                               onChange={e => {
                                 setExaminationInfor(pre => {
                                   let newExaminationInfor = { ...pre }

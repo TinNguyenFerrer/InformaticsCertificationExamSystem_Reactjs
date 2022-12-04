@@ -88,11 +88,11 @@ const Examination = () => {
 
       }
       else {
-        window.alert("xóa giáo viên thất bại")
+        window.alert("xóa kì thi thất bại")
         console.log("thất bại")
       }
     } catch (e) {
-      window.alert("Xóa giáo viên thất bại")
+      window.alert("Xóa kì thi thất bại")
       console.log(e)
     }
   }

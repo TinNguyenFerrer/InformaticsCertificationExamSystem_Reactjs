@@ -137,7 +137,6 @@ const DetailSchedule = () => {
                         <Card className="shadow border-0">
                             <div>
                                 <CardBody>
-
                                     <CardHeader className="bg-white border-0">
                                         <Row className="align-items-center">
                                             <Col xs="8">
@@ -172,11 +171,8 @@ const DetailSchedule = () => {
                                         </Table>
                                     </div>
                                     <hr className="my-4" />
-
                                 </CardBody>
                             </div>
-
-
                         </Card>
                     </div>
                 </Row>

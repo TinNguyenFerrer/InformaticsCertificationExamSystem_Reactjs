@@ -18,6 +18,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import * as request from "Until/request";
+import { useHistory } from "react-router-dom";
 // reactstrap components
 import {
   DropdownMenu,
@@ -38,12 +39,21 @@ import {
 
 const AdminNavbar = (props) => {
   const [teacherInfor, setTeacherInfor] = useState();
+  const history = useHistory()
+  const logOut = () =>{
+    localStorage.removeItem('tokenICE')
+    history.push("/auth/login")
+  }
   const getTeacherInforByToken = async () => {
     try {
       let res = await request.getAPI("Teacher/GetTeacherInfoByTokenIdExam")
       setTeacherInfor(res.data)
       console.log(res.data)
     }catch(e){
+      if(e.response.data === 'Token invalid'){
+        window.alert("Đăng nhập xảy ra lỗi")
+        history.push("/auth/login")
+      }
       console.log(e)
     }
   }
@@ -78,12 +88,12 @@ const AdminNavbar = (props) => {
                   <span className="avatar avatar-sm rounded-circle">
                     <img
                       alt="..."
-                      src={require("../../assets/img/theme/avata.jpg")}
+                      src={require("../../assets/img/theme/AdminLogo.png")}
                     />
                   </span>
                   <Media className="ml-2 d-none d-lg-block">
                     <span className="mb-0 text-sm font-weight-bold">
-                      {teacherInfor?teacherInfor.fullName:""}(Admin)
+                      {/* {teacherInfor?teacherInfor.fullName:""}Admin */}Admin
                     </span>
                   </Media>
                 </Media>
@@ -104,14 +114,14 @@ const AdminNavbar = (props) => {
                   <i className="ni ni-calendar-grid-58" />
                   <span>Activity</span>
                 </DropdownItem> */}
-                <DropdownItem to="/admin/user-profile" tag={Link}>
+                <DropdownItem to="/admin/profile" tag={Link}>
                   <i className="ni ni-support-16" />
-                  <span>Đổi mật khẩu</span>
+                  <span>Cá nhân</span>
                 </DropdownItem>
                 <DropdownItem divider />
-                <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
+                <DropdownItem onClick={logOut}>
                   <i className="ni ni-user-run" />
-                  <span>Logout</span>
+                  <span>Đăng suất</span>
                 </DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>

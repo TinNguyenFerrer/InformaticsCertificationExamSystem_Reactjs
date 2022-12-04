@@ -106,7 +106,7 @@ const AddTeacher = () => {
                   <br></br>
                   <Form>
                     <h6 className="heading-small text-muted mb-4">
-                      Thông tin cá nhân cán bộ
+                      Thông tin cá nhân giám thị
                     </h6>
                     <div className="pl-lg-4">
                       <Row>
@@ -124,6 +124,7 @@ const AddTeacher = () => {
                               id="input-username"
                               placeholder="Trần Minh Tân"
                               type="text"
+                              maxLength="255"
                               onChange={e => {
                                 setTeacherInfor(pre => {
                                   let newTeacherInfo = { ...pre }
@@ -148,7 +149,7 @@ const AddTeacher = () => {
                               id="input-username"
                               placeholder="000122"
                               type="number"
-                              max={999999}
+                              max={999999999999999}
                               onChange={e => {
                                 setTeacherInfor(pre => {
                                   let newTeacherInfo = { ...pre }
