@@ -295,7 +295,7 @@ const Supervisor = () => {
                         <Button
                           color="primary"
                           onClick={handleAutoMergeRoomAndTeacher}
-                          size="sm"
+                          //size="sm"
                         >
                           Sắp sếp tự động
                         </Button>

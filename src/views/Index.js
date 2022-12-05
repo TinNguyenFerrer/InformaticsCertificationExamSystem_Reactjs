@@ -108,18 +108,18 @@ const Index = (props) => {
   //=======================================
   //  chart sóng
   const datasetBar = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    studentsResult.map(item => {
-        console.log(item.finalMark)
-        let temp
-        // if(Number.isInteger(item.finalMark))
-        // {
-        //     temp = item.finalMark - 1;
-        // }else{
-        temp = Math.floor(item.finalMark)
-        if(temp === 10) temp = 9
+  studentsResult.map(item => {
+    console.log(item.finalMark)
+    let temp
+    // if(Number.isInteger(item.finalMark))
+    // {
+    //     temp = item.finalMark - 1;
+    // }else{
+    temp = Math.floor(item.finalMark)
+    if (temp === 10) temp = 9
 
-        datasetBar[temp]++
-    })
+    datasetBar[temp]++
+  })
   const dataLine = {
     labels: [">=0", ">=1", ">=2", ">=3", ">=4", ">=5", ">=6", ">=7", ">=8", ">=9"],
     datasets: [
@@ -129,11 +129,11 @@ const Index = (props) => {
       }
     ]
   };
-  
+
 
   useEffect(() => {
     getStudentResult(1)
-  },[])
+  }, [])
   return (
     <>
       <Header />
@@ -207,14 +207,14 @@ const Index = (props) => {
               </CardHeader>
               <CardBody>
                 {/* Chart */}
-                <div className="chart">
-                  <div className="">
-                    <div className="d-inline-block" style={{ backgroundColor: dataChartPie.datasets[0].backgroundColor[0], height: "13px", width: "65px" }}></div>
-                    <div className="d-inline-block" >&ensp;{dataChartPie.labels[0]}</div>
-                    <br></br>
-                    <div className="d-inline-block" style={{ backgroundColor: dataChartPie.datasets[0].backgroundColor[1], height: "13px", width: "65px" }}></div>
-                    <div className="d-inline-block" >&ensp;{dataChartPie.labels[1]}</div>
-                  </div>
+                <div>
+                  <div className="d-inline-block" style={{ backgroundColor: dataChartPie.datasets[0].backgroundColor[0], height: "13px", width: "65px" }}></div>
+                  <div className="d-inline-block" >&ensp;{dataChartPie.labels[0]}</div>
+                  <br></br>
+                  <div className="d-inline-block" style={{ backgroundColor: dataChartPie.datasets[0].backgroundColor[1], height: "13px", width: "65px" }}></div>
+                  <div className="d-inline-block" >&ensp;{dataChartPie.labels[1]}</div>
+                </div>
+                <div className="chart" >
                   <Pie
                     data={dataChartPie}
                   //options={chartPie1.options}

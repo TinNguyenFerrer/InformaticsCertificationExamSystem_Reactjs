@@ -209,7 +209,7 @@ const Score = () => {
                     <Row className="align-items-center">
 
                       <Col xs="3">
-                        <h3 className="mb-0">File chấm thi</h3>
+                        <h3 className="mb-0">Nhập điểm thi</h3>
                       </Col>
                       <Col className="text-right" xs="9">
                         <input

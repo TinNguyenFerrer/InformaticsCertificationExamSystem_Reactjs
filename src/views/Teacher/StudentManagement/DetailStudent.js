@@ -93,7 +93,7 @@ const DetailStudent = () => {
     sort: true
   },{
     dataField: 'identifierCode',
-    text: 'Mã học viên',
+    text: 'Mã thí sinh',
     sort: true
   },{
     dataField: 'password',

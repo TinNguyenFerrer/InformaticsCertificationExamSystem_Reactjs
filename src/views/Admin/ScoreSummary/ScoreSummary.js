@@ -222,7 +222,7 @@ const ScoreSummary = () => {
     const rowClasses = (row, rowIndex) => {
         console.log(row);
         //if (row.practice < examinationSeleted.minimumPracticeMark || row.theory < examinationSeleted.minimumTheoreticalMark) return `table-danger`
-        if(row.resultStatus === "Trượt" )return `table-danger`
+        if (row.resultStatus === "Trượt") return `table-danger`
         return '';
     };
     const sizePerPageList = [{
@@ -420,7 +420,7 @@ const ScoreSummary = () => {
                                                     </Card>
                                                 </Col>
                                                 <Col xl="4">
-                                                    <Card>
+                                                    <Card className="shadow">
                                                         <CardHeader className="bg-transparent">
                                                             <Row className="align-items-center">
                                                                 <div className="col">
@@ -433,15 +433,14 @@ const ScoreSummary = () => {
                                                         </CardHeader>
                                                         <CardBody>
                                                             {/* Chart */}
-
+                                                            <div className="">
+                                                                <div className="d-inline-block" style={{ backgroundColor: dataChartPie.datasets[0].backgroundColor[0], height: "13px", width: "65px" }}></div>
+                                                                <div className="d-inline-block" >&ensp;{dataChartPie.labels[0]}</div>
+                                                                <br></br>
+                                                                <div className="d-inline-block" style={{ backgroundColor: dataChartPie.datasets[0].backgroundColor[1], height: "13px", width: "65px" }}></div>
+                                                                <div className="d-inline-block" >&ensp;{dataChartPie.labels[1]}</div>
+                                                            </div>
                                                             <div className="chart">
-                                                                <div className="">
-                                                                    <div className="d-inline-block" style={{ backgroundColor: dataChartPie.datasets[0].backgroundColor[0], height: "13px", width: "65px" }}></div>
-                                                                    <div className="d-inline-block" >&ensp;{dataChartPie.labels[0]}</div>
-                                                                    <br></br>
-                                                                    <div className="d-inline-block" style={{ backgroundColor: dataChartPie.datasets[0].backgroundColor[1], height: "13px", width: "65px" }}></div>
-                                                                    <div className="d-inline-block" >&ensp;{dataChartPie.labels[1]}</div>
-                                                                </div>
                                                                 <Pie
                                                                     data={dataChartPie}
                                                                 //options={chartPie1.options}

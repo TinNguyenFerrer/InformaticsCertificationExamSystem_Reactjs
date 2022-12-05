@@ -148,7 +148,7 @@ const Scorecard = () => {
                         <Button
                           color="primary"
                           onClick={() => handleAutoCreateScorecard(examinationSeleted.id)}
-                          size="sm"
+                          //size="sm"
                         >
                           Tạo tự động
                         </Button>

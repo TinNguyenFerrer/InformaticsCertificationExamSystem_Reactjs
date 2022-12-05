@@ -60,15 +60,15 @@ const DetailStudent = () => {
     formatter: (cell, row, rowIndex, formatExtraData) => {
       return rowIndex + 1
     }
+  },{
+    dataField: 'identifierCode',
+    text: 'Mã thí sinh',
+    sort: true
   }, {
     dataField: 'name',
     text: 'Tên thí sinh',
     sort: true
   }, {
-    dataField: 'identifierCode',
-    text: 'Mã thí sinh',
-    sort: true
-  },{
     dataField: 'fileSubmitted.fileWord',
     text: 'Word',
     sort: true,
