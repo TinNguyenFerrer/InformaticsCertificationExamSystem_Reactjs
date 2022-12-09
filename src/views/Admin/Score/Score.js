@@ -1,4 +1,6 @@
 import { useLocation, Route, Switch, Link } from "react-router-dom";
+// react alert hook
+import { useAlert } from 'react-bootstrap-hooks-alert'
 //import 'bootstrap/dist/css/bootstrap.min.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faListOl, faFileImport } from '@fortawesome/free-solid-svg-icons'
@@ -36,7 +38,7 @@ import DropdownListInline from "components/Dropdown/DropdownListInline";
 import * as request from "Until/request";
 
 const Score = () => {
-
+  const { warning, info, primary, danger, success } = useAlert()
   const getStudentResultService = async (idExam) => {
     try {
       const response = await request.getAPI(`Examination/${idExam}/get-marks`)
@@ -141,11 +143,12 @@ const Score = () => {
       });
       console.log(response);
       if (response.status === 200) {
-        window.alert("thành công")
+        success("Nhập điểm thành công")
         const studentResponse = await getStudentResultService(examinationSeleted.id)
         setStudents(studentResponse)
       }
     } catch (e) {
+      danger("Nhập điểm thất bại")
       console.error(e)
     }
   }
@@ -165,11 +168,12 @@ const Score = () => {
       });
       console.log(response);
       if (response.status === 200) {
-        window.alert("thành công")
+        success("Nhập điểm thành công")
         const studentResponse = await getStudentResultService(examinationSeleted.id)
         setStudents(studentResponse)
       }
     } catch (e) {
+      danger("Nhập điểm thất bại")
       console.error(e)
     }
   }

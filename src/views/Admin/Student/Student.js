@@ -179,6 +179,11 @@ const Student = () => {
       let res = await request.getAPI("Examination/GetAll")
       const data = res.data;
       setExaminations([...data])
+      data.forEach(item => {
+        if (item.id === examinationSeleted.id) {
+          setExaminationSeleted(item)
+        }
+      })
       //console.log(examinations)
       console.log(data)
     } catch (e) {
@@ -287,13 +292,15 @@ const Student = () => {
                         <h3 className="mb-0">Danh sách thí sinh</h3>
                       </Col>
                       <Col className="text-right" xs="4">
-                        <Button
-                          color="primary"
-                          onClick={handleRedirectAddStudent}
-                          size=""
-                        >
-                          Tạo mới
-                        </Button>
+                        {!examinationSeleted.isScheduled && (
+                          <Button
+                            color="primary"
+                            onClick={handleRedirectAddStudent}
+                            size=""
+                          >
+                            Tạo mới
+                          </Button>
+                        )}
                       </Col>
                     </Row>
                   </CardHeader>

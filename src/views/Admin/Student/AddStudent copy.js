@@ -40,7 +40,7 @@ import "./AddStudent.css";
 import * as request from "Until/request";
 
 
-const AddStudent = () => {
+const AddStudentDefault = () => {
   const history = useHistory()
   const studentInformInit = [{
     name: "",
@@ -230,7 +230,7 @@ const AddStudent = () => {
                             />
                           </FormGroup>
                         </Col>
-                        <Col lg="6">
+                        {/* <Col lg="6">
                           <FormGroup>
                             <label
                               className="form-control-label"
@@ -254,7 +254,7 @@ const AddStudent = () => {
                               type="text"
                             />
                           </FormGroup>
-                        </Col>
+                        </Col> */}
                       </Row>
                     </div>
 
@@ -282,4 +282,4 @@ const AddStudent = () => {
   );
 };
 
-export default AddStudent;
+export default AddStudentDefault;

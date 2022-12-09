@@ -17,6 +17,8 @@ import { useLocation, Route, Switch } from "react-router-dom";
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
+// react alert hook
+import { useAlert } from 'react-bootstrap-hooks-alert'
 
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import * as request from "Until/request";
@@ -62,6 +64,7 @@ const Examination = () => {
   }]
   let [examinations, setExaminations] = useState(examinationInformInit)
   const history = useHistory()
+  const { warning, info, primary, danger, success } = useAlert()
   const handleRedirectAddExam = () => {
     history.push("examination/add")
   };
@@ -83,16 +86,16 @@ const Examination = () => {
       const response = await request.deleteAPI("Examination/" + e)
       console.log(response)
       if (response.status == 200) {
-        console.log("thành cong" + e)
+        success("xóa thành công")
         getAllExamServices()
 
       }
       else {
-        window.alert("xóa kì thi thất bại")
+        danger("xóa kì thi thất bại")
         console.log("thất bại")
       }
     } catch (e) {
-      window.alert("Xóa kì thi thất bại")
+      danger("Xóa kì thi thất bại")
       console.log(e)
     }
   }
@@ -110,6 +113,7 @@ const Examination = () => {
       console.log(examinations)
       //console.log(data)
     } catch (e) {
+      warning("Có lỗi trong quá trình thực thi")
       console.log(e)
     }
   }

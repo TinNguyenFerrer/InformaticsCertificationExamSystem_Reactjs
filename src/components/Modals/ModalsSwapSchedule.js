@@ -18,18 +18,18 @@ const ModalSwapSchedule = (props) => {
     setModal(!modal);
   }
   const changeStudentScheduleExamService = async () => {
-    try{
-    const formData = {
-      idStudent: idStudent,
-      idRoom: examinationRoomSeleted.id,
-      idTestSchedule: testScheduleSeleted.id
-    };
-    let res = await request.putAPI("Student/ChangeTestSchedule", formData)
-    onExecute()
-    toggle()
-  }catch(e){
-
-  }
+    try {
+      const formData = {
+        idStudent: idStudent,
+        idRoom: examinationRoomSeleted.id,
+        idTestSchedule: testScheduleSeleted.id
+      };
+      let res = await request.putAPI("Student/ChangeTestSchedule", formData)
+      onExecute()
+      toggle()
+    } catch (e) {
+      window.alert("Đổi ca thất bại")
+    }
 
   }
   const [studentsInfor, setStudentInfor] = useState();

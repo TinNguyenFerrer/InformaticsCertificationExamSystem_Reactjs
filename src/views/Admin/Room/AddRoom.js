@@ -38,9 +38,12 @@ import {
 import "./AddRoom.css";
 import * as request from "Until/request";
 import { useHistory } from "react-router-dom";
+// react alert hook
+import { useAlert } from 'react-bootstrap-hooks-alert'
 
 const AddRoom = () => {
   const history = useHistory()
+  const { warning, info, primary, danger, success } = useAlert()
   const RoomInformInit = {
     name: "",
     location: "",
@@ -54,6 +57,7 @@ const AddRoom = () => {
       let res = await request.postAPI("ExaminationRoom",students)
       console.log(res)
       if(res.status === 200){
+        success("Thêm phòng thành công")
         history.push('/admin/room')
         console.log("thêm room thành công")
       }else{
@@ -70,6 +74,7 @@ const AddRoom = () => {
       console.log(roomInfor)
       addRoomServices(roomInfor)
     }catch(e){
+      window.alert("Thêm phòng thi thất bại kiểm tra lại dữ liệu")
       console.log(e)
     }
   }

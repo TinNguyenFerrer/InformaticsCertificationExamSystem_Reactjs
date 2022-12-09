@@ -23,6 +23,8 @@ import { useState, useEffect } from 'react';
 import { Card, Container, DropdownItem, Row } from "reactstrap";
 import { Redirect } from "react-router-dom";
 import HeaderEmpty from "components/Headers/HeaderEmpty";
+// react alert hook
+import { useAlert } from 'react-bootstrap-hooks-alert'
 // data table
 import BootstrapTable from 'react-bootstrap-table-next';
 import { paginationCustom } from "variables/dataTableOption.js"
@@ -49,7 +51,7 @@ import "./Teacher.css"
 import DropdownList from "components/Dropdown/DropdownList.js";
 
 const Teacher = () => {
-
+  const { warning, info, primary, danger, success } = useAlert()
   const history = useHistory()
   const handleRedirectAddTeacher = () => {
     history.push("teacher/add")
@@ -76,6 +78,7 @@ const Teacher = () => {
         setTeachers(t);
         console.log(t)
       }).catch((e) => {
+        danger("Có lỗi trong quá trình thực thi")
         console.log(e)
       })
   }
@@ -83,11 +86,13 @@ const Teacher = () => {
     try {
       const response = await request.putAPI(`Teacher/${id}/UnLock`)
       if (response.status === 200) {
+        success("Mở khóa thành công")
         getAllTeacherServices()
       } else {
-        window.alert("Mở khóa giáo viên thất bại")
+        danger("Mở khóa giáo viên thất bại")
       }
     } catch (e) {
+      danger("Mở khóa giáo viên thất bại")
       console.log(e);
     }
   }
@@ -95,11 +100,13 @@ const Teacher = () => {
     try {
       const response = await request.putAPI(`Teacher/${id}/Lock`)
       if (response.status === 200) {
+        success("Khóa giáo viên thành công")
         getAllTeacherServices()
       } else {
-        window.alert("Khóa giáo viên thất bại")
+        danger("Khóa giáo viên thất bại")
       }
     } catch (e) {
+      danger("Lỗi! Khóa giáo viên thất bại")
       console.log(e);
     }
   }

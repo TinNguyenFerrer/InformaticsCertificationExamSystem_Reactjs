@@ -18,6 +18,8 @@ import DateTimeRange from "components/Datepiker/DateTimeRange";
 */
 import React from "react";
 import { useState, useEffect } from "react";
+// react alert hook
+import { useAlert } from 'react-bootstrap-hooks-alert'
 // reactstrap components
 import { Card, Container, Row } from "reactstrap";
 
@@ -41,6 +43,7 @@ import { useHistory } from "react-router-dom";
 
 const AddRoom = () => {
   const history = useHistory()
+  const { warning, info, primary, danger, success } = useAlert()
   const RoomInformInit = {
     name: "",
     location: "",
@@ -64,12 +67,14 @@ const AddRoom = () => {
       let res = await request.putAPI("ExaminationRoom",room)
       console.log(res)
       if(res.status === 200){
+        success("Sửa phòng thi thành công")
         history.push('/admin/room')
         
       }else{
         window.alert("Sửa phòng thất bại kiểm tra lại dữ liệu")
       }
     } catch (e) {
+      window.alert("Sửa phòng thất bại kiểm tra lại dữ liệu")
       console.log(e)
     }
   }

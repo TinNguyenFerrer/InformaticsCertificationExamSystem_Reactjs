@@ -3,6 +3,8 @@ import { saveAs } from 'file-saver';
 import { useEffect, useContext } from "react";
 import {StoreContext} from "Until/StoreProvider"
 import { useState } from 'react';
+// react alert hook
+import { useAlert } from 'react-bootstrap-hooks-alert'
 // reactstrap components
 import { Card, Container, DropdownItem, Row } from "reactstrap";
 import { Redirect } from "react-router-dom";
@@ -39,7 +41,7 @@ const Scorecard = () => {
     gradingDeadline: ""
   }]
   let te = { id: -1, name: "" };
-
+  const { warning, info, primary, danger, success } = useAlert()
   const history = useHistory()
   const handleAutoCreateScorecard = async (id) => {
     try {
@@ -57,14 +59,14 @@ const Scorecard = () => {
             onExaminationSelected(exam)
           }
         })
-
+        success("Hoàn thành")
       }
       else {
-        window.alert("Tạo tự động thất bại")
+        danger("Tạo tự động thất bại")
         console.log("thất bại")
       }
     } catch (e) {
-      window.alert("Tạo tự động thất bại")
+      danger("Tạo tự động thất bại")
       console.log(e)
     }
   };

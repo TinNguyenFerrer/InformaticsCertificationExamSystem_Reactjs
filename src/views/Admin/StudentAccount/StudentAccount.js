@@ -20,6 +20,8 @@ import { useLocation, Route, Switch } from "react-router-dom";
 import React from "react";
 import { useState, useEffect, useContext } from 'react';
 import { StoreContext } from "Until/StoreProvider"
+// react alert hook
+import { useAlert } from 'react-bootstrap-hooks-alert'
 // data table 
 import BootstrapTable from 'react-bootstrap-table-next';
 import { pagination } from "variables/dataTableOption.js"
@@ -52,6 +54,7 @@ import * as request from "Until/request";
 
 const Student = () => {
     const history = useHistory()
+    const { warning, info, primary, danger, success } = useAlert()
     const studentInformInit = [{
         name: "",
         email: "",
@@ -139,14 +142,14 @@ const Student = () => {
                     if (exam.id == id)
                         onExaminationSelected(exam)
                 })
-
+                success("Tạo mật khẩu thành công")
             }
             else {
-                window.alert("Tạo tự động thất bại")
+                danger("Tạo tự động thất bại")
                 console.log("thất bại")
             }
         } catch (e) {
-            window.alert("Tạo tự động thất bại")
+            danger("Tạo tự động thất bại")
             console.log(e)
         }
     };

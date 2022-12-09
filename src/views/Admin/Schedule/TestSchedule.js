@@ -20,6 +20,8 @@ import { useLocation, Route, Switch, Link } from "react-router-dom";
 import { useEffect, useContext } from "react";
 import { StoreContext } from "Until/StoreProvider"
 import { useState } from 'react';
+// react alert hook
+import { useAlert } from 'react-bootstrap-hooks-alert'
 // reactstrap components
 import { Card, Container, DropdownItem, Row } from "reactstrap";
 import { Redirect } from "react-router-dom";
@@ -57,7 +59,7 @@ const TestShedule = () => {
     gradingDeadline: ""
   }]
   let te = { id: -1, name: "" };
-
+  const { warning, info, primary, danger, success } = useAlert()
   const history = useHistory()
   const handleAutoCreateSchedule = async (id) => {
     try {
@@ -74,7 +76,11 @@ const TestShedule = () => {
           if (exam.id == id)
             onExaminationSelected(exam)
         })
-
+        if (response.data === 'Not thing to do') {
+          info("Ca thi được giữ nguyên")
+        } else {
+          success("Tạo tự động thành công")
+        }
       }
       else {
         window.alert("Tạo tự động thất bại")
@@ -90,11 +96,16 @@ const TestShedule = () => {
   let [examinations, setExaminations] = useState([])
   let [testSchedules, setTestSchedules] = useState([])
   let [examinationSeleted, setExaminationSeleted] = useContext(StoreContext).examinationSeleted
-  const getAllTestScheduleServices = async () => {
+  const getAllExaminationServices = async () => {
     try {
       let res = await request.getAPI("Examination/GetAll")
       const data = res.data;
       setExaminations([...data])
+      data.forEach(item => {
+        if (item.id === examinationSeleted.id) {
+          setExaminationSeleted(item)
+        }
+      })
       //console.log(examinations)
       console.log(data)
     } catch (e) {
@@ -114,7 +125,7 @@ const TestShedule = () => {
     }
   }
   useEffect(() => {
-    getAllTestScheduleServices()
+    getAllExaminationServices()
     if (examinationSeleted.id !== undefined)
       GetAllTestScheduleByIdExaminationServices(examinationSeleted.id)
   }, [])
@@ -133,7 +144,7 @@ const TestShedule = () => {
             <Card className="shadow border-0">
               <div>
                 <CardBody>
-                <div>
+                  <div>
                     Chọn kì thi: &ensp;
                     <DropdownListInline
                       item={examinations}
@@ -148,14 +159,17 @@ const TestShedule = () => {
                         <h3 className="mb-0">Danh sách các ca thi</h3>
                       </Col>
                       <Col className="text-right" sm="5">
-                        <Button
-                          color="primary"
-                          onClick={() => handleAutoCreateSchedule(examinationSeleted.id)}
+                        {!examinationSeleted.isCreateScorecard &&
+                          !examinationSeleted.isEnterScore &&
+                          !examinationSeleted.isAssignedSupervisor &&
+                          (<Button
+                            color="primary"
+                            onClick={() => handleAutoCreateSchedule(examinationSeleted.id)}
                           //size="sm"
-                        >
-                          Tạo tự động
-                        </Button>
-
+                          >
+                            Tạo tự động
+                          </Button>
+                          )}
                       </Col>
                     </Row>
                   </CardHeader>
@@ -213,7 +227,7 @@ const TestShedule = () => {
             </Card>
           </div>
         </Row>
-      </Container>
+      </Container >
     </>
   );
 };

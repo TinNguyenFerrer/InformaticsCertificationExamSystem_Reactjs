@@ -17,7 +17,7 @@ import { useLocation, Route, Switch, Link } from "react-router-dom";
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
+import React, { Suspense } from "react";
 import * as request from "Until/request";
 import { useState, useEffect } from 'react';
 // react alert hook
@@ -77,6 +77,7 @@ const Room = () => {
       setRooms([...data])
       console.log(data)
     } catch (e) {
+      warning("Có lỗi trong quá trình thực thi")
       console.log(e)
     }
   }
@@ -91,12 +92,12 @@ const Room = () => {
         const response = await request.deleteAPI("ExaminationRoom/" + e)
         //console.log(response)
         if (response.status == 200) {
-          console.log("thành cong")
+          success("xóa phòng thành công")
           getAllRoomServices()
 
         }
         else {
-          window.alert("xóa phòng thất bại")
+          danger("xóa phòng thất bại")
           console.log("thất bại")
         }
       } catch (e) {
@@ -112,23 +113,26 @@ const Room = () => {
     try {
       const response = await request.putAPI("ExaminationRoom/UnLockExaminationRoom?id=" + id)
       if (response.status === 200) {
+        success("Đã mở khóa")
         getAllRoomServices()
       } else {
-        window.alert("Mở khóa thất bại")
+        danger("Mở khóa thất bại")
       }
     } catch (e) {
-      console.log(e);
+      danger("Lỗi! Mở khóa thất bại");
     }
   }
   const lockRoom = async (id) => {
     try {
       const response = await request.putAPI("ExaminationRoom/LockExaminationRoom?id=" + id)
       if (response.status === 200) {
+        success("Đã khóa")
         getAllRoomServices()
       } else {
-        window.alert("Khóa phòng thất bại")
+        danger("Khóa phòng thất bại")
       }
     } catch (e) {
+      danger("Lỗi! Khóa phòng thất bại")
       console.log(e);
     }
   }

@@ -64,7 +64,7 @@ const TheoryTest = () => {
       //console.log(examinations)
       console.log(data)
     } catch (e) {
-      danger("Lấy danh sách kì thi thất bại")
+      warning("Lấy danh sách kì thi thất bại")
       console.log(e)
     }
   }
@@ -83,7 +83,7 @@ const TheoryTest = () => {
       console.log(data)
     } catch (e) {
       console.log(e)
-      danger("Lấy danh sách ca thi thất bại")
+      warning("Lấy danh sách ca thi thất bại")
     }
   }
   // khi một ca thi được chọn trong dropdown

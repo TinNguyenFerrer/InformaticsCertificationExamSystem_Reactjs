@@ -66,7 +66,7 @@ const Supervisor = () => {
     text: 'STT',
     sort: true,
     formatter: (cell, row, rowIndex, formatExtraData) => {
-      return rowIndex+1
+      return rowIndex + 1
     }
   }, {
     dataField: 'examinationRoom.name',
@@ -121,6 +121,11 @@ const Supervisor = () => {
       if (res.status == 200) {
         const data = res.data;
         setExaminations([...data])
+        data.forEach(item => {
+          if (item.id === examinationSeleted.id) {
+            setExaminationSeleted(item)
+          }
+        })
         //console.log(examinations)
         console.log(data)
         //success("Lấy danh sách kid thi thành công")
@@ -167,7 +172,7 @@ const Supervisor = () => {
       setexaminationRooms([...data])
       console.log(data)
     } catch (e) {
-      danger("Lấy danh sách phòng thi thất bại")
+      //danger("Lấy danh sách phòng thi thất bại")
       console.log(e)
     }
   }
@@ -184,9 +189,14 @@ const Supervisor = () => {
             let res = await request.postAPI("Supervisor/AutoCreateSupervisor?IdTestSchedule=" + sche.id)
             console.log(res)
             if (res.status === 200) {
-              success("Tạo tự động thành ông")
-            } else {
-              danger("tạo tự đông thất bại")
+              if (res.data === 'Not thing to do') {
+                warning("Giám thị giữ nguyên")
+                getAllExaminationsServices()
+              } else {
+                getRoomByIdScheduleTest(testScheduleSeleted.id)
+                success("Tạo tự động thành công")
+                getAllExaminationsServices()
+              }
             }
             return;
           })
@@ -197,8 +207,12 @@ const Supervisor = () => {
         let res = await request.postAPI("Supervisor/AutoCreateSupervisor?IdTestSchedule=" + testScheduleSeleted.id)
         console.log(res)
         if (res.status === 200) {
-          getRoomByIdScheduleTest(testScheduleSeleted.id)
-          success("Tạo tự động thành ông")
+          if (res.data === 'Not thing to do') {
+            warning("Giám thị giữ nguyên")
+          } else {
+            getRoomByIdScheduleTest(testScheduleSeleted.id)
+            success("Tạo tự động thành ông")
+          }
         } else {
           danger("tạo tự đông thất bại")
         }
@@ -292,14 +306,17 @@ const Supervisor = () => {
                         <h3 className="mb-0">Danh sách phòng thi</h3>
                       </Col>
                       <Col className="text-right" xs="4">
-                        <Button
-                          color="primary"
-                          onClick={handleAutoMergeRoomAndTeacher}
-                          //size="sm"
-                        >
-                          Sắp sếp tự động
-                        </Button>
-
+                        {!examinationSeleted.isCreateScorecard &&
+                          !examinationSeleted.isEnterScore &&
+                          !examinationSeleted.isAssignedSupervisor && (
+                            <Button
+                              color="primary"
+                              onClick={handleAutoMergeRoomAndTeacher}
+                            //size="sm"
+                            >
+                              Sắp sếp tự động
+                            </Button>
+                          )}
                       </Col>
                     </Row>
                   </CardHeader>

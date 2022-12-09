@@ -50,7 +50,7 @@ const AddTheoryTest = () => {
       setTestSchedules([...data])
       console.log(data)
     } catch (e) {
-      danger("Có lỗi trong quá trình lấy ca thi")
+      warning("Có lỗi trong quá trình lấy ca thi")
       console.log(e)
     }
   }

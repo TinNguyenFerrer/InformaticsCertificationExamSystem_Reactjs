@@ -332,7 +332,7 @@ const ProfileTeacher = () => {
                                 className="form-control-alternative addExamination_input_userinfor"
                                 value={teacherInfor.password}
                                 id="input-password"
-                                placeholder="xxxx xxx xxx"
+                                placeholder=""
                                 type="password"
                                 onChange={e => {
                                   setTeacherInfor(pre => {
