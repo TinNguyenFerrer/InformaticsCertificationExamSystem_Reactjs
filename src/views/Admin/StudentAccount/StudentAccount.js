@@ -220,6 +220,7 @@ const Student = () => {
         if (examinationSeleted.id != undefined) {
             getAllStudentByIdExaminationServices(examinationSeleted.id)
             getUsers(examinationSeleted.id)
+            getAllStudentByIdExaminationServices(examinationSeleted.id)
         }
     }, [])
 

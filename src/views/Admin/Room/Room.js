@@ -20,6 +20,8 @@ import { useLocation, Route, Switch, Link } from "react-router-dom";
 import React, { Suspense } from "react";
 import * as request from "Until/request";
 import { useState, useEffect } from 'react';
+// modal
+import ModalsWarning from "components/Modals/ModalsWarning";
 // react alert hook
 import { useAlert } from 'react-bootstrap-hooks-alert'
 // data table
@@ -53,6 +55,8 @@ import DropdownList from "components/Dropdown/DropdownList.js";
 import { info } from "sass";
 
 const Room = () => {
+  let [modal, setModal] = useState(false);
+  let [idDelete, SetIdDelete] = useState()
   const { warning, info, primary, danger, success } = useAlert()
   const history = useHistory()
   const handleRedirectAddTeacher = () => {
@@ -101,8 +105,10 @@ const Room = () => {
           console.log("thất bại")
         }
       } catch (e) {
-        if (e.response.data.code === 405)
+        if(e.response === undefined) danger("xóa phòng thất bại")
+        if (e.response.data.code === 405) {
           warning(`Xóa phòng thất bại (đã thuộc kì thi:${e.response.data.examination[0].name}-${e.response.data.examination[0].examCode})`)
+        } else { danger("xóa phòng thất bại") }
         console.log(e)
       }
     }
@@ -189,7 +195,11 @@ const Room = () => {
             </DropdownItem>
             <DropdownItem
               idteacher={row.id}
-              onClick={() => (deleteRoom(row.id))}
+              //onClick={() => (deleteRoom(row.id))}
+              onClick={() => {
+                SetIdDelete(row.id)
+                setModal(!modal)
+              }}
             >
               Xóa
             </DropdownItem>
@@ -222,6 +232,11 @@ const Room = () => {
 
       <HeaderEmpty />
       {/* Page content */}
+      <div>
+        <div>
+          <ModalsWarning onExecute={deleteRoom} displayUseState={[modal, setModal]} idDelete={idDelete} ></ModalsWarning>
+        </div>
+      </div>
       <Container className="mt--8 Body_Content" fluid>
         <Row>
           <div className="col">

@@ -20,6 +20,8 @@ import { useLocation, Route, Switch } from "react-router-dom";
 import React from "react";
 import { useState, useEffect, useContext } from 'react';
 import { StoreContext } from "Until/StoreProvider"
+// modal
+import ModalsWarning from "components/Modals/ModalsWarning";
 // data table 
 // data table
 import BootstrapTable from 'react-bootstrap-table-next';
@@ -55,6 +57,8 @@ import * as request from "Until/request";
 
 const Student = () => {
   const history = useHistory()
+  let [modal, setModal] = useState(false);
+  let [idDelete, SetIdDelete] = useState()
   const studentInformInit = [{
     id: 0,
     name: "",
@@ -124,13 +128,17 @@ const Student = () => {
             <DropdownItem
 
               idteacher={row.id}
-              onClick={() => (handleDeleteStudent(row.id))}
+              //onClick={() => (handleDeleteStudent(row.id))}
+              onClick={() => {
+                SetIdDelete(row.id)
+                setModal(!modal)
+              }}
             >
               Xóa
             </DropdownItem>
           </DropdownMenu>
         </UncontrolledDropdown>
-      </div>
+      </div >
       )
     }
   }];
@@ -270,6 +278,9 @@ const Student = () => {
     <>
       <HeaderEmpty />
       {/* Page content */}
+      <div>
+        <ModalsWarning onExecute={handleDeleteStudent} displayUseState={[modal, setModal]} idDelete={idDelete} ></ModalsWarning>
+      </div>
       <Container className="mt--8 Body_Content" fluid>
         <Row>
           <div className="col">

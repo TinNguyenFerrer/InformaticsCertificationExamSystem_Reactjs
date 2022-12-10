@@ -129,6 +129,29 @@ const DetailStudent = () => {
       console.log(e)
     }
   }
+  const checkUserIsLockedService = async () => {
+    try {
+      const queryParams = new URLSearchParams(window.location.search);
+      const examroom_testscheid = queryParams.get('examroom_testscheid');
+      const param = {
+        params: {
+          ExamRom_TestScheid: examroom_testscheid
+        }
+      }
+      console.log(examroom_testscheid)
+      let res = await request.getAPI(`Student/CheckStudentIsLocked`, param)
+      //const data = res.data;
+      if (res.status === 200) {
+        if(res.data === false){
+          setLockStudents(false)
+        }
+      } 
+      //setStudents([...data])
+      console.log(res)
+    } catch (e) {
+      console.log(e)
+    }
+  }
   //-----------mở bài làm----------
   const unlockUserService = async () => {
     try {
@@ -180,6 +203,7 @@ const DetailStudent = () => {
 
   useEffect(() => {
     getAllInfoSubmitFileOfStudentBySchedule_RoomIdService()
+    checkUserIsLockedService()
   }, [])
 
 

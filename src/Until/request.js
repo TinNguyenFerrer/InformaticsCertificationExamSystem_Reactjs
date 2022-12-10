@@ -1,4 +1,7 @@
 import axios from "axios";
+import { isWindow } from "jquery";
+import { useHistory } from "react-router-dom";
+
 let token = localStorage.getItem('tokenICE')
 const reques = axios.create({
     baseURL: 'https://localhost:7257/api/',
@@ -12,10 +15,15 @@ const reques = axios.create({
 // reques.interceptors.response.use(undefined, err => {
 //     console.log("looiii")
 //     const error = err.response;
-//     console.log(err)
+//     console.log(error.status)
 //     // if error is 401 
-//     if (error.status === 401){
+//     if (error.status == 401){
+//       console.log("JDLhLooooooooooooooooooooooooooooooo")
+//       const history = useHistory()
+//       window.alert("Lỗi xác thực")
+//       history.push("/auth/login")
 //       console.log("code 401")
+
 //     }
 //   })
 //params
@@ -28,6 +36,25 @@ reques.interceptors.response.use(
     error => {
       //do some global magic with error and pass back to caller
       console.log("LOOOOOOOOOOOOOOOO")
+      console.log(error)
+      if (error.response.status === 401){
+        console.log(error)
+        //const history = useHistory()
+        //window.alert("Lỗi xác thực")
+        window.location="/auth/login"
+        //history.push("/auth/login")
+        console.log("code 401")
+  
+      }
+      if (error.response.status === 403){
+        console.log(error)
+        //const history = useHistory()
+        window.alert("Lỗi xác thực 403")
+        //window.location="/auth/login"
+        //history.push("/auth/login")
+        console.log("code 403")
+  
+      }
       return Promise.reject(error);
     }
   );

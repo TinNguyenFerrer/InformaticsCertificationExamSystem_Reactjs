@@ -23,6 +23,8 @@ import { useState, useEffect } from 'react';
 import { Card, Container, DropdownItem, Row } from "reactstrap";
 import { Redirect } from "react-router-dom";
 import HeaderEmpty from "components/Headers/HeaderEmpty";
+// modal
+import ModalsWarning from "components/Modals/ModalsWarning";
 // react alert hook
 import { useAlert } from 'react-bootstrap-hooks-alert'
 // data table
@@ -51,6 +53,8 @@ import "./Teacher.css"
 import DropdownList from "components/Dropdown/DropdownList.js";
 
 const Teacher = () => {
+  let [modal, setModal] = useState(false);
+  let [idDelete, SetIdDelete] = useState()
   const { warning, info, primary, danger, success } = useAlert()
   const history = useHistory()
   const handleRedirectAddTeacher = () => {
@@ -82,7 +86,7 @@ const Teacher = () => {
         console.log(e)
       })
   }
-  const unLockTeacher = async(id) => {
+  const unLockTeacher = async (id) => {
     try {
       const response = await request.putAPI(`Teacher/${id}/UnLock`)
       if (response.status === 200) {
@@ -96,7 +100,7 @@ const Teacher = () => {
       console.log(e);
     }
   }
-  const lockTeacher =async(id)=>{
+  const lockTeacher = async (id) => {
     try {
       const response = await request.putAPI(`Teacher/${id}/Lock`)
       if (response.status === 200) {
@@ -142,7 +146,7 @@ const Teacher = () => {
       if (cell) return <i className="fas fa-lock"></i>
       return ""
     }
-  },{
+  }, {
     dataField: 'edit',
     text: '',
     formatter: (cell, row, rowIndex, formatExtraData) => {
@@ -172,7 +176,11 @@ const Teacher = () => {
             <DropdownItem
 
               idteacher={row.id}
-              onClick={() => (deleteTeacher(row.id))}
+              //onClick={() => (deleteTeacher(row.id))}
+              onClick={() => {
+                SetIdDelete(row.id)
+                setModal(!modal)
+              }}
             >
               Xóa
             </DropdownItem>
@@ -211,16 +219,20 @@ const Teacher = () => {
         const response = await request.deleteAPI("Teacher/" + e)
         //console.log(response)
         if (response.status == 200) {
-          console.log("thành cong")
+          success("Xóa giáo viên thành công")
           getAllTeacherServices()
 
         }
         else {
-          window.alert("xóa giáo viên thất bại")
+          danger("xóa giáo viên thất bại")
           console.log("thất bại")
         }
       } catch (e) {
-        window.alert("Xóa giáo viên thất bại")
+        if (e.response.data === 'Teacher in schedule') {
+          warning("giáo viên đang giám sát kì thi")
+        }else{
+          danger("Xóa giáo viên thất bại")
+        }
         console.log(e)
       }
     }
@@ -267,6 +279,9 @@ const Teacher = () => {
 
       <HeaderEmpty />
       {/* Page content */}
+      <div>
+        <ModalsWarning onExecute={deleteTeacher} displayUseState={[modal, setModal]} idDelete={idDelete} ></ModalsWarning>
+      </div>
       <Container className="mt--8 Body_Content" fluid>
         <Row>
           <div className="col">
@@ -282,7 +297,7 @@ const Teacher = () => {
                         <Button
                           color="primary"
                           onClick={handleRedirectAddTeacher}
-                          //size="sm"
+                        //size="sm"
                         >
                           Tạo mới
                         </Button>

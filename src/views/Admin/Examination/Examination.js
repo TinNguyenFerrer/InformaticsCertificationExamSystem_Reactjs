@@ -19,6 +19,8 @@ import { useLocation, Route, Switch } from "react-router-dom";
 */
 // react alert hook
 import { useAlert } from 'react-bootstrap-hooks-alert'
+// modal
+import ModalsWarning from "components/Modals/ModalsWarning";
 
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import * as request from "Until/request";
@@ -64,6 +66,10 @@ const Examination = () => {
   }]
   let [examinations, setExaminations] = useState(examinationInformInit)
   const history = useHistory()
+
+  let [modal, setModal] = useState(false);
+  let [idDelete, SetIdDelete] = useState()
+
   const { warning, info, primary, danger, success } = useAlert()
   const handleRedirectAddExam = () => {
     history.push("examination/add")
@@ -168,7 +174,11 @@ const Examination = () => {
               Sửa
             </DropdownItem>
             <DropdownItem
-              onClick={() => (deleteExamination(row.id))}
+              //onClick={() => (deleteExamination(row.id))}
+              onClick={() => {
+                SetIdDelete(row.id)
+                setModal(!modal)
+              }}
             >
               Xóa
             </DropdownItem>
@@ -185,6 +195,9 @@ const Examination = () => {
   return (
     <>
       <HeaderEmpty />
+      <div>
+      <ModalsWarning onExecute={deleteExamination} displayUseState={[modal, setModal]} idDelete={idDelete} ></ModalsWarning>
+      </div>
       {/* Page content */}
       <Container className="mt--8 Body_Content" fluid>
         <Row>

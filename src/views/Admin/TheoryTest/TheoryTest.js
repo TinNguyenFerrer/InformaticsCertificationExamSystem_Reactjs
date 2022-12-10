@@ -20,6 +20,8 @@ import { useLocation, Route, Switch } from "react-router-dom";
 import { useEffect, useContext } from "react";
 import {StoreContext} from "Until/StoreProvider"
 import { useState } from 'react';
+// modal
+import ModalsWarning from "components/Modals/ModalsWarning";
 // reactstrap components
 import { Card, Container, DropdownItem, Row } from "reactstrap";
 import { Redirect } from "react-router-dom";
@@ -47,7 +49,8 @@ import DropdownList from "components/Dropdown/DropdownList.js";
 import DropdownListInline from "components/Dropdown/DropdownListInline.js";
 import * as request from "Until/request";
 const TheoryTest = () => {
-
+  let [modal, setModal] = useState(false);
+  let [idDelete, SetIdDelete] = useState()
   let te = { id: -1, name: "" };
   //========--------------lấy danh sách kì thi------------============
   let [examinations, setExaminations] = useState([])
@@ -163,6 +166,9 @@ const TheoryTest = () => {
     <>
       <HeaderEmpty />
       {/* Page content */}
+      <div>
+        <ModalsWarning onExecute={deleteTheory} displayUseState={[modal, setModal]} idDelete={idDelete} ></ModalsWarning>
+      </div>
       <Container className="mt--8 Body_Content" fluid>
         <Row>
           <div className="col">
@@ -252,7 +258,11 @@ const TheoryTest = () => {
                                   </DropdownItem> */}
 
                                   <DropdownItem
-                                    onClick={() => (deleteTheory(theory.id))}
+                                    //onClick={() => (deleteTheory(theory.id))}
+                                    onClick={() => {
+                                      SetIdDelete(theory.id)
+                                      setModal(!modal)
+                                    }}
                                   >
                                     Xóa
                                   </DropdownItem>
